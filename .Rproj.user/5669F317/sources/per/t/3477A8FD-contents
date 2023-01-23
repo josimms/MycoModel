@@ -1,0 +1,25 @@
+#include <Rcpp.h>
+#include <iostream>
+#include <vector>
+#include <numeric>
+#include <iterator>
+#include <cmath>
+
+
+// [[Rcpp::export]]
+int test(Rcpp::DataFrame df) {
+  
+  std::vector<double> value = df[0];
+  int value_actual = value[1];
+  
+  return(value_actual);
+}
+
+
+/*** R
+
+hello = data.frame("col1" = 1:10, "col2" = 11:20)
+rownames(hello) = LETTERS[1:10]
+
+test(hello)
+*/

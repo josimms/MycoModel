@@ -1,0 +1,37 @@
+# Install CASSIA and PRELES
+library(Rcpp)
+library(CASSIA)
+library(Rprebasso)
+
+# C++ code for the mycorrhiza growth and the trade offs
+# TODO: all code in one file at the moment
+Rcpp::compileAttributes()
+sourceCpp("C:/Users/josimms/OneDrive - University of Helsinki/Mycorrhiza/Code/MycoModel/src/Toy_Model.cpp") # REAL CODE
+
+sourceCpp("C:/Users/josimms/OneDrive - University of Helsinki/Mycorrhiza/Code/testing_C_code.cpp") ## TEST CODE
+
+# Work out the sugar available with CASSIA first
+sugar <- CASSIA(Hyde_weather, "Hyde", sperling_model = TRUE, myco_model = FALSE,
+                mychorrhiza = FALSE, storage.reset = FALSE, phloem.trigger = T)[[1]][,c(26)]
+
+# Final function
+Toy_Model(2010:2019, sugar, Hyde_weather$TSB) # TODO: works for multiple years, but not for one year!
+
+###
+# 
+###
+
+# e = (e_0*(1+N/N_0) - sqrt((e_0*(1+N/N_0))^2 - 4*theta*e_0^2 * N / N_0))/(2*theta) add to preles
+
+#'nitrogen <- function(e_0, N, N_0, theta) {
+#e = (e_0*(1+N/N_0) - sqrt((e_0*(1+N/N_0))^2 - 4*theta*e_0^2 * N / N_0))/(2*theta)
+
+#return(e)
+#}
+
+plot(0:20, nitrogen(3, 0:20, 8, 0.8)/3, xlab = "Nitrogen", ylab = "Epsilon")
+
+
+nitrogen(3, 15, 8, 0.8)/3
+
+#'
