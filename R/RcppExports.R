@@ -13,3 +13,11 @@ Toy_Model <- function(years, sugar, Tmb) {
     .Call(`_MycoModel_Toy_Model`, years, sugar, Tmb)
 }
 
+symphony <- function(params) {
+    .Call(`_MycoModel_symphony`, params)
+}
+
+symphony <- function(params, Photosynthesis) {
+    .Call(`_MycoModel_symphony`, params, Photosynthesis)
+}
+
