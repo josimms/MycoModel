@@ -48,11 +48,36 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// symphony
+Rcpp::List symphony(std::vector<double> params);
+RcppExport SEXP _MycoModel_symphony(SEXP paramsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type params(paramsSEXP);
+    rcpp_result_gen = Rcpp::wrap(symphony(params));
+    return rcpp_result_gen;
+END_RCPP
+}
+// symphony
+Rcpp::List symphony(std::vector<double> params, std::vector<double> Photosynthesis);
+RcppExport SEXP _MycoModel_symphony(SEXP paramsSEXP, SEXP PhotosynthesisSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type params(paramsSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type Photosynthesis(PhotosynthesisSEXP);
+    rcpp_result_gen = Rcpp::wrap(symphony(params, Photosynthesis));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_MycoModel_myco_respiration", (DL_FUNC) &_MycoModel_myco_respiration, 2},
     {"_MycoModel_myco_growth", (DL_FUNC) &_MycoModel_myco_growth, 3},
     {"_MycoModel_Toy_Model", (DL_FUNC) &_MycoModel_Toy_Model, 3},
+    {"_MycoModel_symphony", (DL_FUNC) &_MycoModel_symphony, 1},
+    {"_MycoModel_symphony", (DL_FUNC) &_MycoModel_symphony, 2},
     {NULL, NULL, 0}
 };
 
