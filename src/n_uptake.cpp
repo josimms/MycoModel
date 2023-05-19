@@ -117,8 +117,8 @@ double Fungal_N_Uptake(double C_roots,
   double NC_in_fungal = N_fungal/C_fungal;
   // TODO: Parallel or intercecting?
   double N_fungal_uptake = (uptake_organic_N(N_in_soil.Norg, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg) + 
-                            uptake_NH4(N_in_soil.Norg, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg) + 
-                            uptake_NO3(N_in_soil.Norg, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg))*
+                            uptake_NH4(N_in_soil.NH4, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4) + 
+                            uptake_NO3(N_in_soil.NO3, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3))*
                             (C_fungal/(C_roots))*(mantle_mass/ERM_mass)*N_avaliable*(1 - (NC_in_fungal)/(NC_fungal_opt));
   
   return(N_fungal_uptake);

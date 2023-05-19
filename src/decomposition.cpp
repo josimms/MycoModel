@@ -1,7 +1,8 @@
+/*
 // [[Rcpp::export]]
 double c_uptake_micobes(double C, double T, double C_limit, double k) {
   // Aimed for the microbes
-  double u = k * pow(C, 8) / (pow(C_limit, 8) + pow(C, 8));
+  double u = k * power(C, 8) / (power(C_limit, 8) + power(C, 8));
   return(u);
 }
 
@@ -23,3 +24,4 @@ double c_uptake_mycorrhiza(double C,
                                                                        uptake_NO3(N_in_mycorrhiza.NO3, T, N_limits.NO3));
   return(u);
 }
+ */
