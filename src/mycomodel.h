@@ -30,6 +30,7 @@ struct N_balence
   double NH4;
   double NO3;
   double Norg;
+  double C;
 };
 
 /*
