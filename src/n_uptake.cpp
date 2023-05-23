@@ -138,6 +138,36 @@ double Fungal_N_Uptake(double C_roots,
 }
 
 
+// [[Rcpp::export]]
+double Microbe_N_Uptake(double C_microbe,
+                        double N_micorbe,
+                        double NC_microbe_opt,
+                        double N_avaliable,
+                        double T,
+                        double SWC,
+                        std::vector<double> N_in_soil_R,
+                        std::vector<double> N_limits_R,
+                        std::vector<double> N_k_R,
+                        std::vector<double> SWC_k_R) {
+  
+  // TODO: make the N_available link to the uptake equations that I have made!
+  
+  N_balence N_in_soil = vector_to_N_balence(N_in_soil_R);
+  N_balence N_limits = vector_to_N_balence(N_limits_R);
+  N_balence N_k = vector_to_N_balence(N_k_R);
+  N_balence SWC_k = vector_to_N_balence(SWC_k_R);
+  
+  
+  double NC_in_micorbe = N_micorbe/C_microbe;
+  double N_micorbe_uptake = (uptake_organic_N(N_in_soil.Norg, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg) + 
+                            uptake_NH4(N_in_soil.NH4, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4) + 
+                            uptake_NO3(N_in_soil.NO3, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3))*
+                            N_avaliable*
+                            (1 - (NC_in_micorbe)/(NC_microbe_opt));
+  
+  return(N_micorbe_uptake);
+}
+
 
 
 
