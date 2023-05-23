@@ -16,7 +16,13 @@ symphony_plus_vs_original_plot <- function() {
                           400, # Ca
                           0.0627704) # psi i
   
-  Photosynthesis = sin(seq(0, pi, by = pi/365)) # TODO: preles!
+  Photosynthesis = Rprebasso::PRELES(data_format$PAR, 
+                                     data_format$T, 
+                                     data_format$VPD, 
+                                     data_format$Rain, 
+                                     data_format$CO2, 
+                                     data_format$fAPAR, 
+                                     rep(1, length = nrow(data_format)))$GPP
   
   symphony_results = symphony(symphony_parameters)
   symphony_plus_results = symphony_plus(symphony_parameters, Photosynthesis)
@@ -99,5 +105,3 @@ nitrogen_graphs <- function() {
   plot(concentration_range, conc_change_Norg_Uptake_Fungal, xlab = "Norg", ylab = "total N to plant", main = "Norg response \n with temperature 15, SWC 0.8, other N 10")
 
 }
-
-nitrogen_graphs()
