@@ -98,6 +98,13 @@ N_balence vector_to_N_balence(std::vector<double> input);
 
 #endif
 
+#ifndef PKG_list_to_N_balence_H
+#define PKG_list_to_N_balence_H
+
+N_balence list_to_N_balence(Rcpp::List input);
+  
+#endif 
+
 #ifndef PKG_Plant_N_Uptake_H
 #define PKG_Plant_N_Uptake_H
 
@@ -150,7 +157,6 @@ Rcpp::List Microbe_Uptake(double C_microbe,
                           double Norg_avaliable,
                           double T,
                           double SWC,
-                          std::vector<double> N_in_soil_R,
                           std::vector<double> N_limits_R,
                           std::vector<double> N_k_R,
                           std::vector<double> SWC_k_R,

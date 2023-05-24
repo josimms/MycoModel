@@ -15,6 +15,19 @@ N_balence vector_to_N_balence(std::vector<double> input) {
   return(params);
 }
 
+// Input R values in the correct structure - N_balence
+N_balence list_to_N_balence(Rcpp::List input) {
+  N_balence params;
+  
+  params.NH4 = input[0];
+  params.NO3 = input[1];
+  params.Norg = input[2];
+  params.C = input[3];
+  params.Norg_FOM = input[4];
+  
+  return(params);
+}
+
 
 // [[Rcpp::export]]
 double uptake_organic_N(double N_org, double T, double N_org_limit, double k, double SWC, double SWC_k) {
@@ -166,19 +179,18 @@ double Fungal_N_Uptake(double C_roots,
 
 // [[Rcpp::export]]
 Rcpp::List Microbe_Uptake(double C_microbe,
-                      double N_micorbe,
-                      double NC_microbe_opt,
-                      double NH4_avaliable,
-                      double NO3_avaliable,
-                      double Norg_avaliable,
-                      double C_avaliable,
-                      double T,
-                      double SWC,
-                      std::vector<double> N_limits_R,
-                      std::vector<double> N_k_R,
-                      std::vector<double> SWC_k_R,
-                      bool SOM_decomposers,
-                      double Norg_avaliable_FOM) {
+                          double N_micorbe,
+                          double NC_microbe_opt,
+                          double NH4_avaliable,
+                          double NO3_avaliable,
+                          double Norg_avaliable,
+                          double T,
+                          double SWC,
+                          std::vector<double> N_limits_R,
+                          std::vector<double> N_k_R,
+                          std::vector<double> SWC_k_R,
+                          bool SOM_decomposers,
+                          double Norg_avaliable_FOM) {
   
   /*
    * Nitrogen limitation // Mass limitation is in the soil model!
@@ -204,7 +216,7 @@ Rcpp::List Microbe_Uptake(double C_microbe,
    */
   
   // TODO: taken respiration out of the sympny model - should it be here?
-  double C_microbe_uptake = uptake_C(C_avaliable, T, N_limits.C, N_k.C, SWC, SWC_k.C);
+  double C_microbe_uptake = uptake_C(Norg_avaliable, T, N_limits.C, N_k.C, SWC, SWC_k.C);
   
   /*
    * Uptake organic
