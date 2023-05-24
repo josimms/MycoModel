@@ -1,34 +1,7 @@
 #include <Rcpp.h>
 #include <iostream>
+#include "mycomodel.h"
 using namespace Rcpp;
-
-struct symphony_parameters{
-  double A;
-  double s;
-  double r;
-  double m_p;
-  double e_p;
-  double r_p;
-  double k;
-  double alpha;
-  double beta;
-  double i;
-  double l;
-  double y;
-  double u;
-  double e;
-  double Ca;
-  double psi_i;
-};
-
-struct soil_balence{
-  std::vector<double> C_p;
-  std::vector<double> C_f;
-  std::vector<double> C_df;
-  std::vector<double> C_ds;
-  std::vector<double> N;
-  std::vector<double> C_s;
-};
 
 // Vector to symphony_parameters
 symphony_parameters vector_to_symphony(std::vector<double> input) {
