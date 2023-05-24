@@ -189,6 +189,8 @@ Rcpp::List Microbe_Uptake(double C_microbe,
    * Carbon limitation // Mass limitation is in the soil model!
    */
   
+  // TODO: taken respiration out of the sympny model - should it be here?
+  
   double C_microbe_uptake = uptake_C(N_in_soil.C, T, N_limits.C, N_k.C, SWC, SWC_k.C);
   
   /*
