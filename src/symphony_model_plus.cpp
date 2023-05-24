@@ -205,8 +205,8 @@ Rcpp::List symphony_plus(std::vector<double> params, std::vector<double> Photosy
 
 // [[Rcpp::export]]
 Rcpp::List symphony_plus_daily(std::vector<double> params,
-                               double Photosynthesis,
-                               double C_p, // TODO: this should come from CASSIA
+                               double Photosynthesis, // TODO: check the units here!
+                               double C_plant, // TODO: this should come from CASSIA
                                double C_FOM, // TODO: this will change
                                double N) // TODO: should be from different types of N) 
 {
@@ -220,9 +220,9 @@ Rcpp::List symphony_plus_daily(std::vector<double> params,
   double psi_imf = 1;
   double psi_f = 1;
   double psi_d = 1;
-  double C_ds = 1;
-  double C_df = 1;
-  double C_s = 1;
+  double C_decompose_SOM = 1;
+  double C_decompose_FOM = 1;
+  double C_SOM = 1;
   
   double Photosynthesis_min;
   double psi_d_min;
@@ -233,31 +233,31 @@ Rcpp::List symphony_plus_daily(std::vector<double> params,
   // TODO: add the initial conditions and decide which process should happen first
   
   // N in
-  psi_up = symphony_params.beta * (Photosynthesis - symphony_params.r_p*C_p);
+  psi_up = symphony_params.beta * (Photosynthesis - symphony_params.r_p*C_plant);
   // N immobilisation, mineralisation
-  psi_ims = symphony_params.alpha * symphony_params.r * C_ds + (symphony_params.beta - symphony_params.alpha)*psi_d;
+  psi_ims = symphony_params.alpha * symphony_params.r * C_decompose_SOM + (symphony_params.beta - symphony_params.alpha)*psi_d;
   // N immobilisation,
-  psi_imf = symphony_params.alpha * symphony_params.r * C_df + (symphony_params.beta - symphony_params.alpha)*psi_f;
+  psi_imf = symphony_params.alpha * symphony_params.r * C_decompose_FOM + (symphony_params.beta - symphony_params.alpha)*psi_f;
   // N decomposition flux
-  psi_d_min = std::min(symphony_params.y*C_FOM, (symphony_params.i*N + symphony_params.alpha * symphony_params.r * C_ds)/(symphony_params.alpha - symphony_params.beta));
+  psi_d_min = std::min(symphony_params.y*C_FOM, (symphony_params.i*N + symphony_params.alpha * symphony_params.r * C_decompose_SOM)/(symphony_params.alpha - symphony_params.beta));
   psi_d = psi_d_min;
-  psi_f_min = std::min(symphony_params.u*C_FOM, (symphony_params.i*N + symphony_params.alpha * symphony_params.r * C_df)/(symphony_params.alpha - symphony_params.beta));
+  psi_f_min = std::min(symphony_params.u*C_FOM, (symphony_params.i*N + symphony_params.alpha * symphony_params.r * C_decompose_FOM)/(symphony_params.alpha - symphony_params.beta));
   psi_f = psi_d_min;
   
-  C_p = C_p + Photosynthesis - C_p*(symphony_params.r_p + symphony_params.m_p + symphony_params.e_p);
-  C_FOM = C_FOM + symphony_params.m_p * C_p - psi_d - psi_f;
-  C_df = C_df + psi_f - (symphony_params.s + symphony_params.r) * C_df;
-  C_ds = C_ds + (symphony_params.A - symphony_params.s - symphony_params.r)*C_ds + psi_d;
+  C_plant = C_plant + Photosynthesis - C_plant*(symphony_params.r_p + symphony_params.m_p + symphony_params.e_p);
+  C_FOM = C_FOM + symphony_params.m_p * C_plant - psi_d - psi_f;
+  C_decompose_FOM = C_decompose_FOM + psi_f - (symphony_params.s + symphony_params.r) * C_decompose_FOM;
+  C_decompose_SOM = C_decompose_SOM + (symphony_params.A - symphony_params.s - symphony_params.r)*C_decompose_SOM + psi_d;
   N = N + symphony_params.psi_i - symphony_params.l*N - psi_up + psi_ims + psi_imf;
-  C_s = C_s + (symphony_params.s - symphony_params.A) * C_ds;
+  C_SOM = C_SOM + (symphony_params.s - symphony_params.A) * C_decompose_SOM;
 
   // Output
-  return Rcpp::List::create(Rcpp::_["C_df"] = C_df,
-                            Rcpp::_["C_ds"] = C_ds,
-                            Rcpp::_["C_p"] = C_p,
+  return Rcpp::List::create(Rcpp::_["C_decompose_FOM"] = C_decompose_FOM,
+                            Rcpp::_["C_decompose_SOM"] = C_decompose_SOM,
+                            Rcpp::_["C_plant"] = C_plant,
                             Rcpp::_["C_FOM"] = C_FOM,
                             Rcpp::_["N"] = N,
-                            Rcpp::_["C_s"] = C_s);
+                            Rcpp::_["C_SOM"] = C_SOM);
 }
 
 
