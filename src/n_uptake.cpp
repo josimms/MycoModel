@@ -108,7 +108,7 @@ double Plant_N_Uptake(double C_in_root,
                           N_avaliable;
   
   double out = std::min(N_to_root_max, C_roots*(NC_in_root_opt - NC_in_root - N_allocation)*N_avaliable);
-    
+  
   return(out);
 }
 
@@ -137,7 +137,7 @@ double Fungal_N_Uptake(double C_roots,
   N_balence N_limits = vector_to_N_balence(N_limits_R);
   N_balence N_k = vector_to_N_balence(N_k_R);
   N_balence SWC_k = vector_to_N_balence(SWC_k_R);
-
+  
   
   double NC_in_fungal = N_fungal/C_fungal;
   double Cr_biomass = C_roots/C_roots_biomass;
@@ -152,19 +152,21 @@ double Fungal_N_Uptake(double C_roots,
 
 
 // [[Rcpp::export]]
-double Microbe_Uptake(double C_microbe,
+Rcpp::List Microbe_Uptake(double C_microbe,
                       double N_micorbe,
                       double NC_microbe_opt,
-                      double N_avaliable,
+                      double NH4_avaliable,
+                      double NO3_avaliable,
+                      double Norg_avaliable,
                       double T,
                       double SWC,
                       std::vector<double> N_in_soil_R,
                       std::vector<double> N_limits_R,
                       std::vector<double> N_k_R,
                       std::vector<double> SWC_k_R) {
-
+  
   /*
-   * Nitrogen limitation // TODO: remeber mass dependance
+   * Nitrogen limitation // Mass limitation is in the soil model!
    */
   
   N_balence N_in_soil = vector_to_N_balence(N_in_soil_R);
@@ -172,26 +174,47 @@ double Microbe_Uptake(double C_microbe,
   N_balence N_k = vector_to_N_balence(N_k_R);
   N_balence SWC_k = vector_to_N_balence(SWC_k_R);
   
+  double NH4_uptaken;
+  double NO3_uptaken;
+  double Norg_uptaken;
+  double C_uptaken;
+  
   double NC_in_micorbe = N_micorbe/C_microbe;
-  double N_micorbe_uptake = (uptake_organic_N(N_in_soil.Norg, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg) + 
-                            uptake_NH4(N_in_soil.NH4, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4) + 
-                            uptake_NO3(N_in_soil.NO3, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3))*
-                            N_avaliable*
-                            (1 - (NC_in_micorbe)/(NC_microbe_opt)); 
+  double N_micorbe_uptake = (Norg_avaliable*uptake_organic_N(N_in_soil.Norg, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg) + 
+                             NH4_avaliable*uptake_NH4(N_in_soil.NH4, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4) + 
+                             NO3_avaliable*uptake_NO3(N_in_soil.NO3, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3))*
+                             (1 - (NC_in_micorbe)/(NC_microbe_opt)); 
   
   /*
-   * Carbon limitation
+   * Carbon limitation // Mass limitation is in the soil model!
    */
   
   double C_microbe_uptake = uptake_C(N_in_soil.C, T, N_limits.C, N_k.C, SWC, SWC_k.C);
   
-/*
+  /*
    * Uptake
    */
   
-  double out = std::max(N_micorbe_uptake, C_microbe_uptake);
+  double out = std::min(N_micorbe_uptake, C_microbe_uptake); // TODO: need to find the mass relationship here - also for the following code to work need to assume that they are in the same units
   
-  return(out);
+  if (out == N_micorbe_uptake) {
+    NH4_uptaken = NH4_avaliable*uptake_NH4(N_in_soil.NH4, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4);
+    NO3_uptaken = NO3_avaliable*uptake_NO3(N_in_soil.NO3, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3);
+    Norg_uptaken = Norg_avaliable*uptake_organic_N(N_in_soil.Norg, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg);
+    C_uptaken = C_microbe_uptake - (C_microbe_uptake - N_micorbe_uptake);
+  } else if (out == C_microbe_uptake) {
+    NH4_uptaken = NH4_avaliable*uptake_NH4(N_in_soil.NH4, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4)*(C_microbe_uptake/N_micorbe_uptake);
+    NO3_uptaken = NO3_avaliable*uptake_NO3(N_in_soil.NO3, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3)*(C_microbe_uptake/N_micorbe_uptake);
+    Norg_uptaken = Norg_avaliable*uptake_organic_N(N_in_soil.Norg, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*(C_microbe_uptake/N_micorbe_uptake);
+    C_uptaken = C_microbe_uptake;
+  } else {
+    std::cout << "Warning:\nOutput of Microbe_Uptake doesn't make sense!";
+  }
+  
+  return(Rcpp::List::create(Rcpp::_["NH4_uptaken"] = NH4_uptaken,
+                            Rcpp::_["NO3_uptaken"] = NO3_uptaken,
+                            Rcpp::_["Norg_uptaken"] = Norg_uptaken,
+                            Rcpp::_["C_uptaken"] = C_uptaken));
 }
 
 
