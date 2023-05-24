@@ -66,7 +66,7 @@ struct soil_balence{
  * FUNCTIONS DEFINED HERE - WHEN THEY ARE NEEDED BETWEEN FILES (reference above them)
  */
 
-// general_functions
+// FILE: general_functions.cpp
 
 #ifndef PKG_leap_year_H
 #define PKG_leap_year_H
@@ -75,7 +75,7 @@ int leap_year(int year);
 
 #endif
 
-// respiration.cpp
+// FILE: respiration.cpp
 
 #ifndef PKG_respiration_H
 #define PKG_respiration_H
@@ -84,11 +84,11 @@ double respiration(double Tmb, double a, double b);
 
 #endif
 
-// myco_growth.cpp
+// FILE: myco_growth.cpp
 
 double myco_growth(double sugar, double Tmb, double N);
 
-// n_uptake.cpp
+// FILE: n_uptake.cpp
 
 #ifndef PKG_vector_to_N_balence_H
 #define PKG_vector_to_N_balence_H
@@ -138,7 +138,25 @@ double Fungal_N_Uptake(double C_roots,
 
 #endif
 
-// symphony_model_plus.cpp
+#ifndef PKG_Microbe_Uptake_H
+#define PKG_Microbe_Uptake_H
+
+Rcpp::List Microbe_Uptake(double C_microbe,
+                          double N_micorbe,
+                          double NC_microbe_opt,
+                          double NH4_avaliable,
+                          double NO3_avaliable,
+                          double Norg_avaliable,
+                          double T,
+                          double SWC,
+                          std::vector<double> N_in_soil_R,
+                          std::vector<double> N_limits_R,
+                          std::vector<double> N_k_R,
+                          std::vector<double> SWC_k_R);
+  
+#endif
+
+// FILE: symphony_model_plus.cpp
 
 #ifndef PKG_vector_to_symphony_H
 #define PKG_vector_to_symphony_H
