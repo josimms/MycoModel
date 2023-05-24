@@ -32,6 +32,7 @@ struct N_balence
   double NO3;
   double Norg;
   double C;
+  double Norg_FOM;
 };
 
 struct symphony_parameters{
@@ -152,7 +153,9 @@ Rcpp::List Microbe_Uptake(double C_microbe,
                           std::vector<double> N_in_soil_R,
                           std::vector<double> N_limits_R,
                           std::vector<double> N_k_R,
-                          std::vector<double> SWC_k_R);
+                          std::vector<double> SWC_k_R,
+                          bool SOM_decomposers,
+                          double Norg_avaliable_FOM);
   
 #endif
 
