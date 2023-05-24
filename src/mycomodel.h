@@ -3,6 +3,7 @@
  */
 #include <vector>
 #include <cmath>
+#include <Rcpp.h>
 
 /*
  * STURCTURES DEFINED HERE
@@ -31,6 +32,34 @@ struct N_balence
   double NO3;
   double Norg;
   double C;
+};
+
+struct symphony_parameters{
+  double A;
+  double s;
+  double r;
+  double m_p;
+  double e_p;
+  double r_p;
+  double k;
+  double alpha;
+  double beta;
+  double i;
+  double l;
+  double y;
+  double u;
+  double e;
+  double Ca;
+  double psi_i;
+};
+
+struct soil_balence{
+  std::vector<double> C_p;
+  std::vector<double> C_f;
+  std::vector<double> C_df;
+  std::vector<double> C_ds;
+  std::vector<double> N;
+  std::vector<double> C_s;
 };
 
 /*
@@ -106,5 +135,14 @@ double Fungal_N_Uptake(double C_roots,
                        std::vector<double> N_limits_R,
                        std::vector<double> N_k_R,
                        std::vector<double> SWC_k_R);
+
+#endif
+
+// symphony_model_plus.cpp
+
+#ifndef PKG_vector_to_symphony_H
+#define PKG_vector_to_symphony_H
+
+symphony_parameters vector_to_symphony(std::vector<double> input);
 
 #endif
