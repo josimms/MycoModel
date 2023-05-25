@@ -102,22 +102,22 @@ double uptake_C(double C,     // UNITS: C kg
 }
 
 // [[Rcpp::export]]
-double Plant_N_Uptake(double C_in_root,                   // UNITS: C kg
-                      double NC_in_root_opt, 
-                      double T,                           // UNITS: 'C
-                      double SWC,                         // UNITS: %
-                      double m,                           // UNITS: %
-                      std::vector<double> N_in_root_R,    // TODO: make this have in input that works with the outåut of the soil function
-                      std::vector<double> N_in_soil_R,
-                      std::vector<double> N_limits_R,
-                      std::vector<double> N_k_R,
-                      std::vector<double> SWC_k_R,
-                      double C_roots,                     // UNITS: C kg
-                      double percentage_C_biomass,        // UNITS: %
-                      double N_avaliable,                 // UNITS: C kg
-                      double N_allocation,                // UNITS: C kg
-                      std::vector<double> parameters) {
-  
+Rcpp::List Plant_N_Uptake(double C_in_root,                   // UNITS: C kg
+                          double NC_in_root_opt, 
+                          double T,                           // UNITS: 'C
+                          double SWC,                         // UNITS: %
+                          double m,                           // UNITS: %
+                          std::vector<double> N_in_root_R,    // TODO: make this have in input that works with the outåut of the soil function
+                          std::vector<double> N_in_soil_R,
+                          std::vector<double> N_limits_R,
+                          std::vector<double> N_k_R,
+                          std::vector<double> SWC_k_R,
+                          double C_roots,                     // UNITS: C kg
+                          double percentage_C_biomass,        // UNITS: %
+                          double N_avaliable,                 // UNITS: C kg
+                          double N_allocation,                // UNITS: C kg
+                          std::vector<double> parameters) {
+      
   
   // Input the parameters!
   N_balence N_in_root = vector_to_N_balence(N_in_root_R);   // TODO: change this input
@@ -150,30 +150,40 @@ double Plant_N_Uptake(double C_in_root,                   // UNITS: C kg
                          (1 - m);
   
   // STEP 3: 
-  double out = std::min(N_to_root_max, (NC_in_root_opt - NC_in_root - N_allocation)*N_to_root_max);
+  double N_to_plant = std::min(N_to_root_max, (NC_in_root_opt - NC_in_root - N_allocation)*N_to_root_max);
+  double reduction_factor;
+  if (N_to_plant == N_to_root_max) {
+    reduction_factor = 1;
+  } else if (N_to_plant == (NC_in_root_opt - NC_in_root - N_allocation)*N_to_root_max) {
+    reduction_factor = (NC_in_root_opt - NC_in_root - N_allocation)*N_to_root_max/N_to_root_max;
+  } else {
+    std::cout << "Warning:\nReduction factor not working in Planr_N_Intake\n";
+  }
   
-  return(out);
-  // TODO: need to add the output for N
+  return(Rcpp::List::create(Rcpp::_["N_to_plant"] = N_to_plant,
+                            Rcpp::_["NH4_used"] = uptake_NH4(N_in_soil.NH4, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4)*reduction_factor,
+                            Rcpp::_["NO3_used"] = NH4_effect_on_NO3*uptake_NO3(N_in_soil.NO3, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3)*reduction_factor,
+                            Rcpp::_["Norg_used"] = uptake_organic_N(N_in_soil.Norg, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*reduction_factor));
 }
 
 
 // [[Rcpp::export]]
-double Fungal_N_Uptake(double C_roots,
-                       double N_roots,
-                       double C_fungal,
-                       double N_fungal,
-                       double NC_fungal_opt,
-                       double mantle_mass,
-                       double ERM_mass,
-                       double C_roots_biomass,
-                       double N_avaliable,
-                       double N_to_CASSIA,
-                       double T,
-                       double SWC,
-                       std::vector<double> N_in_soil_R,
-                       std::vector<double> N_limits_R,
-                       std::vector<double> N_k_R,
-                       std::vector<double> SWC_k_R) {
+Rcpp::List Fungal_N_Uptake(double C_roots,
+                           double N_roots,
+                           double C_fungal,
+                           double N_fungal,
+                           double NC_fungal_opt,
+                           double mantle_mass,
+                           double ERM_mass,
+                           double C_roots_biomass,
+                           double N_avaliable,
+                           double N_to_CASSIA,
+                           double T,
+                           double SWC,
+                           std::vector<double> N_in_soil_R,
+                           std::vector<double> N_limits_R,
+                           std::vector<double> N_k_R,
+                           std::vector<double> SWC_k_R) {
   
   // TODO: make the N_available link to the uptake equations that I have made!
   
@@ -186,13 +196,16 @@ double Fungal_N_Uptake(double C_roots,
   double NC_in_fungal = N_fungal/C_fungal;
   double Cr_biomass = C_roots/C_roots_biomass;
   // TODO: Parallel or intercecting?
+  // Demand
+  double demand = (C_fungal/Cr_biomass)*(mantle_mass/ERM_mass)*(1 - (NC_in_fungal)/(NC_fungal_opt)); // TODO: check the formula
   double N_fungal_uptake = (uptake_organic_N(N_in_soil.Norg, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg) + 
                             uptake_NH4(N_in_soil.NH4, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4) + 
-                            uptake_NO3(N_in_soil.NO3, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3))*
-                            (C_fungal/Cr_biomass)*(mantle_mass/ERM_mass)*N_avaliable*(1 - (NC_in_fungal)/(NC_fungal_opt));
+                            uptake_NO3(N_in_soil.NO3, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3))*demand;
   
-  return(N_fungal_uptake);
-  // TODO: need to add the output for N
+  return Rcpp::List::create(Rcpp::_["N_to_fungal"] = N_fungal_uptake,
+                            Rcpp::_["NH4_used"] = uptake_NH4(N_in_soil.NH4, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4)*demand,
+                            Rcpp::_["NO3_used"] = uptake_NO3(N_in_soil.NO3, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3)*demand,
+                            Rcpp::_["Norg_used"] = uptake_organic_N(N_in_soil.Norg, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*demand);
 }
 
 

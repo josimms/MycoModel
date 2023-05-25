@@ -108,41 +108,41 @@ N_balence list_to_N_balence(Rcpp::List input);
 #ifndef PKG_Plant_N_Uptake_H
 #define PKG_Plant_N_Uptake_H
 
-double Plant_N_Uptake(double C_in_root, 
-                      double NC_in_root_opt, 
-                      double T,
-                      double SWC,
-                      double m,
-                      std::vector<double> N_in_root_R, 
-                      std::vector<double> N_in_soil_R,
-                      std::vector<double> N_limits_R,
-                      std::vector<double> N_k_R,
-                      std::vector<double> SWC_k_R,
-                      double C_roots,
-                      double C_roots_biomass,
-                      double N_avaliable,
-                      double N_allocation);
+Rcpp::List Plant_N_Uptake(double C_in_root, 
+                          double NC_in_root_opt, 
+                          double T,
+                          double SWC,
+                          double m,
+                          std::vector<double> N_in_root_R, 
+                          std::vector<double> N_in_soil_R,
+                          std::vector<double> N_limits_R,
+                          std::vector<double> N_k_R,
+                          std::vector<double> SWC_k_R,
+                          double C_roots,
+                          double C_roots_biomass,
+                          double N_avaliable,
+                          double N_allocation);
 #endif
 
 #ifndef PKG_Fungal_N_Uptake_H
 #define PKG_Fungal_N_Uptake_H
 
-double Fungal_N_Uptake(double C_roots,
-                       double N_roots,
-                       double C_fungal,
-                       double N_fungal,
-                       double NC_fungal_opt,
-                       double mantle_mass,
-                       double ERM_mass,
-                       double C_roots_biomass,
-                       double N_avaliable,
-                       double N_to_CASSIA,
-                       double T,
-                       double SWC,
-                       std::vector<double> N_in_soil_R,
-                       std::vector<double> N_limits_R,
-                       std::vector<double> N_k_R,
-                       std::vector<double> SWC_k_R);
+Rcpp::List Fungal_N_Uptake(double C_roots,
+                           double N_roots,
+                           double C_fungal,
+                           double N_fungal,
+                           double NC_fungal_opt,
+                           double mantle_mass,
+                           double ERM_mass,
+                           double C_roots_biomass,
+                           double N_avaliable,
+                           double N_to_CASSIA,
+                           double T,
+                           double SWC,
+                           std::vector<double> N_in_soil_R,
+                           std::vector<double> N_limits_R,
+                           std::vector<double> N_k_R,
+                           std::vector<double> SWC_k_R);
 
 #endif
 
