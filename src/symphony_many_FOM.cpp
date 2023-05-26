@@ -1,10 +1,8 @@
 #include "mycomodel.h"
 
 // [[Rcpp::export]]
-Rcpp::List symphony_multiple_FOM_daily(std::vector<double> params,  // TODO: need to clean this of old variables and include the newer variables if possible
-                                       double Tmb,                  // UNITS: 'C
+Rcpp::List symphony_multiple_FOM_daily(double Tmb,                  // UNITS: 'C
                                        double SWC,                  // UNITS; mm
-                                       double C_plant,              // UNITS: C kg, FROM: CASSIA
                                        double C_FOM_needles,        // UNITS: C kg, FROM: CASSIA
                                        double C_FOM_woody,          // UNITS: C kg, FROM: CASSIA
                                        double C_FOM_roots,          // UNITS: C kg, FROM: CASSIA
@@ -12,6 +10,8 @@ Rcpp::List symphony_multiple_FOM_daily(std::vector<double> params,  // TODO: nee
                                        double C_SOM,                // UNITS: C kg, FROM: CASSIA
                                        double C_decompose_FOM,      // UNITS: C kg, FROM: here, last iteration
                                        double C_decompose_SOM,      // UNITS: C kg, FROM: here, last iteration
+                                       double N_decompose_FOM,      // UNITS: C kg, FROM: here, last iteration
+                                       double N_decompose_SOM,      // UNITS: C kg, FROM: here, last iteration
                                        double Litter_needles,       // UNITS: C kg, FROM: CASSIA
                                        double Litter_woody,         // UNITS: C kg, FROM: CASSIA
                                        double Litter_roots,         // UNITS: C kg, FROM: CASSIA
@@ -29,7 +29,6 @@ Rcpp::List symphony_multiple_FOM_daily(std::vector<double> params,  // TODO: nee
                                        std::vector<double> N_limits_R,
                                        std::vector<double> N_k_R,
                                        std::vector<double> SWC_k_R,
-                                       double NC_microbe,           // Assume that the CN ratio is constant
                                        double NC_microbe_opt,       // Assume that this is the same as the above number for the moment 
                                        double microbe_turnover)
 {
@@ -40,8 +39,7 @@ Rcpp::List symphony_multiple_FOM_daily(std::vector<double> params,  // TODO: nee
   
   // INITILISATION FROM VECTORS
   // Parameters into symphony_parameters format
-  symphony_parameters symphony_params = vector_to_symphony(params);
-  // alpha and beta should be more precise and the same as the parameters in the microbe uptake 
+    // TODO: do I need to initialise anything
   
   // SOIL INITIALISATION
   double C_FOM = C_FOM_needles + C_FOM_woody + C_FOM_roots + C_FOM_mycelium; // C kg
@@ -57,14 +55,14 @@ Rcpp::List symphony_multiple_FOM_daily(std::vector<double> params,  // TODO: nee
   C_SOM = C_SOM - SOM_Norg_used;                            // C kg
   
   // STEP 2: consider the uptake functions, for FOM and SOM, 
-      // this includes the decomposition and mineralisation / immobilisation
-      // Apart from the biomass that the microbes specialise in, the second N uptake is considered to be equally driven between the types
-      
+  // this includes the decomposition and mineralisation / immobilisation
+  // Apart from the biomass that the microbes specialise in, the second N uptake is considered to be equally driven between the types
+  
   // FOM
-  Rcpp::List FOM_after_microbe_activity_list = Microbe_Uptake(C_decompose_FOM, NC_microbe*C_decompose_FOM, NC_microbe_opt, NH4, NO3, C_FOM, Tmb, SWC, N_limits_R, N_k_R, SWC_k_R, false, C_FOM);
+  Rcpp::List FOM_after_microbe_activity_list = Microbe_Uptake(C_decompose_FOM, N_decompose_FOM, NC_microbe_opt, NH4, NO3, C_FOM, Tmb, SWC, N_limits_R, N_k_R, SWC_k_R, false, C_FOM);
   N_balence FOM_after_microbe_activity = list_to_N_balence(FOM_after_microbe_activity_list);    // C kg
   // SOM
-  Rcpp::List SOM_after_microbe_activity_list = Microbe_Uptake(C_decompose_SOM, NC_microbe*C_decompose_SOM, NC_microbe_opt, NH4, NO3, C_SOM, Tmb, SWC, N_limits_R, N_k_R, SWC_k_R, true, C_FOM);
+  Rcpp::List SOM_after_microbe_activity_list = Microbe_Uptake(C_decompose_SOM, N_decompose_SOM, NC_microbe_opt, NH4, NO3, C_SOM, Tmb, SWC, N_limits_R, N_k_R, SWC_k_R, true, C_FOM);
   N_balence SOM_after_microbe_activity = list_to_N_balence(SOM_after_microbe_activity_list);    // C kg
   
   // Update pure inorganic pools
