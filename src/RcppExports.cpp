@@ -65,47 +65,43 @@ BEGIN_RCPP
 END_RCPP
 }
 // mycofon_balence
-Rcpp::List mycofon_balence(double Allocation_C_CASSIA, double N_to_CASSIA, double root_mass, double fungal_mass, double optimal_root_fungal_biomass_ratio, double C_roots, double C_roots_biomass, double N_roots, double C_fungal, double N_fungal, double turnover_roots, double turnover_fungal, double a_roots, double b_roots, double a_myco, double b_myco, double C_allocation, double N_allocation, std::vector<double> N_in_root_R, double NH4, double NO3, double FOM_Norg, double C_in_root, double NC_in_root_opt, double T, double Tsb, double SWC, std::vector<double> N_limits_R, std::vector<double> N_k_R, std::vector<double> SWC_k_R, double NC_fungal_opt, double mantle_mass, double ERM_mass, double N_avaliable, std::vector<double> parameters_NH4_on_NO3);
-RcppExport SEXP _MycoModel_mycofon_balence(SEXP Allocation_C_CASSIASEXP, SEXP N_to_CASSIASEXP, SEXP root_massSEXP, SEXP fungal_massSEXP, SEXP optimal_root_fungal_biomass_ratioSEXP, SEXP C_rootsSEXP, SEXP C_roots_biomassSEXP, SEXP N_rootsSEXP, SEXP C_fungalSEXP, SEXP N_fungalSEXP, SEXP turnover_rootsSEXP, SEXP turnover_fungalSEXP, SEXP a_rootsSEXP, SEXP b_rootsSEXP, SEXP a_mycoSEXP, SEXP b_mycoSEXP, SEXP C_allocationSEXP, SEXP N_allocationSEXP, SEXP N_in_root_RSEXP, SEXP NH4SEXP, SEXP NO3SEXP, SEXP FOM_NorgSEXP, SEXP C_in_rootSEXP, SEXP NC_in_root_optSEXP, SEXP TSEXP, SEXP TsbSEXP, SEXP SWCSEXP, SEXP N_limits_RSEXP, SEXP N_k_RSEXP, SEXP SWC_k_RSEXP, SEXP NC_fungal_optSEXP, SEXP mantle_massSEXP, SEXP ERM_massSEXP, SEXP N_avaliableSEXP, SEXP parameters_NH4_on_NO3SEXP) {
+Rcpp::List mycofon_balence(double Allocation_C_CASSIA, double N_to_CASSIA, double C_allocation, double N_allocation, double C_roots, double N_roots, double percentage_C_biomass, double optimal_root_fungal_biomass_ratio, double C_roots_biomass, double C_fungal, double N_fungal, double turnover_roots, double turnover_fungal, std::vector<double> respiration_parameters_R, double NH4, double NO3, double FOM_Norg, double NC_in_root_opt, double T, double Tsb, double SWC, std::vector<double> N_limits_Plant, std::vector<double> N_k_Plant, std::vector<double> SWC_k_Plant, std::vector<double> N_limits_Fungal, std::vector<double> N_k_Fungal, std::vector<double> SWC_k_Fungal, double NC_fungal_opt, double mantle_mass, double ERM_mass, std::vector<double> parameters_NH4_on_NO3);
+RcppExport SEXP _MycoModel_mycofon_balence(SEXP Allocation_C_CASSIASEXP, SEXP N_to_CASSIASEXP, SEXP C_allocationSEXP, SEXP N_allocationSEXP, SEXP C_rootsSEXP, SEXP N_rootsSEXP, SEXP percentage_C_biomassSEXP, SEXP optimal_root_fungal_biomass_ratioSEXP, SEXP C_roots_biomassSEXP, SEXP C_fungalSEXP, SEXP N_fungalSEXP, SEXP turnover_rootsSEXP, SEXP turnover_fungalSEXP, SEXP respiration_parameters_RSEXP, SEXP NH4SEXP, SEXP NO3SEXP, SEXP FOM_NorgSEXP, SEXP NC_in_root_optSEXP, SEXP TSEXP, SEXP TsbSEXP, SEXP SWCSEXP, SEXP N_limits_PlantSEXP, SEXP N_k_PlantSEXP, SEXP SWC_k_PlantSEXP, SEXP N_limits_FungalSEXP, SEXP N_k_FungalSEXP, SEXP SWC_k_FungalSEXP, SEXP NC_fungal_optSEXP, SEXP mantle_massSEXP, SEXP ERM_massSEXP, SEXP parameters_NH4_on_NO3SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type Allocation_C_CASSIA(Allocation_C_CASSIASEXP);
     Rcpp::traits::input_parameter< double >::type N_to_CASSIA(N_to_CASSIASEXP);
-    Rcpp::traits::input_parameter< double >::type root_mass(root_massSEXP);
-    Rcpp::traits::input_parameter< double >::type fungal_mass(fungal_massSEXP);
-    Rcpp::traits::input_parameter< double >::type optimal_root_fungal_biomass_ratio(optimal_root_fungal_biomass_ratioSEXP);
+    Rcpp::traits::input_parameter< double >::type C_allocation(C_allocationSEXP);
+    Rcpp::traits::input_parameter< double >::type N_allocation(N_allocationSEXP);
     Rcpp::traits::input_parameter< double >::type C_roots(C_rootsSEXP);
-    Rcpp::traits::input_parameter< double >::type C_roots_biomass(C_roots_biomassSEXP);
     Rcpp::traits::input_parameter< double >::type N_roots(N_rootsSEXP);
+    Rcpp::traits::input_parameter< double >::type percentage_C_biomass(percentage_C_biomassSEXP);
+    Rcpp::traits::input_parameter< double >::type optimal_root_fungal_biomass_ratio(optimal_root_fungal_biomass_ratioSEXP);
+    Rcpp::traits::input_parameter< double >::type C_roots_biomass(C_roots_biomassSEXP);
     Rcpp::traits::input_parameter< double >::type C_fungal(C_fungalSEXP);
     Rcpp::traits::input_parameter< double >::type N_fungal(N_fungalSEXP);
     Rcpp::traits::input_parameter< double >::type turnover_roots(turnover_rootsSEXP);
     Rcpp::traits::input_parameter< double >::type turnover_fungal(turnover_fungalSEXP);
-    Rcpp::traits::input_parameter< double >::type a_roots(a_rootsSEXP);
-    Rcpp::traits::input_parameter< double >::type b_roots(b_rootsSEXP);
-    Rcpp::traits::input_parameter< double >::type a_myco(a_mycoSEXP);
-    Rcpp::traits::input_parameter< double >::type b_myco(b_mycoSEXP);
-    Rcpp::traits::input_parameter< double >::type C_allocation(C_allocationSEXP);
-    Rcpp::traits::input_parameter< double >::type N_allocation(N_allocationSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type N_in_root_R(N_in_root_RSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type respiration_parameters_R(respiration_parameters_RSEXP);
     Rcpp::traits::input_parameter< double >::type NH4(NH4SEXP);
     Rcpp::traits::input_parameter< double >::type NO3(NO3SEXP);
     Rcpp::traits::input_parameter< double >::type FOM_Norg(FOM_NorgSEXP);
-    Rcpp::traits::input_parameter< double >::type C_in_root(C_in_rootSEXP);
     Rcpp::traits::input_parameter< double >::type NC_in_root_opt(NC_in_root_optSEXP);
     Rcpp::traits::input_parameter< double >::type T(TSEXP);
     Rcpp::traits::input_parameter< double >::type Tsb(TsbSEXP);
     Rcpp::traits::input_parameter< double >::type SWC(SWCSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type N_limits_R(N_limits_RSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type N_k_R(N_k_RSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type SWC_k_R(SWC_k_RSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type N_limits_Plant(N_limits_PlantSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type N_k_Plant(N_k_PlantSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type SWC_k_Plant(SWC_k_PlantSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type N_limits_Fungal(N_limits_FungalSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type N_k_Fungal(N_k_FungalSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type SWC_k_Fungal(SWC_k_FungalSEXP);
     Rcpp::traits::input_parameter< double >::type NC_fungal_opt(NC_fungal_optSEXP);
     Rcpp::traits::input_parameter< double >::type mantle_mass(mantle_massSEXP);
     Rcpp::traits::input_parameter< double >::type ERM_mass(ERM_massSEXP);
-    Rcpp::traits::input_parameter< double >::type N_avaliable(N_avaliableSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type parameters_NH4_on_NO3(parameters_NH4_on_NO3SEXP);
-    rcpp_result_gen = Rcpp::wrap(mycofon_balence(Allocation_C_CASSIA, N_to_CASSIA, root_mass, fungal_mass, optimal_root_fungal_biomass_ratio, C_roots, C_roots_biomass, N_roots, C_fungal, N_fungal, turnover_roots, turnover_fungal, a_roots, b_roots, a_myco, b_myco, C_allocation, N_allocation, N_in_root_R, NH4, NO3, FOM_Norg, C_in_root, NC_in_root_opt, T, Tsb, SWC, N_limits_R, N_k_R, SWC_k_R, NC_fungal_opt, mantle_mass, ERM_mass, N_avaliable, parameters_NH4_on_NO3));
+    rcpp_result_gen = Rcpp::wrap(mycofon_balence(Allocation_C_CASSIA, N_to_CASSIA, C_allocation, N_allocation, C_roots, N_roots, percentage_C_biomass, optimal_root_fungal_biomass_ratio, C_roots_biomass, C_fungal, N_fungal, turnover_roots, turnover_fungal, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_root_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, NC_fungal_opt, mantle_mass, ERM_mass, parameters_NH4_on_NO3));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -342,7 +338,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_MycoModel_plant_decision", (DL_FUNC) &_MycoModel_plant_decision, 3},
     {"_MycoModel_myco_decision", (DL_FUNC) &_MycoModel_myco_decision, 3},
     {"_MycoModel_myco_growth", (DL_FUNC) &_MycoModel_myco_growth, 5},
-    {"_MycoModel_mycofon_balence", (DL_FUNC) &_MycoModel_mycofon_balence, 35},
+    {"_MycoModel_mycofon_balence", (DL_FUNC) &_MycoModel_mycofon_balence, 31},
     {"_MycoModel_uptake_organic_N", (DL_FUNC) &_MycoModel_uptake_organic_N, 6},
     {"_MycoModel_uptake_NH4", (DL_FUNC) &_MycoModel_uptake_NH4, 6},
     {"_MycoModel_uptake_NO3", (DL_FUNC) &_MycoModel_uptake_NO3, 6},

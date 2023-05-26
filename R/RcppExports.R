@@ -17,8 +17,8 @@ myco_growth <- function(C_fungal, N_fungal, sugar, N, Tmb) {
     .Call(`_MycoModel_myco_growth`, C_fungal, N_fungal, sugar, N, Tmb)
 }
 
-mycofon_balence <- function(Allocation_C_CASSIA, N_to_CASSIA, root_mass, fungal_mass, optimal_root_fungal_biomass_ratio, C_roots, C_roots_biomass, N_roots, C_fungal, N_fungal, turnover_roots, turnover_fungal, a_roots, b_roots, a_myco, b_myco, C_allocation, N_allocation, N_in_root_R, NH4, NO3, FOM_Norg, C_in_root, NC_in_root_opt, T, Tsb, SWC, N_limits_R, N_k_R, SWC_k_R, NC_fungal_opt, mantle_mass, ERM_mass, N_avaliable, parameters_NH4_on_NO3) {
-    .Call(`_MycoModel_mycofon_balence`, Allocation_C_CASSIA, N_to_CASSIA, root_mass, fungal_mass, optimal_root_fungal_biomass_ratio, C_roots, C_roots_biomass, N_roots, C_fungal, N_fungal, turnover_roots, turnover_fungal, a_roots, b_roots, a_myco, b_myco, C_allocation, N_allocation, N_in_root_R, NH4, NO3, FOM_Norg, C_in_root, NC_in_root_opt, T, Tsb, SWC, N_limits_R, N_k_R, SWC_k_R, NC_fungal_opt, mantle_mass, ERM_mass, N_avaliable, parameters_NH4_on_NO3)
+mycofon_balence <- function(Allocation_C_CASSIA, N_to_CASSIA, C_allocation, N_allocation, C_roots, N_roots, percentage_C_biomass, optimal_root_fungal_biomass_ratio, C_roots_biomass, C_fungal, N_fungal, turnover_roots, turnover_fungal, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_root_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, NC_fungal_opt, mantle_mass, ERM_mass, parameters_NH4_on_NO3) {
+    .Call(`_MycoModel_mycofon_balence`, Allocation_C_CASSIA, N_to_CASSIA, C_allocation, N_allocation, C_roots, N_roots, percentage_C_biomass, optimal_root_fungal_biomass_ratio, C_roots_biomass, C_fungal, N_fungal, turnover_roots, turnover_fungal, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_root_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, NC_fungal_opt, mantle_mass, ERM_mass, parameters_NH4_on_NO3)
 }
 
 uptake_organic_N <- function(N_org, T, N_org_limit, k, SWC, SWC_k) {

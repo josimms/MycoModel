@@ -9,24 +9,6 @@
  * STURCTURES DEFINED HERE
  */
 
-struct organism
-{
-  std::vector<double> transfer_timeseries;
-  std::vector<double> total_n;
-  std::vector<double> total_c;
-  std::vector<double> input;
-  std::vector<double> transfer_rate; // This is from literature
-  double value_lower_bound; // REM: could make this a vector later
-  double baseline_lower_bound; // REM: could make this a vector later
-  std::vector<double> respiration_microbes_paramsM;
-};
-
-struct ecosystem
-{
-  organism tree;
-  organism myco;
-};
-
 struct N_balence
 {
   double NH4;
@@ -34,6 +16,16 @@ struct N_balence
   double Norg;
   double C;
   double Norg_FOM;
+};
+
+struct respiration_parameters
+{
+  double plant_a;
+  double plant_b;
+  double fungal_a;
+  double fungal_b;
+  double micorbe_a;
+  double micorbe_b;
 };
 
 struct symphony_parameters{
@@ -82,18 +74,45 @@ struct parameters // A collection of parameters that I want as input function - 
   std::vector<double> SWC_k_fungal;
   std::vector<double> SWC_k_microbes;
   std::vector<double> NH4_on_NO3;
-  std::vector<double> respiration_microbes_params;
+  std::vector<double> respiration_params;
+  double optimal_root_fungal_biomass_ratio;
+  double turnover_roots;
+  double turnover_fungal;
+  double mantle_mass;
+  double ERM_mass;
 };
 
 struct DECISION_output
 {
+  double NH4_given_Plant;
+  double NO3_given_Plant;
+  double FOM_Norg_given_Plant;
+  double N_given_Plant_total;
+  double C_given_Plant;
+  
   double NH4_used_Plant;
   double NO3_used_Plant;
   double FOM_Norg_used_Plant;
+  double N_used_Plant_total;
+  double C_used_Plant;
+  
+  double NH4_used_Roots;
+  double NO3_used_Roots;
+  double FOM_Norg_used_Roots;
+  double N_used_Roots_total;
+  double N_given_Roots_total;
+  double C_given_Roots;
+  
   double NH4_used_Fungal;
   double NO3_used_Fungal;
   double FOM_Norg_used_Fungal;
-  double N_used_Plant_total;
+  double N_used_Fungal_total;
+  double C_used_Fungal;
+  
+  double NH4_given_Fungal;
+  double NO3_given_Fungal;
+  double FOM_Norg_given_Fungal;
+  double N_given_Fungal_total;
 };
 
 struct CASSIA_output
@@ -285,4 +304,44 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,                  // UNITS: 'C
                                        double NC_microbe_opt,       // Assume that this is the same as the above number for the moment 
                                        double microbe_turnover);
 
+#endif
+
+// FILE: mycofon_updated.cpp
+
+
+#ifndef PKG_mycofon_balence_H
+#define PKG_mycofon_balence_H
+
+Rcpp::List mycofon_balence(double Allocation_C_CASSIA,
+                           double N_to_CASSIA,
+                           double C_allocation,
+                           double N_allocation,
+                           double C_roots,
+                           double N_roots,
+                           double percentage_C_biomass,
+                           double optimal_root_fungal_biomass_ratio,
+                           double C_roots_biomass,
+                           double C_fungal,
+                           double N_fungal,
+                           double turnover_roots,
+                           double turnover_fungal,
+                           std::vector<double> respiration_parameters_R,
+                           double NH4,
+                           double NO3,
+                           double FOM_Norg,
+                           double NC_in_root_opt,
+                           double T,
+                           double Tsb,
+                           double SWC,
+                           std::vector<double> N_limits_Plant,
+                           std::vector<double> N_k_Plant,
+                           std::vector<double> SWC_k_Plant,
+                           std::vector<double> N_limits_Fungal,
+                           std::vector<double> N_k_Fungal,
+                           std::vector<double> SWC_k_Fungal,
+                           double NC_fungal_opt,
+                           double mantle_mass,
+                           double ERM_mass,
+                           std::vector<double> parameters_NH4_on_NO3);
+  
 #endif

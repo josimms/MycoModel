@@ -1,54 +1,66 @@
-#include <Rcpp.h>
 #include "mycomodel.h"
-using namespace Rcpp;
+
+respiration_parameters respiration_vector_to_struct(std::vector<double> input) {
+  respiration_parameters out;
+  out.plant_a = input[0];
+  out.plant_b = input[1];
+  out.fungal_a = input[2];
+  out.fungal_b = input[3];
+  out.micorbe_a = input[4];
+  out.micorbe_b = input[5];
+  return(out);
+}
 
 // TODO: for the export to work, maybe make this a list?
 // [[Rcpp::export]]
 Rcpp::List mycofon_balence(double Allocation_C_CASSIA,
                            double N_to_CASSIA,
-                           double root_mass,
-                           double fungal_mass,
-                           double optimal_root_fungal_biomass_ratio,
+                           double C_allocation,
+                           double N_allocation,
                            double C_roots,
-                           double C_roots_biomass,
                            double N_roots,
+                           double percentage_C_biomass,
+                           double optimal_root_fungal_biomass_ratio,
+                           double C_roots_biomass,
                            double C_fungal,
                            double N_fungal,
                            double turnover_roots,
                            double turnover_fungal,
-                           double a_roots,
-                           double b_roots,
-                           double a_myco,
-                           double b_myco,
-                           double C_allocation,
-                           double N_allocation,
-                           std::vector<double> N_in_root_R,
+                           std::vector<double> respiration_parameters_R,
                            double NH4,
                            double NO3,
                            double FOM_Norg,
-                           double C_in_root,
                            double NC_in_root_opt,
                            double T,
                            double Tsb,
                            double SWC,
-                           std::vector<double> N_limits_R,
-                           std::vector<double> N_k_R,
-                           std::vector<double> SWC_k_R,
+                           std::vector<double> N_limits_Plant,
+                           std::vector<double> N_k_Plant,
+                           std::vector<double> SWC_k_Plant,
+                           std::vector<double> N_limits_Fungal,
+                           std::vector<double> N_k_Fungal,
+                           std::vector<double> SWC_k_Fungal,
                            double NC_fungal_opt,
                            double mantle_mass,
                            double ERM_mass,
-                           double N_avaliable,
                            std::vector<double> parameters_NH4_on_NO3) {
   
+  /*
+   * Initialise parameters
+   */
+  respiration_parameters respiration_params = respiration_vector_to_struct(respiration_parameters_R);
+  
   // Mycorrhizal rate
-  double m = fungal_mass / (root_mass * optimal_root_fungal_biomass_ratio);
+  // although this should be multiplied by the biomass this is taken out at this stage, as the values are assumed to be the same and therefore there is no point
+      // TODO: should the C to biomass ratio be the same for roots and fungi?
+  double m = N_roots / (C_roots * optimal_root_fungal_biomass_ratio); 
   if (m > 1) {
     std::cout << "Warning:\nThe mycorhization value (m) is more than 1 - check the fungal_mass, root_mass and optimal_root_fungal_biomass_ratio values"; 
   }
   // dC^r/dt TODO: this need to be linked with the CASSIA C sections
-  C_roots = C_roots + Allocation_C_CASSIA - (1 - m)*C_roots*turnover_roots - m*C_roots*turnover_fungal - respiration(Tsb, a_roots, b_roots)*C_roots - C_allocation;
+  C_roots = C_roots + Allocation_C_CASSIA - (1 - m)*C_roots*turnover_roots - m*C_roots*turnover_fungal - respiration(Tsb, respiration_params.plant_a, respiration_params.plant_b)*C_roots - C_allocation;
   // dC^f/dt
-  C_fungal = C_fungal + C_allocation - turnover_fungal*fungal_mass - respiration(Tsb, a_myco, b_myco)*fungal_mass;
+  C_fungal = C_fungal + C_allocation - turnover_fungal*N_roots*percentage_C_biomass - respiration(Tsb, respiration_params.fungal_a, respiration_params.fungal_b)*N_roots*percentage_C_biomass;
   
   // Nitrogen!
   // TODO: should the N in the roots in different forms be differentiated - or can it be grouped at this stage?
@@ -64,9 +76,9 @@ Rcpp::List mycofon_balence(double Allocation_C_CASSIA,
                                        NH4,    // TODO: make this have in input that works with the output of the soil function
                                        NO3,
                                        FOM_Norg,
-                                       N_limits_R,
-                                       N_k_R,
-                                       SWC_k_R,
+                                       N_limits_Plant,
+                                       N_k_Plant,
+                                       SWC_k_Plant,
                                        C_roots,
                                        N_roots,
                                        C_roots_biomass,
@@ -89,16 +101,18 @@ Rcpp::List mycofon_balence(double Allocation_C_CASSIA,
                                          NH4,
                                          NO3,
                                          FOM_Norg,
-                                         N_limits_R,
-                                         N_k_R,
-                                         SWC_k_R)[1];
+                                         N_limits_Fungal,
+                                         N_k_Fungal,
+                                         SWC_k_Fungal)[1];
   
   N_fungal = N_fungal + uptake_fungal - turnover_fungal*C_fungal*fungal_NC_ratio - N_allocation;
 
   return Rcpp::List::create(Rcpp::_["C_roots"] = C_roots,
                             Rcpp::_["C_fungal"] = C_fungal,
                             Rcpp::_["N_roots"] = N_roots,
-                            Rcpp::_["N_fungal"] = N_fungal);
+                            Rcpp::_["N_fungal"] = N_fungal,
+                            Rcpp::_["uptake_plant"] = uptake_plant,
+                            Rcpp::_["uptake_fungal"] = uptake_fungal);
 }
 
 
