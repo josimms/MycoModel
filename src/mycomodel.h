@@ -77,6 +77,7 @@ struct parameters // A collection of parameters that I want as input function - 
   std::vector<double> respiration_params;
   double optimal_root_fungal_biomass_ratio;
   double turnover_roots;
+  double turnover_roots_mycorrhized;
   double turnover_fungal;
   double mantle_mass;
   double ERM_mass;
@@ -216,7 +217,6 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
                           double C_roots,                     // UNITS: C kg
                           double N_roots,
                           double percentage_C_biomass,        // UNITS: %
-                          double N_allocation,                // UNITS: C kg
                           std::vector<double> parameters);
 
 #endif
@@ -312,11 +312,7 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,                  // UNITS: 'C
 #ifndef PKG_mycofon_balence_H
 #define PKG_mycofon_balence_H
 
-Rcpp::List mycofon_balence(double Allocation_C_CASSIA,
-                           double N_to_CASSIA,
-                           double C_allocation,
-                           double N_allocation,
-                           double C_roots,
+Rcpp::List mycofon_balence(double C_roots,
                            double N_roots,
                            double percentage_C_biomass,
                            double optimal_root_fungal_biomass_ratio,
@@ -324,12 +320,14 @@ Rcpp::List mycofon_balence(double Allocation_C_CASSIA,
                            double C_fungal,
                            double N_fungal,
                            double turnover_roots,
+                           double turnover_roots_mycorrhized,
                            double turnover_fungal,
                            std::vector<double> respiration_parameters_R,
                            double NH4,
                            double NO3,
                            double FOM_Norg,
                            double NC_in_root_opt,
+                           double NC_in_fungai_opt,
                            double T,
                            double Tsb,
                            double SWC,

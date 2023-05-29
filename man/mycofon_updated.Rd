@@ -7,23 +7,23 @@
 \description{
   This function brings together the C or N balance as in the original MYCOFON model, the decision functions for resource transfer, fungal growth and multiple N uptake functions. The equations in this function are below.
   
-  m = \frac{N^r}{B^{rf}_{opt}C^r}
+  \eqn{m = \frac{N^r}{B^{rf}_{opt}C^r}}
   
   Where N is nitrogen, C is carbon, r roots, f fungai, B biomass, opt is optimum.
   
-  C^r = C^r + C^{CASSIA}_{Allocated} - (1 - m)*t^r*C^r - m*t^m - r(Tmb)*C^r - d^r(C^{CASSIA})
+  \eqn{C^r = C^r + C^{CASSIA}_{Allocated} - (1 - m)*t^r*C^r - m*t^m - r(Tmb)*C^r - d^r(C^{CASSIA})}
   
   Where, C^{CASSIA}_{Allocated} is the carbon allocated from the CASSIA model, t is turnover, which is different for micorhized (m) and non-mycorrhized roots (r), Tmb is temperature of the soil, d() is decomposition and r() is respiration.
   
-  C^f = C^f + d(C^{CASSIA}) - t^f * N^{r} * p^{C, biomass} - r(Tmb) * N^{r} * p^{C, biomass}
+  \eqn{C^f = C^f + d(C^{CASSIA}) - t^f * N^{r} * p^{C, biomass} - r(Tmb) * N^{r} * p^{C, biomass}}
   
   Where p is percentage.
   
-  N^r = N^r + d^f(N^{f}) + u^r(T, SWC, NH4, NO3, FOM_Norg, C^r, N^r)*C_roots - (1 - m)*t^r*C^r*fungal_NC_ratio - m*t^m*fungal_NC_ratio - a(N^f)
+  \eqn{N^r = N^r + d^f(N^{f}) + u^r(T, SWC, NH4, NO3, FOM_Norg, C^r, N^r)*C_roots - (1 - m)*t^r*C^r*fungal_NC_ratio - m*t^m*fungal_NC_ratio - a(N^f)}
   
   a allocation from roots to plant, fungal_NC_ratio
   
-  N^f = N^f + u^f(T, SWC, NH4, NO3, FOM_Norg, C^r, N^r)*C^f*fungal_NC_ratio - t^f*C^f*fungal_NC_ratio - d^f(N^f)
+  \eqn{N^f = N^f + u^f(T, SWC, NH4, NO3, FOM_Norg, C^r, N^r)*C^f*fungal_NC_ratio - t^f*C^f*fungal_NC_ratio - d^f(N^f)}
 }
 \usage{
 

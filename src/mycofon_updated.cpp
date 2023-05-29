@@ -12,11 +12,7 @@ respiration_parameters respiration_vector_to_struct(std::vector<double> input) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List mycofon_balence(double Allocation_C_CASSIA,
-                           double N_to_CASSIA,
-                           double C_allocation,
-                           double N_allocation,
-                           double C_roots,
+Rcpp::List mycofon_balence(double C_roots,
                            double N_roots,
                            double percentage_C_biomass,
                            double optimal_root_fungal_biomass_ratio,
@@ -62,7 +58,7 @@ Rcpp::List mycofon_balence(double Allocation_C_CASSIA,
   // dC^r/dt TODO: this need to be linked with the CASSIA C sections
   // TODO: need to work out if the 
   C_roots = C_roots + 
-    Allocation_C_CASSIA - 
+    0.1*C_roots - 
     (1 - m)*C_roots*turnover_roots - 
     m*C_roots*turnover_roots_mycorrhized - 
     respiration(Tsb, respiration_params.plant_a, respiration_params.plant_b)*C_roots - 
@@ -94,7 +90,6 @@ Rcpp::List mycofon_balence(double Allocation_C_CASSIA,
                                        C_roots,
                                        N_roots,
                                        C_roots_biomass,
-                                       N_allocation,
                                        parameters_NH4_on_NO3)[1];
 
   N_roots = N_roots +
@@ -102,7 +97,7 @@ Rcpp::List mycofon_balence(double Allocation_C_CASSIA,
     uptake_plant*C_roots - 
     (1 - m)*C_roots*turnover_roots*root_NC_ratio - 
     m*C_roots*turnover_roots_mycorrhized*root_NC_ratio -
-    N_to_CASSIA;
+    0.1*N_roots;
   
   //dN^f/dt
   double uptake_fungal = Fungal_N_Uptake(C_fungal,

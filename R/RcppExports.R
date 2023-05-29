@@ -17,8 +17,8 @@ myco_growth <- function(C_fungal, N_fungal, sugar, N, Tmb) {
     .Call(`_MycoModel_myco_growth`, C_fungal, N_fungal, sugar, N, Tmb)
 }
 
-mycofon_balence <- function(Allocation_C_CASSIA, N_to_CASSIA, C_allocation, N_allocation, C_roots, N_roots, percentage_C_biomass, optimal_root_fungal_biomass_ratio, C_roots_biomass, C_fungal, N_fungal, turnover_roots, turnover_fungal, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_root_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, NC_fungal_opt, mantle_mass, ERM_mass, parameters_NH4_on_NO3) {
-    .Call(`_MycoModel_mycofon_balence`, Allocation_C_CASSIA, N_to_CASSIA, C_allocation, N_allocation, C_roots, N_roots, percentage_C_biomass, optimal_root_fungal_biomass_ratio, C_roots_biomass, C_fungal, N_fungal, turnover_roots, turnover_fungal, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_root_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, NC_fungal_opt, mantle_mass, ERM_mass, parameters_NH4_on_NO3)
+mycofon_balence <- function(C_roots, N_roots, percentage_C_biomass, optimal_root_fungal_biomass_ratio, C_roots_biomass, C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_fungal, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_root_opt, NC_in_fungai_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, NC_fungal_opt, mantle_mass, ERM_mass, parameters_NH4_on_NO3) {
+    .Call(`_MycoModel_mycofon_balence`, C_roots, N_roots, percentage_C_biomass, optimal_root_fungal_biomass_ratio, C_roots_biomass, C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_fungal, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_root_opt, NC_in_fungai_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, NC_fungal_opt, mantle_mass, ERM_mass, parameters_NH4_on_NO3)
 }
 
 uptake_organic_N <- function(N_org, T, N_org_limit, k, SWC, SWC_k) {
@@ -37,8 +37,8 @@ uptake_C <- function(C, T, C_limit, k, SWC, SWC_k) {
     .Call(`_MycoModel_uptake_C`, C, T, C_limit, k, SWC, SWC_k)
 }
 
-Plant_N_Uptake <- function(NC_in_root_opt, T, SWC, m, NH4_in, NO3_in, FOM_in, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, percentage_C_biomass, N_allocation, parameters) {
-    .Call(`_MycoModel_Plant_N_Uptake`, NC_in_root_opt, T, SWC, m, NH4_in, NO3_in, FOM_in, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, percentage_C_biomass, N_allocation, parameters)
+Plant_N_Uptake <- function(NC_in_root_opt, T, SWC, m, NH4_in, NO3_in, FOM_in, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, percentage_C_biomass, parameters) {
+    .Call(`_MycoModel_Plant_N_Uptake`, NC_in_root_opt, T, SWC, m, NH4_in, NO3_in, FOM_in, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, percentage_C_biomass, parameters)
 }
 
 Fungal_N_Uptake <- function(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, T, SWC, NH4, NO3, FOM_Norg, N_limits_R, N_k_R, SWC_k_R) {

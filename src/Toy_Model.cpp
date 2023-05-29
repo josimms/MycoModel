@@ -24,9 +24,10 @@ parameters parameters_initalise(std::vector<double> parameters_R) {
   out.respiration_params = {parameters_R[36], parameters_R[37], parameters_R[38], parameters_R[39], parameters_R[40], parameters_R[41]};
   out.optimal_root_fungal_biomass_ratio = parameters_R[42];
   out.turnover_roots = parameters_R[43];
-  out.turnover_fungal = parameters_R[44];
-  out.mantle_mass = parameters_R[45];
-  out.ERM_mass = parameters_R[46];
+  out.turnover_roots_mycorrhized = parameters_R[44];
+  out.turnover_fungal = parameters_R[45];
+  out.mantle_mass = parameters_R[46];
+  out.ERM_mass = parameters_R[47];
   return(out);
 };
 
@@ -96,16 +97,15 @@ Rcpp::List Toy_Model(double year,
     // TODO: decision function shouold be here or in the mycofon balance
     
     // TODO: work out which parameters are available here
-    Rcpp::List MYCOFON_out =  mycofon_balence(DECISION_out.C_given_Plant, DECISION_out.N_given_Plant_total,
-                                             DECISION_out.C_given_Roots, DECISION_out.N_given_Roots_total, // TODO: think about this
-                                             CASSIA_out.C_roots, MYTCOFON_out.C_fungal,
+    Rcpp::List MYCOFON_out =  mycofon_balence(CASSIA_out.C_roots, MYTCOFON_out.C_fungal,
                                              parameters_in.optimal_root_fungal_biomass_ratio, parameters_in.percentage_C_biomass,
                                              CASSIA_out.N_roots,
                                              MYTCOFON_out.C_fungal, MYTCOFON_out.N_fungal,
-                                             parameters_in.turnover_roots, parameters_in.turnover_fungal,
+                                             parameters_in.turnover_roots, parameters_in.turnover_roots_mycorrhized, parameters_in.turnover_fungal,
                                              parameters_in.respiration_params,
                                              SYMPHONY_out.NH4, SYMPHONY_out.NO3, SYMPHONY_out.N_FOM,
                                              parameters_in.NC_in_root_opt,
+                                             parameters_in.NC_fungal_opt,
                                              TAir[days], Tmb[days], SWC[days],
                                              parameters_in.N_limits_plant,
                                              parameters_in.N_k_plant,

@@ -115,7 +115,6 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
                           double C_roots,                     // UNITS: C kg
                           double N_roots,
                           double percentage_C_biomass,        // UNITS: %
-                          double N_allocation,                // UNITS: C kg
                           std::vector<double> parameters) {
   
   
@@ -148,12 +147,12 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
     (1 - m);
   
   // STEP 3: 
-  double N_to_plant = std::min(N_to_root_max, (NC_in_root_opt - NC_in_root - N_allocation)*N_to_root_max);
+  double N_to_plant = std::min(N_to_root_max, (NC_in_root_opt - NC_in_root)*N_to_root_max);
   double reduction_factor;
   if (N_to_plant == N_to_root_max) {
     reduction_factor = 1;
-  } else if (N_to_plant == (NC_in_root_opt - NC_in_root - N_allocation)*N_to_root_max) {
-    reduction_factor = (NC_in_root_opt - NC_in_root - N_allocation)*N_to_root_max/N_to_root_max;
+  } else if (N_to_plant == (NC_in_root_opt - NC_in_root)*N_to_root_max) {
+    reduction_factor = (NC_in_root_opt - NC_in_root)*N_to_root_max/N_to_root_max;
   } else {
     std::cout << "Warning:\nReduction factor not working in Planr_N_Intake\n";
   }
