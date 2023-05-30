@@ -55,6 +55,9 @@ Rcpp::List mycofon_balence(double C_roots,
     std::cout << "Warning:\nThe mycorhization value (m) is more than 1 - check the fungal_mass, root_mass and optimal_root_fungal_biomass_ratio values"; 
   }
   
+  // Plant decision thing
+  double plant_mind = plant_decision(C_roots, N_roots, NC_in_root_opt)[2];
+  
   // dC^r/dt TODO: this need to be linked with the CASSIA C sections
   // TODO: need to work out if the 
   C_roots = C_roots + 
@@ -62,12 +65,12 @@ Rcpp::List mycofon_balence(double C_roots,
     (1 - m)*C_roots*turnover_roots - 
     m*C_roots*turnover_roots_mycorrhized - 
     respiration(Tsb, respiration_params.plant_a, respiration_params.plant_b)*C_roots - 
-    plant_decision(C_roots, N_roots, NC_in_root_opt);
+    plant_mind;
   
   // dC^f/dt
   // TODO: what is the percentage_C_biomass doing?
   C_fungal = C_fungal + 
-    plant_decision(C_roots, N_roots, NC_in_root_opt) - 
+    plant_mind - 
     myco_growth(C_fungal, N_fungal, carbon_use, nitrogen_use) - // TODO: currently C_roots rather than sugar as the model isn't connected in that way
     turnover_fungal*N_roots*percentage_C_biomass - 
     respiration(Tsb, respiration_params.fungal_a, respiration_params.fungal_b)*N_roots*percentage_C_biomass;
@@ -93,8 +96,10 @@ Rcpp::List mycofon_balence(double C_roots,
                                        percentage_C_biomass,
                                        parameters_NH4_on_NO3)[1];
 
+  double myco_mind = myco_decision(C_fungal, N_fungal, NC_in_fungai_opt)[2];
+  
   N_roots = N_roots +
-    myco_decision(C_fungal, N_fungal, NC_in_fungai_opt) + 
+    myco_mind + 
     uptake_plant*C_roots - 
     (1 - m)*C_roots*turnover_roots*root_NC_ratio - 
     m*C_roots*turnover_roots_mycorrhized*root_NC_ratio -
@@ -119,7 +124,7 @@ Rcpp::List mycofon_balence(double C_roots,
   N_fungal = N_fungal + 
     uptake_fungal*C_fungal - 
     turnover_fungal*C_fungal*fungal_NC_ratio - 
-    myco_decision(C_fungal, N_fungal, NC_in_fungai_opt);
+    myco_mind;
 
   return Rcpp::List::create(Rcpp::_["C_roots"] = C_roots,
                             Rcpp::_["C_fungal"] = C_fungal,
