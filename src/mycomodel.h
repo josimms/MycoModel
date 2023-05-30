@@ -81,6 +81,8 @@ struct parameters // A collection of parameters that I want as input function - 
   double turnover_fungal;
   double mantle_mass;
   double ERM_mass;
+  double carbon_use;
+  double nitrogen_use;
 };
 
 struct DECISION_output
@@ -316,7 +318,6 @@ Rcpp::List mycofon_balence(double C_roots,
                            double N_roots,
                            double percentage_C_biomass,
                            double optimal_root_fungal_biomass_ratio,
-                           double C_roots_biomass,
                            double C_fungal,
                            double N_fungal,
                            double turnover_roots,
@@ -340,7 +341,9 @@ Rcpp::List mycofon_balence(double C_roots,
                            double NC_fungal_opt,
                            double mantle_mass,
                            double ERM_mass,
-                           std::vector<double> parameters_NH4_on_NO3);
+                           std::vector<double> parameters_NH4_on_NO3,
+                           double carbon_use,
+                           double nitrogen_use);
   
 #endif
   
@@ -361,5 +364,15 @@ double plant_decision(double C_roots,
 double myco_decision(double C_fungal,
                      double N_fungal,
                      double NC_in_fungal_opt);
+
+#endif
+
+#ifndef PKG_myco_growth_H
+#define PKG_myco_growth_H
+
+double myco_growth(double C_fungal,
+                   double N_fungal,
+                   double a,
+                   double b);
 
 #endif
