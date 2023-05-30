@@ -352,18 +352,18 @@ Rcpp::List mycofon_balence(double C_roots,
 #ifndef PKG_plant_decision_H
 #define PKG_plant_decision_H
 
-double plant_decision(double C_roots,
-                      double N_roots,
-                      double NC_in_root_opt);
-  
+Rcpp::List plant_decision(double C_roots,
+                          double N_roots,
+                          double NC_in_root_opt);
+
 #endif
 
 #ifndef PKG_myco_decision_H
 #define PKG_myco_decision_H
   
-double myco_decision(double C_fungal,
-                     double N_fungal,
-                     double NC_in_fungal_opt);
+Rcpp::List myco_decision(double C_fungal,
+                         double N_fungal,
+                         double NC_in_fungal_opt);
 
 #endif
 
