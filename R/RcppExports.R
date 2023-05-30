@@ -13,12 +13,12 @@ myco_decision <- function(C_fungal, N_fungal, NC_in_fungal_opt) {
     .Call(`_MycoModel_myco_decision`, C_fungal, N_fungal, NC_in_fungal_opt)
 }
 
-myco_growth <- function(C_fungal, N_fungal, sugar, N, Tmb) {
-    .Call(`_MycoModel_myco_growth`, C_fungal, N_fungal, sugar, N, Tmb)
+myco_growth <- function(C_fungal, N_fungal) {
+    .Call(`_MycoModel_myco_growth`, C_fungal, N_fungal)
 }
 
-mycofon_balence <- function(C_roots, N_roots, percentage_C_biomass, optimal_root_fungal_biomass_ratio, C_roots_biomass, C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_fungal, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_root_opt, NC_in_fungai_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, NC_fungal_opt, mantle_mass, ERM_mass, parameters_NH4_on_NO3) {
-    .Call(`_MycoModel_mycofon_balence`, C_roots, N_roots, percentage_C_biomass, optimal_root_fungal_biomass_ratio, C_roots_biomass, C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_fungal, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_root_opt, NC_in_fungai_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, NC_fungal_opt, mantle_mass, ERM_mass, parameters_NH4_on_NO3)
+mycofon_balence <- function(C_roots, N_roots, percentage_C_biomass, optimal_root_fungal_biomass_ratio, C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_fungal, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_root_opt, NC_in_fungai_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, mantle_mass, ERM_mass, parameters_NH4_on_NO3) {
+    .Call(`_MycoModel_mycofon_balence`, C_roots, N_roots, percentage_C_biomass, optimal_root_fungal_biomass_ratio, C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_fungal, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_root_opt, NC_in_fungai_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, mantle_mass, ERM_mass, parameters_NH4_on_NO3)
 }
 
 uptake_organic_N <- function(N_org, T, N_org_limit, k, SWC, SWC_k) {
