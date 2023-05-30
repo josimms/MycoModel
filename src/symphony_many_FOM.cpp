@@ -52,7 +52,7 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,                  // UNITS: 'C
   NH4 = NH4 - NH4_used_Plant - NH4_used_Fungal;             // C kg
   NO3 = NO3 - NO3_used_Plant - NO3_used_Fungal;             // C kg
   C_FOM = C_FOM - FOM_Norg_used_Plant - FOM_Norg_used_Fungal;    // C kg
-  C_SOM = C_SOM - SOM_Norg_used;                            // C kg
+  C_SOM = C_SOM;                            // C kg
   
   // STEP 2: consider the uptake functions, for FOM and SOM, 
   // this includes the decomposition and mineralisation / immobilisation
@@ -72,8 +72,11 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,                  // UNITS: 'C
   /*
    * Carbon processes
    */
+  
+  // TODO: add the N uptake!
+  
   // STEP 1: Update the FOM mass
-  double total_decomposition = (C_decompose_FOM*FOM_after_microbe_activity.C + C_decompose_SOM*SOM_after_microbe_activity.Norg_FOM);   // C kg
+  double total_decomposition = C_decompose_FOM*FOM_after_microbe_activity.C + C_decompose_SOM*SOM_after_microbe_activity.Norg_FOM;   // C kg
   // the nitrogen transfer should be by N and litter type
   C_FOM_needles = C_FOM_needles + Litter_needles - (C_FOM_needles/C_FOM)*total_decomposition;             // C kg
   C_FOM_woody = C_FOM_woody + Litter_woody - (C_FOM_woody/C_FOM)*total_decomposition;                     // C kg
