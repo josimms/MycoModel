@@ -52,7 +52,7 @@ nitrogen_graphs <- function() {
     temp_change_organic[count] = uptake_organic_N(10, Temp, 10, 0.2, 0.8, 0.5)
     temp_change_NO3[count] = uptake_NO3(10, Temp, 10, -0.2, 0.8, 0.5)
     temp_change_N_Uptake[count] = Plant_N_Uptake(c(0.5, 0.5, 0.5), c(10, 10, 10), 0.2, 15, Temp, 0.8, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    temp_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 150, 500, 3000, 3000, 3000, 10, Temp, 0.8,c(10, 10, 10), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
+    temp_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 500, 3000, 3000, 3000, 10, Temp, 0.8,c(10, 10, 10), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
     count = count + 1
   }
   concentration_range = seq(0, 20, by = 0.01)
@@ -64,10 +64,10 @@ nitrogen_graphs <- function() {
     conc_change_Norg_Uptake[count] = Plant_N_Uptake(c(0.5, 0.5, 0.5), c(conc, 10, 10), 0.2, 15, 15, 0.8, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
     conc_change_NO3_Uptake[count] = Plant_N_Uptake(c(0.5, 0.5, 0.5), c(10, conc, 10), 0.2, 15, 15, 0.8, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
     conc_change_NH4_Uptake[count] = Plant_N_Uptake(c(0.5, 0.5, 0.5), c(10, 10, conc), 0.2, 15, 15, 0.8, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    conc_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 150, 500, 3000, 3000, 3000, 10, 15, 0.8, c(conc, conc, conc), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    conc_change_NO3_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 150, 500, 3000, 3000, 3000, 10, 15, 0.8, c(10, conc, 10), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    conc_change_NH4_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 150, 500, 3000, 3000, 3000, 10, 15, 0.8, c(conc, 10, 10), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    conc_change_Norg_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 150, 500, 3000, 3000, 3000, 10, 15, 0.8, c(10, 10, conc), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
+    conc_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 500, 3000, 3000, 3000, 10, 15, 0.8, c(conc, conc, conc), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
+    conc_change_NO3_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 500, 3000, 3000, 3000, 10, 15, 0.8, c(10, conc, 10), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
+    conc_change_NH4_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 500, 3000, 3000, 3000, 10, 15, 0.8, c(conc, 10, 10), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
+    conc_change_Norg_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 500, 3000, 3000, 3000, 10, 15, 0.8, c(10, 10, conc), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
     count = count + 1
   }
   SWC_range = seq(0, 1, by = 0.01)
@@ -76,7 +76,7 @@ nitrogen_graphs <- function() {
     SWC_change_organic[count] <- uptake_organic_N(10, 15, 10, 0.2, SWC, 0.5)
     SWC_change_NO3[count] <- uptake_NO3(10, 15, 10, -0.2, SWC, 0.5)
     SWC_change_N_Uptake[count] = Plant_N_Uptake(c(0.5, 0.5, 0.5), c(10, 10, 10), 0.2, 15, 15, SWC, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    SWC_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 150, 500, 3000, 3000, 3000, 10, 15, SWC, c(10, 10, 10), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
+    SWC_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 500, 3000, 3000, 3000, 10, 15, SWC, c(10, 10, 10), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
     count = count + 1
   }
   
