@@ -1,12 +1,11 @@
 // [[Rcpp::export]]
 double myco_growth(double C_fungal,
                    double N_fungal,
-                   double sugar, 
-                   double N,
-                   double Tmb)
+                   double a,
+                   double b)
 {
   
-  double out = sugar + N; // TODO: put some actual formula here!
+  double out = std::min(a*C_fungal, b*N_fungal); // The growth is just a experiential function, limited by the element
   
   return(out);
 }
