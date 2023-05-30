@@ -16,7 +16,6 @@ Rcpp::List mycofon_balence(double C_roots,
                            double N_roots,
                            double percentage_C_biomass,
                            double optimal_root_fungal_biomass_ratio,
-                           double C_roots_biomass,
                            double C_fungal,
                            double N_fungal,
                            double turnover_roots,
@@ -37,10 +36,11 @@ Rcpp::List mycofon_balence(double C_roots,
                            std::vector<double> N_limits_Fungal,
                            std::vector<double> N_k_Fungal,
                            std::vector<double> SWC_k_Fungal,
-                           double NC_fungal_opt,
                            double mantle_mass,
                            double ERM_mass,
-                           std::vector<double> parameters_NH4_on_NO3) {
+                           std::vector<double> parameters_NH4_on_NO3,
+                           double carbon_use,
+                           double nitrogen_use) {
   
   /*
    * Initialise parameters
@@ -68,6 +68,7 @@ Rcpp::List mycofon_balence(double C_roots,
   // TODO: what is the percentage_C_biomass doing?
   C_fungal = C_fungal + 
     plant_decision(C_roots, N_roots, NC_in_root_opt) - 
+    myco_growth(C_fungal, N_fungal, carbon_use, nitrogen_use) - // TODO: currently C_roots rather than sugar as the model isn't connected in that way
     turnover_fungal*N_roots*percentage_C_biomass - 
     respiration(Tsb, respiration_params.fungal_a, respiration_params.fungal_b)*N_roots*percentage_C_biomass;
   
@@ -89,7 +90,7 @@ Rcpp::List mycofon_balence(double C_roots,
                                        SWC_k_Plant,
                                        C_roots,
                                        N_roots,
-                                       C_roots_biomass,
+                                       percentage_C_biomass,
                                        parameters_NH4_on_NO3)[1];
 
   N_roots = N_roots +
@@ -105,7 +106,7 @@ Rcpp::List mycofon_balence(double C_roots,
                                          NC_in_fungai_opt,
                                          mantle_mass,
                                          ERM_mass,
-                                         C_roots_biomass,
+                                         percentage_C_biomass,
                                          T,
                                          SWC,
                                          NH4,
