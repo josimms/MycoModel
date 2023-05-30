@@ -1,4 +1,4 @@
-\name{Mycofon Balence}
+\name{Mycofon_Balence}
 \alias{mycofon_balence}
 \alias{mycofon_balence}
 \title{
@@ -12,7 +12,7 @@
   Where N is nitrogen, C is carbon, r roots, f fungai, B biomass, opt is optimum.
   
   \eqn{C^r = C^r + C^{CASSIA}_{Allocated} - (1 - m)t^rC^r - mt^m - r(Tmb)C^r - d^r(C^{CASSIA})}
-  
+
   Where, C^{CASSIA}_{Allocated} is the carbon allocated from the CASSIA model, t is turnover, which is different for micorhized (m) and non-mycorrhized roots (r), Tmb is temperature of the soil, d() is decomposition and r() is respiration.
   
   \eqn{C^f = C^f + d(C^{CASSIA}) - t^f  N^{r}  p^{C, biomass} - r(Tmb)  N^{r}  p^{C, biomass}}
@@ -23,7 +23,7 @@
   
   a allocation from roots to plant, fungal_NC_ratio
   
-  \eqn{N^f = N^f + u^f(T, SWC, NH4, NO3, FOM_Norg, C^r, N^r)C^ffungal_NC_ratio - t^fC^f fungal_NC_ratio - d^f(N^f)}
+  \eqn{N^f = N^f + u^f(T, SWC, NH4, NO3, FOM_Norg, C^r, N^r)C^f fungal_NC_ratio - t^f C^f fungal_NC_ratio - d^f(N^f)}
 }
 \usage{
 
@@ -55,7 +55,6 @@ mycofon_balence(C_roots,
                 mantle_mass,
                 ERM_mass,
                 parameters_NH4_on_NO3)
-
 }
 
 \arguments{
@@ -145,7 +144,7 @@ mycofon_balence(C_roots,
 \value{
   \item{output}{
     List of the outputs
-    
+  
     1. C_roots (kg C) \cr
     2. C_fungal (kg C) \cr
     3. N_roots (kg C eq) \cr
@@ -160,11 +159,4 @@ mycofon_balence(C_roots,
 }
 \references{
   TODO: add a reference here
-}
-
-\examples{
-  \dontrun{
-     ## Optional simple examples of the most important functions
-     ## These can be in \dontrun{} and \donttest{} blocks.   
-  }
 }
