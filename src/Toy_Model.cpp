@@ -82,22 +82,6 @@ Rcpp::List Toy_Model(double year,
       // TODO: add the model here!
     MYCOFON_output MYTCOFON_out;
     
-    // Soil model symphony
-    Rcpp::List Soil_All = symphony_multiple_FOM_daily(Tmb[days], SWC[days],
-                                                       SYMPHONY_out.C_FOM_needles, SYMPHONY_out.C_FOM_woody, SYMPHONY_out.C_FOM_roots, SYMPHONY_out.C_FOM_mycelium,
-                                                       SYMPHONY_out.C_SOM, 
-                                                       SYMPHONY_out.C_decompose_FOM, SYMPHONY_out.C_decompose_SOM,
-                                                       SYMPHONY_out.N_decompose_FOM, SYMPHONY_out.N_decompose_SOM,
-                                                       CASSIA_out.Litter_needles, CASSIA_out.Litter_woody, CASSIA_out.Litter_roots, CASSIA_out.Litter_mycelium, 
-                                                       SYMPHONY_out.NH4, SYMPHONY_out.NO3,
-                                                       DECISION_out.NH4_used_Plant, DECISION_out.NH4_used_Fungal,  // TODO think about this!
-                                                       DECISION_out.NO3_used_Plant, DECISION_out.NO3_used_Fungal,
-                                                       DECISION_out.FOM_Norg_used_Plant, DECISION_out.FOM_Norg_used_Fungal, SYMPHONY_out.SOM_Norg_used, 
-                                                       parameters_in.respiration_params, parameters_in.N_limits_microbes, parameters_in.N_k_microbes, parameters_in.SWC_k_microbes,
-                                                       parameters_in.NC_microbe_opt, parameters_in.microbe_turnover);
-    
-    // TODO: decision function shouold be here or in the mycofon balance
-    
     // TODO: work out which parameters are available here
     Rcpp::List MYCOFON_out =  mycofon_balence(CASSIA_out.C_roots, CASSIA_out.N_roots,
                                              parameters_in.percentage_C_biomass, parameters_in.optimal_root_fungal_biomass_ratio,
@@ -120,6 +104,21 @@ Rcpp::List Toy_Model(double year,
                                              parameters_in.NH4_on_NO3,
                                              parameters_in.carbon_use,
                                              parameters_in.nitrogen_use);
+    
+    // Soil model symphony
+    Rcpp::List Soil_All = symphony_multiple_FOM_daily(Tmb[days], SWC[days],
+                                                      SYMPHONY_out.C_FOM_needles, SYMPHONY_out.C_FOM_woody, SYMPHONY_out.C_FOM_roots, SYMPHONY_out.C_FOM_mycelium,
+                                                      SYMPHONY_out.C_SOM, 
+                                                      SYMPHONY_out.C_decompose_FOM, SYMPHONY_out.C_decompose_SOM,
+                                                      SYMPHONY_out.N_decompose_FOM, SYMPHONY_out.N_decompose_SOM,
+                                                      CASSIA_out.Litter_needles, CASSIA_out.Litter_woody, CASSIA_out.Litter_roots, CASSIA_out.Litter_mycelium, 
+                                                      SYMPHONY_out.NH4, SYMPHONY_out.NO3,
+                                                      DECISION_out.NH4_used_Plant, DECISION_out.NH4_used_Fungal,  // TODO think about this!
+                                                      DECISION_out.NO3_used_Plant, DECISION_out.NO3_used_Fungal,
+                                                      DECISION_out.FOM_Norg_used_Plant, DECISION_out.FOM_Norg_used_Fungal, SYMPHONY_out.SOM_Norg_used, 
+                                                      parameters_in.respiration_params, parameters_in.N_limits_microbes, parameters_in.N_k_microbes, parameters_in.SWC_k_microbes,
+                                                      parameters_in.NC_microbe_opt, parameters_in.microbe_turnover);
+    
     
     
   }
