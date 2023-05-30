@@ -28,6 +28,8 @@ parameters parameters_initalise(std::vector<double> parameters_R) {
   out.turnover_fungal = parameters_R[45];
   out.mantle_mass = parameters_R[46];
   out.ERM_mass = parameters_R[47];
+  out.carbon_use = parameters_R[48];
+  out.nitrogen_use = parameters_R[49];
   return(out);
 };
 
@@ -97,9 +99,8 @@ Rcpp::List Toy_Model(double year,
     // TODO: decision function shouold be here or in the mycofon balance
     
     // TODO: work out which parameters are available here
-    Rcpp::List MYCOFON_out =  mycofon_balence(CASSIA_out.C_roots, MYTCOFON_out.C_fungal,
-                                             parameters_in.optimal_root_fungal_biomass_ratio, parameters_in.percentage_C_biomass,
-                                             CASSIA_out.N_roots,
+    Rcpp::List MYCOFON_out =  mycofon_balence(CASSIA_out.C_roots, CASSIA_out.N_roots,
+                                             parameters_in.percentage_C_biomass, parameters_in.optimal_root_fungal_biomass_ratio,
                                              MYTCOFON_out.C_fungal, MYTCOFON_out.N_fungal,
                                              parameters_in.turnover_roots, parameters_in.turnover_roots_mycorrhized, parameters_in.turnover_fungal,
                                              parameters_in.respiration_params,
@@ -116,7 +117,9 @@ Rcpp::List Toy_Model(double year,
                                              parameters_in.NC_fungal_opt,
                                              parameters_in.mantle_mass, 
                                              parameters_in.ERM_mass,
-                                             parameters_in.NH4_on_NO3);
+                                             parameters_in.NH4_on_NO3,
+                                             parameters_in.carbon_use,
+                                             parameters_in.nitrogen_use);
     
     
   }
