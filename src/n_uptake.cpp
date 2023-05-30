@@ -129,7 +129,7 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
   double demand = 1 - NC_in_root/NC_in_root_opt; // TODO: this should be linked to a demand function
   if (demand < 0) {
     std::cout << "Warning:\nDemand is negative, rethink optimal root value (NC_in_root_opt) value.\n";
-  }
+  } // TOOD: the demand currently doesn't actually have an effect
   
   // STEP 1: Pure uptake
   // Assume that the organic and inorganic uptake is parallel
@@ -139,7 +139,7 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
   // All possible N to root with NH4 modifier for NO3
   double N_to_root = uptake_organic_N(FOM_in, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg) + 
     uptake_NH4(NH4_in, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4) + 
-    NH4_effect_on_NO3*uptake_NO3(NO3_in, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3);
+    NH4_effect_on_NO3*uptake_NO3(NO3_in, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3)*demand;
   
   // STEP 2: Uptake with demand
   double N_to_root_max = N_to_root *
@@ -204,18 +204,18 @@ Rcpp::List Fungal_N_Uptake(double C_fungal,
 
 // [[Rcpp::export]]
 Rcpp::List Microbe_Uptake(double C_microbe,                   // UNITS: C kg
-                          double N_micorbe,                   // UNITS: C kg
+                          double N_micorbe,                   // UNITS: C kg eq
                           double NC_microbe_opt,              // UNITS: %
-                          double NH4_avaliable,               // UNITS: C kg
-                          double NO3_avaliable,               // UNITS: C kg
-                          double Norg_avaliable,              // UNITS: C kg
+                          double NH4_avaliable,               // UNITS: C kg eq
+                          double NO3_avaliable,               // UNITS: C kg eq
+                          double Norg_avaliable,              // UNITS: C kg eq
                           double T,                           // UNITS: 'C
                           double SWC,                         // UNITS: %
                           std::vector<double> N_limits_R,
                           std::vector<double> N_k_R,
                           std::vector<double> SWC_k_R,
                           bool SOM_decomposers,
-                          double Norg_avaliable_FOM) {        // UNITS: C kg
+                          double Norg_avaliable_FOM) {        // UNITS: C kg eq
   
   /*
    * Nitrogen limitation // Mass limitation is in the soil model!
@@ -231,10 +231,10 @@ Rcpp::List Microbe_Uptake(double C_microbe,                   // UNITS: C kg
   double C_uptaken;       // UNITS: C kg
   
   // Working out the current N:C ratio
-  double NC_in_micorbe = N_micorbe/C_microbe;        // UNITS: C kg
+  double NC_in_micorbe = N_micorbe/C_microbe;        // UNITS: C kg eq
   
   // purely organic uptake
-  double N_micorbe_uptake = uptake_organic_N(Norg_avaliable, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*(1 - (NC_in_micorbe)/(NC_microbe_opt));           // UNITS: C kg
+  double N_micorbe_uptake = uptake_organic_N(Norg_avaliable, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*(1 - (NC_in_micorbe)/(NC_microbe_opt));           // UNITS: C kg eq
   
   /*
    * Carbon limitation // Mass limitation is in the soil model!
