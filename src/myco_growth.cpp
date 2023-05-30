@@ -1,3 +1,5 @@
+#include "mycomodel.h"
+
 // [[Rcpp::export]]
 double myco_growth(double C_fungal,
                    double N_fungal,
