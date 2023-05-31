@@ -30,20 +30,12 @@ N_balence list_to_N_balence(Rcpp::List input) {
 
 
 // [[Rcpp::export]]
-double uptake_organic_N(double N_org,
-                        double T,    
+double uptake_organic_N(double N_org,   // UNITS: C kg
+                        double T,       // UNITS: 'C
                         double N_org_limit, 
                         double k, 
-                        double SWC,  
+                        double SWC,     // UNITS: %
                         double SWC_k) {
-  /*
-   double N_org,   // UNITS: C kg
-   double T,       // UNITS: 'C
-   double N_org_limit, 
-   double k, 
-   double SWC,     // UNITS: %
-   double SWC_k
-   */
   
   // Concentration
   double u = k * pow(N_org, 8) / (pow(N_org_limit, 8) + pow(N_org, 8));
@@ -57,21 +49,13 @@ double uptake_organic_N(double N_org,
 
 
 // [[Rcpp::export]]
-double uptake_NH4(double NH4,
-                  double T,  
+double uptake_NH4(double NH4,     // UNITS: C kg
+                  double T,       // UNITS: 'C
                   double NH4_limit,
                   double k, 
-                  double SWC,
+                  double SWC,     // UNITS: %
                   double SWC_k) {
-  /*
-   * double NH4,     // UNITS: C kg
-   double T,       // UNITS: 'C
-   double NH4_limit,
-   double k, 
-   double SWC,     // UNITS: %
-   double SWC_k
-   */
-  
+
   double u = k * pow(NH4, 8) / (pow(NH4_limit, 8) + pow(NH4, 8));
   // Temperature
   double u_t = (T+20)/55;
@@ -83,21 +67,13 @@ double uptake_NH4(double NH4,
 
 
 // [[Rcpp::export]]
-double uptake_NO3(double NO3,
-                  double T,
+double uptake_NO3(double NO3,    // UNITS: C kg
+                  double T,      // UNITS: 'C
                   double NO3_limit,
                   double k, 
-                  double SWC,
+                  double SWC,    // UNITS: %
                   double SWC_k) {
   
-  /*
-   * double NO3,    // UNITS: C kg
-   double T,      // UNITS: 'C
-   double NO3_limit,
-   double k, 
-   double SWC,    // UNITS: %
-   double SWC_k
-   */
   
   // Normal function
   double u = k * pow(NO3, 8) / (pow(NO3_limit, 8) + pow(NO3, 8)) - k;
@@ -112,23 +88,13 @@ double uptake_NO3(double NO3,
 }
 
 // [[Rcpp::export]]
-double uptake_C(double C,
-                double T,
+double uptake_C(double C,     // UNITS: C kg 
+                double T,     // UNITS: 'C
                 double C_limit, 
                 double k, 
-                double SWC,
+                double SWC,   // UNITS: %
                 double SWC_k) {
   
-  /*
-   * double C,     // UNITS: C kg 
-   double T,     // UNITS: 'C
-   double C_limit, 
-   double k, 
-   double SWC,   // UNITS: %
-   double SWC_k
-   */
-  
-  // TODO: Uptake from the plant at least should depend on the lack of NH4 not the concentration of NH3 completely!
   double u = k * pow(C, 8) / (pow(C_limit, 8) + pow(C, 8)) - k;
   // Temperature
   double u_t = (T+20)/55;
@@ -140,40 +106,22 @@ double uptake_C(double C,
 
 // [[Rcpp::export]]
 Rcpp::List Plant_N_Uptake(double NC_in_root_opt, 
-                          double T,
-                          double SWC,
-                          double m,  
+                          double T,                           // UNITS: 'C
+                          double SWC,                         // UNITS: %
+                          double m,                           // UNITS: %
                           double NH4_in,
                           double NO3_in,
                           double FOM_in,
                           std::vector<double> N_limits_R,
                           std::vector<double> N_k_R,
                           std::vector<double> SWC_k_R,
-                          double C_roots,
+                          double C_roots,                     // UNITS: C kg
                           double N_roots,
-                          double percentage_C_biomass,
+                          double C_fungal,
+                          double percentage_C_biomass,        // UNITS: %
                           std::vector<double> parameters,
                           double C_value_param,
                           double N_value_param) {
-  
-  /*
-   * double NC_in_root_opt, 
-   double T,                           // UNITS: 'C
-   double SWC,                         // UNITS: %
-   double m,                           // UNITS: %
-   double NH4_in,    // TODO: make this have in input that works with the output of the soil function
-   double NO3_in,
-   double FOM_in,
-   std::vector<double> N_limits_R,
-   std::vector<double> N_k_R,
-   std::vector<double> SWC_k_R,
-   double C_roots,                     // UNITS: C kg
-   double N_roots,
-   double percentage_C_biomass,        // UNITS: %
-   std::vector<double> parameters,
-   double C_value_param,
-   double N_value_param
-   */
   
   
   // Input the parameters!
@@ -191,12 +139,10 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
   // All possible N to root with NH4 modifier for NO3
   double N_to_root = (uptake_organic_N(FOM_in, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg) + 
     uptake_NH4(NH4_in, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4) + 
-    NH4_effect_on_NO3*uptake_NO3(NO3_in, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3))*demand;
+    NH4_effect_on_NO3*uptake_NO3(NO3_in, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3));
   
   // STEP 2: Uptake with demand
-  double N_to_root_max = N_to_root *
-    (C_roots/(C_roots/percentage_C_biomass)) * // TODO: check the biomass equation here!
-    (1 - m);
+  double N_to_root_max = N_to_root * (C_fungal/percentage_C_biomass) * (1 - m) * demand;
   
   // STEP 3: 
   double NC_in_root = 1;
