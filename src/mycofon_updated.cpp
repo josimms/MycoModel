@@ -40,7 +40,9 @@ Rcpp::List mycofon_balence(double C_roots,
                            double ERM_mass,
                            std::vector<double> parameters_NH4_on_NO3,
                            double carbon_use,
-                           double nitrogen_use) {
+                           double nitrogen_use,
+                           double C_value_param,
+                           double N_value_param) {
   
   /*
    * Initialise parameters
@@ -96,7 +98,8 @@ Rcpp::List mycofon_balence(double C_roots,
                                        percentage_C_biomass,
                                        parameters_NH4_on_NO3)[1];
 
-  double myco_mind = myco_decision(C_fungal, N_fungal, NC_in_fungai_opt)[2];
+  double myco_mind = myco_decision(C_fungal, N_fungal, NC_in_fungai_opt, mantle_mass,
+                                   ERM_mass, percentage_C_biomass, C_value_param, N_value_param)[2];
   
   N_roots = N_roots +
     myco_mind + 

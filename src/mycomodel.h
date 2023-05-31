@@ -360,10 +360,15 @@ Rcpp::List plant_decision(double C_roots,
 
 #ifndef PKG_myco_decision_H
 #define PKG_myco_decision_H
-  
+
 Rcpp::List myco_decision(double C_fungal,
                          double N_fungal,
-                         double NC_in_fungal_opt);
+                         double NC_fungal_opt,
+                         double mantle_mass,
+                         double ERM_mass,
+                         double percentage_C_biomass,
+                         double C_value_param,
+                         double N_value_param);
 
 #endif
 

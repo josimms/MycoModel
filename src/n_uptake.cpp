@@ -178,7 +178,9 @@ Rcpp::List Fungal_N_Uptake(double C_fungal,
                            double FOM_Norg,
                            std::vector<double> N_limits_R,
                            std::vector<double> N_k_R,
-                           std::vector<double> SWC_k_R) {
+                           std::vector<double> SWC_k_R,
+                           double C_value_param,
+                           double N_value_param) {
   
   // TODO: make the N_available link to the uptake equations that I have made!
   
@@ -187,10 +189,17 @@ Rcpp::List Fungal_N_Uptake(double C_fungal,
   N_balence SWC_k = vector_to_N_balence(SWC_k_R);
   
   double NC_in_fungal = N_fungal/C_fungal;
-  double Cr_biomass = percentage_C_biomass;
   // TODO: Parallel or intercecting?
   // Demand
-  double demand = (C_fungal/Cr_biomass)*(mantle_mass/ERM_mass)*(1 - (NC_in_fungal)/(NC_fungal_opt)); // TODO: check the formula
+  double demand = myco_decision(C_fungal,
+                                N_fungal,
+                                NC_fungal_opt,
+                                mantle_mass,
+                                ERM_mass,
+                                percentage_C_biomass,
+                                C_value_param,
+                                N_value_param)[1];
+  
   double N_fungal_uptake = (uptake_organic_N(FOM_Norg, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg) + 
                             uptake_NH4(NH4, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4) + 
                             uptake_NO3(NO3, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3))*demand;
