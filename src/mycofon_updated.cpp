@@ -41,8 +41,10 @@ Rcpp::List mycofon_balence(double C_roots,
                            std::vector<double> parameters_NH4_on_NO3,
                            double carbon_use,
                            double nitrogen_use,
-                           double C_value_param,
-                           double N_value_param) {
+                           double C_value_param_myco,
+                           double N_value_param_myco,
+                           double C_value_param_plant,
+                           double N_value_param_plant) {
   
   /*
    * Initialise parameters
@@ -58,7 +60,7 @@ Rcpp::List mycofon_balence(double C_roots,
   }
   
   // Plant decision thing
-  double plant_mind = plant_decision(C_roots, N_roots, NC_in_root_opt)[2];
+  double C_given = plant_decision(C_roots, N_roots, NC_in_root_opt, C_value_param_plant, N_value_param_plant)[4];
   
   // dC^r/dt TODO: this need to be linked with the CASSIA C sections
   // TODO: need to work out if the 
@@ -67,12 +69,12 @@ Rcpp::List mycofon_balence(double C_roots,
     (1 - m)*C_roots*turnover_roots - 
     m*C_roots*turnover_roots_mycorrhized - 
     respiration(Tsb, respiration_params.plant_a, respiration_params.plant_b)*C_roots - 
-    plant_mind;
+    C_given;
   
   // dC^f/dt
   // TODO: what is the percentage_C_biomass doing?
   C_fungal = C_fungal + 
-    plant_mind - 
+    C_given - 
     myco_growth(C_fungal, N_fungal, carbon_use, nitrogen_use) - // TODO: currently C_roots rather than sugar as the model isn't connected in that way
     turnover_fungal*N_roots*percentage_C_biomass - 
     respiration(Tsb, respiration_params.fungal_a, respiration_params.fungal_b)*N_roots*percentage_C_biomass;
@@ -98,11 +100,11 @@ Rcpp::List mycofon_balence(double C_roots,
                                        percentage_C_biomass,
                                        parameters_NH4_on_NO3)[1];
 
-  double myco_mind = myco_decision(C_fungal, N_fungal, NC_in_fungai_opt, mantle_mass,
-                                   ERM_mass, percentage_C_biomass, C_value_param, N_value_param)[2];
+  double N_given = myco_decision(C_fungal, N_fungal, NC_in_fungai_opt, mantle_mass,
+                                 ERM_mass, percentage_C_biomass, C_value_param_myco, N_value_param_myco)[4];
   
   N_roots = N_roots +
-    myco_mind + 
+    N_given + 
     uptake_plant*C_roots - 
     (1 - m)*C_roots*turnover_roots*root_NC_ratio - 
     m*C_roots*turnover_roots_mycorrhized*root_NC_ratio -
@@ -127,14 +129,15 @@ Rcpp::List mycofon_balence(double C_roots,
   N_fungal = N_fungal + 
     uptake_fungal*C_fungal - 
     turnover_fungal*C_fungal*fungal_NC_ratio - 
-    myco_mind;
-
+    N_given;
+  
   return Rcpp::List::create(Rcpp::_["C_roots"] = C_roots,
                             Rcpp::_["C_fungal"] = C_fungal,
                             Rcpp::_["N_roots"] = N_roots,
                             Rcpp::_["N_fungal"] = N_fungal,
                             Rcpp::_["uptake_plant"] = uptake_plant*C_roots,
                             Rcpp::_["uptake_fungal"] = uptake_fungal*N_roots);
+
 }
 
 

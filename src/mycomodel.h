@@ -83,6 +83,10 @@ struct parameters // A collection of parameters that I want as input function - 
   double ERM_mass;
   double carbon_use;
   double nitrogen_use;
+  double C_value_param_myco;
+  double N_value_param_myco;
+  double C_value_param_plant;
+  double N_value_param_plant;
 };
 
 struct DECISION_output
@@ -284,20 +288,20 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,                  // UNITS: 'C
                                        double C_SOM,                // UNITS: C kg, FROM: CASSIA
                                        double C_decompose_FOM,      // UNITS: C kg, FROM: here, last iteration
                                        double C_decompose_SOM,      // UNITS: C kg, FROM: here, last iteration
-                                       double N_decompose_FOM,      // UNITS: C kg, FROM: here, last iteration
-                                       double N_decompose_SOM,      // UNITS: C kg, FROM: here, last iteration
+                                       double N_decompose_FOM,      // UNITS: C kg eq, FROM: here, last iteration
+                                       double N_decompose_SOM,      // UNITS: C kg eq, FROM: here, last iteration
                                        double Litter_needles,       // UNITS: C kg, FROM: CASSIA
                                        double Litter_woody,         // UNITS: C kg, FROM: CASSIA
                                        double Litter_roots,         // UNITS: C kg, FROM: CASSIA
-                                       double Litter_mycelium,      // UNITS: C kg, FROM: Mycofon
-                                       double NH4,                  // UNITS: C kg, FROM: here, last iteration
-                                       double NO3,                  // UNITS: C kg, FROM: here, last iteration
-                                       double NH4_used_Plant,       // UNITS: C kg, FROM: n_uptake
-                                       double NH4_used_Fungal,      // UNITS: C kg, FROM: n_uptake
-                                       double NO3_used_Plant,       // UNITS: C kg, FROM: n_uptake
-                                       double NO3_used_Fungal,      // UNITS: C kg, FROM: n_uptake
-                                       double FOM_Norg_used_Plant,  // UNITS: C kg, FROM: n_uptake
-                                       double FOM_Norg_used_Fungal, // UNITS: C kg, FROM: n_uptake
+                                       double Litter_mycelium,      // UNITS: C kg, FROM: MYCOFON
+                                       double NH4,                  // UNITS: C kg eq, FROM: here, last iteration
+                                       double NO3,                  // UNITS: C kg eq, FROM: here, last iteration
+                                       double NH4_used_Plant,       // UNITS: C kg eq, FROM: n_uptake
+                                       double NH4_used_Fungal,      // UNITS: C kg eq, FROM: n_uptake
+                                       double NO3_used_Plant,       // UNITS: C kg eq, FROM: n_uptake
+                                       double NO3_used_Fungal,      // UNITS: C kg eq, FROM: n_uptake
+                                       double FOM_Norg_used_Plant,  // UNITS: C kg eq, FROM: n_uptake
+                                       double FOM_Norg_used_Fungal, // UNITS: C kg eq, FROM: n_uptake
                                        double SOM_Norg_used,        // UNITS: C kg, FROM: n_uptake
                                        std::vector<double> respiration_microbes_params,
                                        std::vector<double> N_limits_R,
@@ -338,12 +342,15 @@ Rcpp::List mycofon_balence(double C_roots,
                            std::vector<double> N_limits_Fungal,
                            std::vector<double> N_k_Fungal,
                            std::vector<double> SWC_k_Fungal,
-                           double NC_fungal_opt,
                            double mantle_mass,
                            double ERM_mass,
                            std::vector<double> parameters_NH4_on_NO3,
                            double carbon_use,
-                           double nitrogen_use);
+                           double nitrogen_use,
+                           double C_value_param_myco,
+                           double N_value_param_myco,
+                           double C_value_param_plant,
+                           double N_value_param_plant);
   
 #endif
   
@@ -354,7 +361,9 @@ Rcpp::List mycofon_balence(double C_roots,
 
 Rcpp::List plant_decision(double C_roots,
                           double N_roots,
-                          double NC_in_root_opt);
+                          double NC_in_root_opt,
+                          double C_value_param,
+                          double N_value_param);
 
 #endif
 

@@ -115,7 +115,9 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
                           double C_roots,                     // UNITS: C kg
                           double N_roots,
                           double percentage_C_biomass,        // UNITS: %
-                          std::vector<double> parameters) {
+                          std::vector<double> parameters,
+                          double C_value_param,
+                          double N_value_param) {
   
   
   // Input the parameters!
@@ -123,23 +125,17 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
   N_balence N_k = vector_to_N_balence(N_k_R);
   N_balence SWC_k = vector_to_N_balence(SWC_k_R);
   
-  double NC_in_root = N_roots/C_roots;
-  
-  // TODO: this isn't in output in the end...
-  double demand = 1 - NC_in_root/NC_in_root_opt; // TODO: this should be linked to a demand function
-  if (demand < 0) {
-    std::cout << "Warning:\nDemand is negative, rethink optimal root value (NC_in_root_opt) value.\n";
-  } // TOOD: the demand currently doesn't actually have an effect
-  
   // STEP 1: Pure uptake
   // Assume that the organic and inorganic uptake is parallel
   // Inorganic NH4 affects NO3, in this function as it is a specific plant effect
   double NH4_effect_on_NO3 = parameters[0] * pow(NH4_in, 8) / (pow(parameters[1], 8) + pow(NH4_in, 8));
   
+  double demand = plant_decision(C_roots, N_roots, NC_in_root_opt, C_value_param, N_value_param)[1];
+  
   // All possible N to root with NH4 modifier for NO3
-  double N_to_root = uptake_organic_N(FOM_in, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg) + 
+  double N_to_root = (uptake_organic_N(FOM_in, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg) + 
     uptake_NH4(NH4_in, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4) + 
-    NH4_effect_on_NO3*uptake_NO3(NO3_in, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3)*demand;
+    NH4_effect_on_NO3*uptake_NO3(NO3_in, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3))*demand;
   
   // STEP 2: Uptake with demand
   double N_to_root_max = N_to_root *
@@ -147,6 +143,7 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
     (1 - m);
   
   // STEP 3: 
+  double NC_in_root = 1;
   double N_to_plant = std::min(N_to_root_max, (NC_in_root_opt - NC_in_root)*N_to_root_max);
   double reduction_factor;
   if (N_to_plant == N_to_root_max) {

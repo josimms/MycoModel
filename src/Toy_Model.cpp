@@ -30,6 +30,10 @@ parameters parameters_initalise(std::vector<double> parameters_R) {
   out.ERM_mass = parameters_R[47];
   out.carbon_use = parameters_R[48];
   out.nitrogen_use = parameters_R[49];
+  out.C_value_param_myco = parameters_R[50];
+  out.N_value_param_myco = parameters_R[51];
+  out.C_value_param_plant = parameters_R[52];
+  out.N_value_param_plant = parameters_R[53];
   return(out);
 };
 
@@ -98,12 +102,15 @@ Rcpp::List Toy_Model(double year,
                                              parameters_in.N_limits_fungal,
                                              parameters_in.N_k_fungal,
                                              parameters_in.SWC_k_fungal,
-                                             parameters_in.NC_fungal_opt,
                                              parameters_in.mantle_mass, 
                                              parameters_in.ERM_mass,
                                              parameters_in.NH4_on_NO3,
                                              parameters_in.carbon_use,
-                                             parameters_in.nitrogen_use);
+                                             parameters_in.nitrogen_use,
+                                             parameters_in.C_value_param_myco,
+                                             parameters_in.N_value_param_myco,
+                                             parameters_in.C_value_param_plant,
+                                             parameters_in.N_value_param_plant);
     
     // Soil model symphony
     Rcpp::List Soil_All = symphony_multiple_FOM_daily(Tmb[days], SWC[days],
