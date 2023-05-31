@@ -6,6 +6,7 @@ Rcpp::List plant_decision(double C_roots,
                           double NC_in_root_opt,
                           double C_value_param,
                           double N_value_param) {
+  
     double out;
     if (C_roots/N_roots > NC_in_root_opt) {
       out = 1;
@@ -46,7 +47,7 @@ Rcpp::List myco_decision(double C_fungal,
   }
   
   double NC_in_fungal = C_fungal/N_fungal;
-  double demand = (C_fungal/percentage_C_biomass)*(mantle_mass/ERM_mass)*(1 - (NC_in_fungal)/(NC_fungal_opt)); // TODO: check the formula;
+  double demand = (C_fungal/percentage_C_biomass)*(mantle_mass/ERM_mass)*(1 - NC_in_fungal/NC_fungal_opt);
   
   double C_value = C_value_param*C_fungal;
   double N_value = N_value_param*N_fungal;

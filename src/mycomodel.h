@@ -29,18 +29,6 @@ struct respiration_parameters
   double micorbe_b;
 };
 
-
-#ifndef PKG_plant_decision_H
-#define PKG_plant_decision_H
-
-Rcpp::List plant_decision(double C_roots,
-                          double N_roots,
-                          double NC_in_root_opt,
-                          double C_value_param,
-                          double N_value_param);
-
-#endif
-
 struct symphony_parameters{
   double A;
   double s;
@@ -258,6 +246,7 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
                           std::vector<double> SWC_k_R,
                           double C_roots,
                           double N_roots,
+                          double C_fungal,
                           double percentage_C_biomass,
                           std::vector<double> parameters);
  
@@ -412,6 +401,20 @@ Rcpp::List myco_decision(double C_fungal,
 
 #ifndef PKG_myco_growth_H
 #define PKG_myco_growth_H
+
+
+#ifndef PKG_plant_decision_H
+#define PKG_plant_decision_H
+
+Rcpp::List plant_decision(double C_roots,
+                          double N_roots,
+                          double NC_in_root_opt,
+                          double C_value_param,
+                          double N_value_param);
+
+#endif
+
+// FILE: myco_growth.cpp
 
 double myco_growth(double C_fungal,
                    double N_fungal,
