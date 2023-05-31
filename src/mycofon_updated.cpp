@@ -52,20 +52,19 @@ Rcpp::List mycofon_balence(double C_roots,
   respiration_parameters respiration_params = respiration_vector_to_struct(respiration_parameters_R);
   
   // Mycorrhizal rate
-  // although this should be multiplied by the biomass this is taken out at this stage, as the values are assumed to be the same and therefore there is no point
-      // TODO: should the C to biomass ratio be the same for roots and fungi?
+    // although this should be multiplied by the biomass this is taken out at this stage, as the values are assumed to be the same and therefore there is no point
   double m = N_roots / (C_roots * optimal_root_fungal_biomass_ratio); 
   if (m > 1) {
     std::cout << "Warning:\nThe mycorhization value (m) is more than 1 - check the fungal_mass, root_mass and optimal_root_fungal_biomass_ratio values"; 
   }
   
-  // Plant decision thing
+  // Plant decision, this needs to be decided before the C_roots and N_roots is recalculated
   double C_given = plant_decision(C_roots, N_roots, NC_in_root_opt, C_value_param_plant, N_value_param_plant)[4];
+  double to_CASSIA = 0.1*C_roots; // could change this to be a function that would work with the gradient that is happening in CASSIA
   
-  // dC^r/dt TODO: this need to be linked with the CASSIA C sections
-  // TODO: need to work out if the 
+  // dC^r/dt TODO: this need to be linked with the CASSIA C sections, also link the amount going to CASSIA
   C_roots = C_roots + 
-    0.1*C_roots - 
+    to_CASSIA - 
     (1 - m)*C_roots*turnover_roots - 
     m*C_roots*turnover_roots_mycorrhized - 
     respiration(Tsb, respiration_params.plant_a, respiration_params.plant_b)*C_roots - 
@@ -76,11 +75,10 @@ Rcpp::List mycofon_balence(double C_roots,
   C_fungal = C_fungal + 
     C_given - 
     myco_growth(C_fungal, N_fungal, carbon_use, nitrogen_use) - // TODO: currently C_roots rather than sugar as the model isn't connected in that way
-    turnover_fungal*N_roots*percentage_C_biomass - 
-    respiration(Tsb, respiration_params.fungal_a, respiration_params.fungal_b)*N_roots*percentage_C_biomass;
+    turnover_fungal*C_fungal - 
+    respiration(Tsb, respiration_params.fungal_a, respiration_params.fungal_b)*C_fungal;
   
   // Nitrogen!
-  // TODO: should the N in the roots in different forms be differentiated - or can it be grouped at this stage?
   double root_NC_ratio = N_roots / C_roots;
   double fungal_NC_ratio = N_fungal / C_fungal;
   
@@ -97,6 +95,7 @@ Rcpp::List mycofon_balence(double C_roots,
                                        SWC_k_Plant,
                                        C_roots,
                                        N_roots,
+                                       C_fungal,
                                        percentage_C_biomass,
                                        parameters_NH4_on_NO3)[1];
 
@@ -105,9 +104,9 @@ Rcpp::List mycofon_balence(double C_roots,
   
   N_roots = N_roots +
     N_given + 
-    uptake_plant*C_roots - 
-    (1 - m)*C_roots*turnover_roots*root_NC_ratio - 
-    m*C_roots*turnover_roots_mycorrhized*root_NC_ratio -
+    uptake_plant*C_roots - // This should be by the biomass, so decided that it is multiplied by C^r rather than N^r, maybe should actually be a surface area equation
+    (1 - m)*N_roots*turnover_roots*root_NC_ratio - 
+    m*N_roots*turnover_roots_mycorrhized*root_NC_ratio -
     0.1*N_roots;
   
   //dN^f/dt
@@ -136,7 +135,8 @@ Rcpp::List mycofon_balence(double C_roots,
                             Rcpp::_["N_roots"] = N_roots,
                             Rcpp::_["N_fungal"] = N_fungal,
                             Rcpp::_["uptake_plant"] = uptake_plant*C_roots,
-                            Rcpp::_["uptake_fungal"] = uptake_fungal*N_roots);
+                            Rcpp::_["uptake_fungal"] = uptake_fungal*N_roots,
+                            Rcpp::_["to_CASSIA"] = to_CASSIA);
 
 }
 
