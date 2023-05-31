@@ -1,35 +1,35 @@
 #include "mycomodel.h"
 
 // [[Rcpp::export]]
-Rcpp::List symphony_multiple_FOM_daily(double Tmb,                  // UNITS: 'C
-                                       double SWC,                  // UNITS; mm
-                                       double C_FOM_needles,        // UNITS: C kg, FROM: CASSIA
-                                       double C_FOM_woody,          // UNITS: C kg, FROM: CASSIA
-                                       double C_FOM_roots,          // UNITS: C kg, FROM: CASSIA
-                                       double C_FOM_mycelium,       // UNITS: C kg, FROM: CASSIA
-                                       double C_SOM,                // UNITS: C kg, FROM: CASSIA
-                                       double C_decompose_FOM,      // UNITS: C kg, FROM: here, last iteration
-                                       double C_decompose_SOM,      // UNITS: C kg, FROM: here, last iteration
-                                       double N_decompose_FOM,      // UNITS: C kg, FROM: here, last iteration
-                                       double N_decompose_SOM,      // UNITS: C kg, FROM: here, last iteration
-                                       double Litter_needles,       // UNITS: C kg, FROM: CASSIA
-                                       double Litter_woody,         // UNITS: C kg, FROM: CASSIA
-                                       double Litter_roots,         // UNITS: C kg, FROM: CASSIA
-                                       double Litter_mycelium,      // UNITS: C kg, FROM: Mycofon
-                                       double NH4,                  // UNITS: C kg, FROM: here, last iteration
-                                       double NO3,                  // UNITS: C kg, FROM: here, last iteration
-                                       double NH4_used_Plant,       // UNITS: C kg, FROM: n_uptake
-                                       double NH4_used_Fungal,      // UNITS: C kg, FROM: n_uptake
-                                       double NO3_used_Plant,       // UNITS: C kg, FROM: n_uptake
-                                       double NO3_used_Fungal,      // UNITS: C kg, FROM: n_uptake
-                                       double FOM_Norg_used_Plant,  // UNITS: C kg, FROM: n_uptake
-                                       double FOM_Norg_used_Fungal, // UNITS: C kg, FROM: n_uptake
-                                       double SOM_Norg_used,        // UNITS: C kg, FROM: n_uptake
+Rcpp::List symphony_multiple_FOM_daily(double Tmb,
+                                       double SWC,
+                                       double C_FOM_needles,
+                                       double C_FOM_woody,
+                                       double C_FOM_roots,
+                                       double C_FOM_mycelium,
+                                       double C_SOM,
+                                       double C_decompose_FOM,
+                                       double C_decompose_SOM,
+                                       double N_decompose_FOM,
+                                       double N_decompose_SOM,
+                                       double Litter_needles,
+                                       double Litter_woody,
+                                       double Litter_roots,
+                                       double Litter_mycelium,
+                                       double NH4,
+                                       double NO3,
+                                       double NH4_used_Plant,
+                                       double NH4_used_Fungal,
+                                       double NO3_used_Plant,
+                                       double NO3_used_Fungal,
+                                       double FOM_Norg_used_Plant,
+                                       double FOM_Norg_used_Fungal,
+                                       double SOM_Norg_used,
                                        std::vector<double> respiration_microbes_params,
                                        std::vector<double> N_limits_R,
                                        std::vector<double> N_k_R,
                                        std::vector<double> SWC_k_R,
-                                       double NC_microbe_opt,       // Assume that this is the same as the above number for the moment 
+                                       double NC_microbe_opt,
                                        double microbe_turnover)
 {
   

@@ -89,7 +89,7 @@ Rcpp::List mycofon_balence(double C_roots,
                                        T,
                                        SWC,
                                        m,
-                                       NH4,    // TODO: make this have in input that works with the output of the soil function
+                                       NH4,
                                        NO3,
                                        FOM_Norg,
                                        N_limits_Plant,
