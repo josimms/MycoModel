@@ -1,11 +1,11 @@
 Package: MycoModel
 Type: Package
-Title: What the Package Does in One 'Title Case' Line
+Title: Myco Model
 Version: 1.0
 Date: 2023-01-06
 Author: Joanna Simms
 Maintainer: Joanna Simms <joanna.x.simms@ad.helsinki.fi>
-Description: One paragraph description of what the package does as one or more full sentences.
+Description: Model to look at the transfer of N and C between trees and mycorrhiza.
 License: GPL (>= 2)
 Imports: Rcpp (>= 1.0.9)
 LinkingTo: Rcpp
