@@ -181,14 +181,12 @@ Rcpp::List Fungal_N_Uptake(double C_fungal,
                            double C_value_param,
                            double N_value_param) {
   
-  // TODO: make the N_available link to the uptake equations that I have made!
-  
+
   N_balence N_limits = vector_to_N_balence(N_limits_R);
   N_balence N_k = vector_to_N_balence(N_k_R);
   N_balence SWC_k = vector_to_N_balence(SWC_k_R);
   
   double NC_in_fungal = N_fungal/C_fungal;
-  // TODO: Parallel or intercecting?
   // Demand
   double demand = myco_decision(C_fungal,
                                 N_fungal,
@@ -211,36 +209,22 @@ Rcpp::List Fungal_N_Uptake(double C_fungal,
 
 
 // [[Rcpp::export]]
-Rcpp::List Microbe_Uptake(double C_microbe,     
-                          double N_micorbe,     
-                          double NC_microbe_opt,
-                          double NH4_avaliable,
-                          double NO3_avaliable,
-                          double Norg_avaliable,
-                          double T,             
-                          double SWC,           
+Rcpp::List Microbe_Uptake(double C_microbe,                   // UNITS: C kg
+                          double N_micorbe,                   // UNITS: C kg eq
+                          double NC_microbe_opt,              // UNITS: %
+                          double NH4_avaliable,               // UNITS: C kg eq
+                          double NO3_avaliable,               // UNITS: C kg eq
+                          double Norg_avaliable,              // UNITS: C kg eq
+                          double T,                           // UNITS: 'C
+                          double SWC,                         // UNITS: %
                           std::vector<double> N_limits_R,
                           std::vector<double> N_k_R,
                           std::vector<double> SWC_k_R,
                           bool SOM_decomposers,
-                          double Norg_avaliable_FOM) {
+                          double Norg_avaliable_FOM,
+                          std::vector<double> respiration_microbes_params) {
   
-  /*
-   * double C_microbe,                   // UNITS: C kg
-   double N_micorbe,                   // UNITS: C kg eq
-   double NC_microbe_opt,              // UNITS: %
-   double NH4_avaliable,               // UNITS: C kg eq
-   double NO3_avaliable,               // UNITS: C kg eq
-   double Norg_avaliable,              // UNITS: C kg eq
-   double T,                           // UNITS: 'C
-   double SWC,                         // UNITS: %
-   std::vector<double> N_limits_R,
-   std::vector<double> N_k_R,
-   std::vector<double> SWC_k_R,
-   bool SOM_decomposers,
-   double Norg_avaliable_FOM
-   */
-  
+
   /*
    * Nitrogen limitation // Mass limitation is in the soil model!
    */
@@ -264,8 +248,8 @@ Rcpp::List Microbe_Uptake(double C_microbe,
    * Carbon limitation // Mass limitation is in the soil model!
    */
   
-  // TODO: taken respiration out of the sympny model - should it be here?
-  double C_microbe_uptake = uptake_C(Norg_avaliable, T, N_limits.C, N_k.C, SWC, SWC_k.C);       // UNITS: C kg
+  // The respiration is taken into account here so the microbes don't run out of C
+  double C_microbe_uptake = uptake_C(Norg_avaliable, T, N_limits.C, N_k.C, SWC, SWC_k.C) - respiration(T, respiration_microbes_params[1], respiration_microbes_params[2]);       // UNITS: C kg
   
   /*
    * Uptake organic
@@ -296,6 +280,10 @@ Rcpp::List Microbe_Uptake(double C_microbe,
   // Not having an update means that they will be considered equal.
   NH4_uptaken = uptake_NH4(NH4_avaliable, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4)*(1 - (NC_in_micorbe)/(NC_microbe_opt));        // UNITS: C kg
   NO3_uptaken = uptake_NO3(NO3_avaliable, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3)*(1 - (NC_in_micorbe)/(NC_microbe_opt));        // UNITS: C kg
+  
+  /*
+   * Organic Uptake Again if SOM
+   */
   
   double Norg_uptaken_extra_FOM;
   if (SOM_decomposers) {
