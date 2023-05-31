@@ -178,8 +178,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // Plant_N_Uptake
-Rcpp::List Plant_N_Uptake(double NC_in_root_opt, double T, double SWC, double m, double NH4_in, double NO3_in, double FOM_in, std::vector<double> N_limits_R, std::vector<double> N_k_R, std::vector<double> SWC_k_R, double C_roots, double N_roots, double percentage_C_biomass, std::vector<double> parameters, double C_value_param, double N_value_param);
-RcppExport SEXP _MycoModel_Plant_N_Uptake(SEXP NC_in_root_optSEXP, SEXP TSEXP, SEXP SWCSEXP, SEXP mSEXP, SEXP NH4_inSEXP, SEXP NO3_inSEXP, SEXP FOM_inSEXP, SEXP N_limits_RSEXP, SEXP N_k_RSEXP, SEXP SWC_k_RSEXP, SEXP C_rootsSEXP, SEXP N_rootsSEXP, SEXP percentage_C_biomassSEXP, SEXP parametersSEXP, SEXP C_value_paramSEXP, SEXP N_value_paramSEXP) {
+Rcpp::List Plant_N_Uptake(double NC_in_root_opt, double T, double SWC, double m, double NH4_in, double NO3_in, double FOM_in, std::vector<double> N_limits_R, std::vector<double> N_k_R, std::vector<double> SWC_k_R, double C_roots, double N_roots, double C_fungal, double percentage_C_biomass, std::vector<double> parameters, double C_value_param, double N_value_param);
+RcppExport SEXP _MycoModel_Plant_N_Uptake(SEXP NC_in_root_optSEXP, SEXP TSEXP, SEXP SWCSEXP, SEXP mSEXP, SEXP NH4_inSEXP, SEXP NO3_inSEXP, SEXP FOM_inSEXP, SEXP N_limits_RSEXP, SEXP N_k_RSEXP, SEXP SWC_k_RSEXP, SEXP C_rootsSEXP, SEXP N_rootsSEXP, SEXP C_fungalSEXP, SEXP percentage_C_biomassSEXP, SEXP parametersSEXP, SEXP C_value_paramSEXP, SEXP N_value_paramSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -195,11 +195,12 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<double> >::type SWC_k_R(SWC_k_RSEXP);
     Rcpp::traits::input_parameter< double >::type C_roots(C_rootsSEXP);
     Rcpp::traits::input_parameter< double >::type N_roots(N_rootsSEXP);
+    Rcpp::traits::input_parameter< double >::type C_fungal(C_fungalSEXP);
     Rcpp::traits::input_parameter< double >::type percentage_C_biomass(percentage_C_biomassSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type parameters(parametersSEXP);
     Rcpp::traits::input_parameter< double >::type C_value_param(C_value_paramSEXP);
     Rcpp::traits::input_parameter< double >::type N_value_param(N_value_paramSEXP);
-    rcpp_result_gen = Rcpp::wrap(Plant_N_Uptake(NC_in_root_opt, T, SWC, m, NH4_in, NO3_in, FOM_in, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, percentage_C_biomass, parameters, C_value_param, N_value_param));
+    rcpp_result_gen = Rcpp::wrap(Plant_N_Uptake(NC_in_root_opt, T, SWC, m, NH4_in, NO3_in, FOM_in, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -230,8 +231,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // Microbe_Uptake
-Rcpp::List Microbe_Uptake(double C_microbe, double N_micorbe, double NC_microbe_opt, double NH4_avaliable, double NO3_avaliable, double Norg_avaliable, double T, double SWC, std::vector<double> N_limits_R, std::vector<double> N_k_R, std::vector<double> SWC_k_R, bool SOM_decomposers, double Norg_avaliable_FOM);
-RcppExport SEXP _MycoModel_Microbe_Uptake(SEXP C_microbeSEXP, SEXP N_micorbeSEXP, SEXP NC_microbe_optSEXP, SEXP NH4_avaliableSEXP, SEXP NO3_avaliableSEXP, SEXP Norg_avaliableSEXP, SEXP TSEXP, SEXP SWCSEXP, SEXP N_limits_RSEXP, SEXP N_k_RSEXP, SEXP SWC_k_RSEXP, SEXP SOM_decomposersSEXP, SEXP Norg_avaliable_FOMSEXP) {
+Rcpp::List Microbe_Uptake(double C_microbe, double N_micorbe, double NC_microbe_opt, double NH4_avaliable, double NO3_avaliable, double Norg_avaliable, double T, double SWC, std::vector<double> N_limits_R, std::vector<double> N_k_R, std::vector<double> SWC_k_R, bool SOM_decomposers, double Norg_avaliable_FOM, std::vector<double> respiration_microbes_params);
+RcppExport SEXP _MycoModel_Microbe_Uptake(SEXP C_microbeSEXP, SEXP N_micorbeSEXP, SEXP NC_microbe_optSEXP, SEXP NH4_avaliableSEXP, SEXP NO3_avaliableSEXP, SEXP Norg_avaliableSEXP, SEXP TSEXP, SEXP SWCSEXP, SEXP N_limits_RSEXP, SEXP N_k_RSEXP, SEXP SWC_k_RSEXP, SEXP SOM_decomposersSEXP, SEXP Norg_avaliable_FOMSEXP, SEXP respiration_microbes_paramsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -248,7 +249,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<double> >::type SWC_k_R(SWC_k_RSEXP);
     Rcpp::traits::input_parameter< bool >::type SOM_decomposers(SOM_decomposersSEXP);
     Rcpp::traits::input_parameter< double >::type Norg_avaliable_FOM(Norg_avaliable_FOMSEXP);
-    rcpp_result_gen = Rcpp::wrap(Microbe_Uptake(C_microbe, N_micorbe, NC_microbe_opt, NH4_avaliable, NO3_avaliable, Norg_avaliable, T, SWC, N_limits_R, N_k_R, SWC_k_R, SOM_decomposers, Norg_avaliable_FOM));
+    Rcpp::traits::input_parameter< std::vector<double> >::type respiration_microbes_params(respiration_microbes_paramsSEXP);
+    rcpp_result_gen = Rcpp::wrap(Microbe_Uptake(C_microbe, N_micorbe, NC_microbe_opt, NH4_avaliable, NO3_avaliable, Norg_avaliable, T, SWC, N_limits_R, N_k_R, SWC_k_R, SOM_decomposers, Norg_avaliable_FOM, respiration_microbes_params));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -266,8 +268,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // symphony_multiple_FOM_daily
-Rcpp::List symphony_multiple_FOM_daily(double Tmb, double SWC, double C_FOM_needles, double C_FOM_woody, double C_FOM_roots, double C_FOM_mycelium, double C_SOM, double C_decompose_FOM, double C_decompose_SOM, double N_decompose_FOM, double N_decompose_SOM, double Litter_needles, double Litter_woody, double Litter_roots, double Litter_mycelium, double NH4, double NO3, double NH4_used_Plant, double NH4_used_Fungal, double NO3_used_Plant, double NO3_used_Fungal, double FOM_Norg_used_Plant, double FOM_Norg_used_Fungal, double SOM_Norg_used, std::vector<double> respiration_microbes_params, std::vector<double> N_limits_R, std::vector<double> N_k_R, std::vector<double> SWC_k_R, double NC_microbe_opt, double microbe_turnover);
-RcppExport SEXP _MycoModel_symphony_multiple_FOM_daily(SEXP TmbSEXP, SEXP SWCSEXP, SEXP C_FOM_needlesSEXP, SEXP C_FOM_woodySEXP, SEXP C_FOM_rootsSEXP, SEXP C_FOM_myceliumSEXP, SEXP C_SOMSEXP, SEXP C_decompose_FOMSEXP, SEXP C_decompose_SOMSEXP, SEXP N_decompose_FOMSEXP, SEXP N_decompose_SOMSEXP, SEXP Litter_needlesSEXP, SEXP Litter_woodySEXP, SEXP Litter_rootsSEXP, SEXP Litter_myceliumSEXP, SEXP NH4SEXP, SEXP NO3SEXP, SEXP NH4_used_PlantSEXP, SEXP NH4_used_FungalSEXP, SEXP NO3_used_PlantSEXP, SEXP NO3_used_FungalSEXP, SEXP FOM_Norg_used_PlantSEXP, SEXP FOM_Norg_used_FungalSEXP, SEXP SOM_Norg_usedSEXP, SEXP respiration_microbes_paramsSEXP, SEXP N_limits_RSEXP, SEXP N_k_RSEXP, SEXP SWC_k_RSEXP, SEXP NC_microbe_optSEXP, SEXP microbe_turnoverSEXP) {
+Rcpp::List symphony_multiple_FOM_daily(double Tmb, double SWC, double C_FOM_needles, double C_FOM_woody, double C_FOM_roots, double C_FOM_mycelium, double C_SOM, double N_SOM, double C_decompose_FOM, double C_decompose_SOM, double N_decompose_FOM, double N_decompose_SOM, double Litter_needles, double Litter_woody, double Litter_roots, double Litter_mycelium, double NH4, double NO3, double N_FOM_needles, double N_FOM_woody, double N_FOM_roots, double N_FOM_mycelium, double NH4_used_Plant, double NH4_used_Fungal, double NO3_used_Plant, double NO3_used_Fungal, double FOM_Norg_used_Plant, double FOM_Norg_used_Fungal, double SOM_Norg_used, std::vector<double> respiration_microbes_params, std::vector<double> N_limits_R, std::vector<double> N_k_R, std::vector<double> SWC_k_R, double NC_microbe_opt, double microbe_turnover);
+RcppExport SEXP _MycoModel_symphony_multiple_FOM_daily(SEXP TmbSEXP, SEXP SWCSEXP, SEXP C_FOM_needlesSEXP, SEXP C_FOM_woodySEXP, SEXP C_FOM_rootsSEXP, SEXP C_FOM_myceliumSEXP, SEXP C_SOMSEXP, SEXP N_SOMSEXP, SEXP C_decompose_FOMSEXP, SEXP C_decompose_SOMSEXP, SEXP N_decompose_FOMSEXP, SEXP N_decompose_SOMSEXP, SEXP Litter_needlesSEXP, SEXP Litter_woodySEXP, SEXP Litter_rootsSEXP, SEXP Litter_myceliumSEXP, SEXP NH4SEXP, SEXP NO3SEXP, SEXP N_FOM_needlesSEXP, SEXP N_FOM_woodySEXP, SEXP N_FOM_rootsSEXP, SEXP N_FOM_myceliumSEXP, SEXP NH4_used_PlantSEXP, SEXP NH4_used_FungalSEXP, SEXP NO3_used_PlantSEXP, SEXP NO3_used_FungalSEXP, SEXP FOM_Norg_used_PlantSEXP, SEXP FOM_Norg_used_FungalSEXP, SEXP SOM_Norg_usedSEXP, SEXP respiration_microbes_paramsSEXP, SEXP N_limits_RSEXP, SEXP N_k_RSEXP, SEXP SWC_k_RSEXP, SEXP NC_microbe_optSEXP, SEXP microbe_turnoverSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -278,6 +280,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type C_FOM_roots(C_FOM_rootsSEXP);
     Rcpp::traits::input_parameter< double >::type C_FOM_mycelium(C_FOM_myceliumSEXP);
     Rcpp::traits::input_parameter< double >::type C_SOM(C_SOMSEXP);
+    Rcpp::traits::input_parameter< double >::type N_SOM(N_SOMSEXP);
     Rcpp::traits::input_parameter< double >::type C_decompose_FOM(C_decompose_FOMSEXP);
     Rcpp::traits::input_parameter< double >::type C_decompose_SOM(C_decompose_SOMSEXP);
     Rcpp::traits::input_parameter< double >::type N_decompose_FOM(N_decompose_FOMSEXP);
@@ -288,6 +291,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type Litter_mycelium(Litter_myceliumSEXP);
     Rcpp::traits::input_parameter< double >::type NH4(NH4SEXP);
     Rcpp::traits::input_parameter< double >::type NO3(NO3SEXP);
+    Rcpp::traits::input_parameter< double >::type N_FOM_needles(N_FOM_needlesSEXP);
+    Rcpp::traits::input_parameter< double >::type N_FOM_woody(N_FOM_woodySEXP);
+    Rcpp::traits::input_parameter< double >::type N_FOM_roots(N_FOM_rootsSEXP);
+    Rcpp::traits::input_parameter< double >::type N_FOM_mycelium(N_FOM_myceliumSEXP);
     Rcpp::traits::input_parameter< double >::type NH4_used_Plant(NH4_used_PlantSEXP);
     Rcpp::traits::input_parameter< double >::type NH4_used_Fungal(NH4_used_FungalSEXP);
     Rcpp::traits::input_parameter< double >::type NO3_used_Plant(NO3_used_PlantSEXP);
@@ -301,7 +308,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<double> >::type SWC_k_R(SWC_k_RSEXP);
     Rcpp::traits::input_parameter< double >::type NC_microbe_opt(NC_microbe_optSEXP);
     Rcpp::traits::input_parameter< double >::type microbe_turnover(microbe_turnoverSEXP);
-    rcpp_result_gen = Rcpp::wrap(symphony_multiple_FOM_daily(Tmb, SWC, C_FOM_needles, C_FOM_woody, C_FOM_roots, C_FOM_mycelium, C_SOM, C_decompose_FOM, C_decompose_SOM, N_decompose_FOM, N_decompose_SOM, Litter_needles, Litter_woody, Litter_roots, Litter_mycelium, NH4, NO3, NH4_used_Plant, NH4_used_Fungal, NO3_used_Plant, NO3_used_Fungal, FOM_Norg_used_Plant, FOM_Norg_used_Fungal, SOM_Norg_used, respiration_microbes_params, N_limits_R, N_k_R, SWC_k_R, NC_microbe_opt, microbe_turnover));
+    rcpp_result_gen = Rcpp::wrap(symphony_multiple_FOM_daily(Tmb, SWC, C_FOM_needles, C_FOM_woody, C_FOM_roots, C_FOM_mycelium, C_SOM, N_SOM, C_decompose_FOM, C_decompose_SOM, N_decompose_FOM, N_decompose_SOM, Litter_needles, Litter_woody, Litter_roots, Litter_mycelium, NH4, NO3, N_FOM_needles, N_FOM_woody, N_FOM_roots, N_FOM_mycelium, NH4_used_Plant, NH4_used_Fungal, NO3_used_Plant, NO3_used_Fungal, FOM_Norg_used_Plant, FOM_Norg_used_Fungal, SOM_Norg_used, respiration_microbes_params, N_limits_R, N_k_R, SWC_k_R, NC_microbe_opt, microbe_turnover));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -354,11 +361,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_MycoModel_uptake_NH4", (DL_FUNC) &_MycoModel_uptake_NH4, 6},
     {"_MycoModel_uptake_NO3", (DL_FUNC) &_MycoModel_uptake_NO3, 6},
     {"_MycoModel_uptake_C", (DL_FUNC) &_MycoModel_uptake_C, 6},
-    {"_MycoModel_Plant_N_Uptake", (DL_FUNC) &_MycoModel_Plant_N_Uptake, 16},
+    {"_MycoModel_Plant_N_Uptake", (DL_FUNC) &_MycoModel_Plant_N_Uptake, 17},
     {"_MycoModel_Fungal_N_Uptake", (DL_FUNC) &_MycoModel_Fungal_N_Uptake, 16},
-    {"_MycoModel_Microbe_Uptake", (DL_FUNC) &_MycoModel_Microbe_Uptake, 13},
+    {"_MycoModel_Microbe_Uptake", (DL_FUNC) &_MycoModel_Microbe_Uptake, 14},
     {"_MycoModel_respiration", (DL_FUNC) &_MycoModel_respiration, 3},
-    {"_MycoModel_symphony_multiple_FOM_daily", (DL_FUNC) &_MycoModel_symphony_multiple_FOM_daily, 30},
+    {"_MycoModel_symphony_multiple_FOM_daily", (DL_FUNC) &_MycoModel_symphony_multiple_FOM_daily, 35},
     {"_MycoModel_symphony", (DL_FUNC) &_MycoModel_symphony, 1},
     {"_MycoModel_symphony_plus", (DL_FUNC) &_MycoModel_symphony_plus, 2},
     {"_MycoModel_symphony_plus_daily", (DL_FUNC) &_MycoModel_symphony_plus_daily, 5},

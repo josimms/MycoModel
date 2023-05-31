@@ -8,6 +8,7 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,
                                        double C_FOM_roots,
                                        double C_FOM_mycelium,
                                        double C_SOM,
+                                       double N_SOM,
                                        double C_decompose_FOM,
                                        double C_decompose_SOM,
                                        double N_decompose_FOM,
@@ -18,6 +19,10 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,
                                        double Litter_mycelium,
                                        double NH4,
                                        double NO3,
+                                       double N_FOM_needles,
+                                       double N_FOM_woody,
+                                       double N_FOM_roots,
+                                       double N_FOM_mycelium,
                                        double NH4_used_Plant,
                                        double NH4_used_Fungal,
                                        double NO3_used_Plant,
@@ -39,10 +44,10 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,
   
   // INITILISATION FROM VECTORS
   // Parameters into symphony_parameters format
-    // TODO: do I need to initialise anything
   
   // SOIL INITIALISATION
   double C_FOM = C_FOM_needles + C_FOM_woody + C_FOM_roots + C_FOM_mycelium; // C kg
+  double N_FOM = N_FOM_needles + N_FOM_woody + N_FOM_roots + N_FOM_mycelium; // C kg
   
   /*
    * Nitrogen processes
@@ -51,8 +56,8 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,
   // STEP 1: Set the values, considering the other models
   NH4 = NH4 - NH4_used_Plant - NH4_used_Fungal;             // C kg
   NO3 = NO3 - NO3_used_Plant - NO3_used_Fungal;             // C kg
-  C_FOM = C_FOM - FOM_Norg_used_Plant - FOM_Norg_used_Fungal;    // C kg
-  C_SOM = C_SOM;                            // C kg
+  N_FOM = N_FOM - FOM_Norg_used_Plant - FOM_Norg_used_Fungal;    // C kg
+  N_SOM = N_SOM;                                            // C kg
   
   // STEP 2: consider the uptake functions, for FOM and SOM, 
   // this includes the decomposition and mineralisation / immobilisation
@@ -66,14 +71,24 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,
   N_balence SOM_after_microbe_activity = list_to_N_balence(SOM_after_microbe_activity_list);    // C kg
   
   // Update pure inorganic pools
-  NH4 = NH4 - C_decompose_FOM*FOM_after_microbe_activity.NH4 - C_decompose_SOM*SOM_after_microbe_activity.NH4;    // C kg
-  NO3 = NO3 - C_decompose_FOM*FOM_after_microbe_activity.NO3 - C_decompose_SOM*SOM_after_microbe_activity.NO3;    // C kg
+  NO3 = NO3 - C_decompose_FOM*FOM_after_microbe_activity.NO3 - C_decompose_SOM*SOM_after_microbe_activity.NO3;    // C kg eq
+  NH4 = NH4 - C_decompose_FOM*FOM_after_microbe_activity.NH4 - C_decompose_SOM*SOM_after_microbe_activity.NH4;    // C kg eq
+  
+  N_FOM = N_FOM - C_decompose_FOM*FOM_after_microbe_activity.Norg - C_decompose_SOM*SOM_after_microbe_activity.Norg_FOM;    // C kg eq
+  N_SOM = N_SOM - C_decompose_SOM*SOM_after_microbe_activity.Norg;    // C kg eq 
+  
+  // TODO: make this a sensible function, at the moment I just want to make sure that the outputs are right,
+  // in the end there should be no need for the N_FOM
+  // need to add the litter fall as an input of N
+  
+  N_FOM_needles = (C_FOM_needles/C_FOM)*N_FOM;             // C kg
+  N_FOM_woody = (C_FOM_woody/C_FOM)*N_FOM;                     // C kg
+  N_FOM_roots = (C_FOM_roots/C_FOM)*N_FOM;                     // C kg
+  N_FOM_mycelium = (C_FOM_mycelium/C_FOM)*N_FOM;         // C kg
   
   /*
    * Carbon processes
    */
-  
-  // TODO: add the N uptake!
   
   // STEP 1: Update the FOM mass
   double total_decomposition = C_decompose_FOM*FOM_after_microbe_activity.C + C_decompose_SOM*SOM_after_microbe_activity.Norg_FOM;   // C kg
@@ -104,6 +119,10 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,
                             Rcpp::_["C_FOM_woody"] = C_FOM_woody,                  // C kg
                             Rcpp::_["C_FOM_roots"] = C_FOM_roots,                  // C kg
                             Rcpp::_["C_FOM_mycelium"] = C_FOM_mycelium,            // C kg
+                            Rcpp::_["N_FOM_needles"] = N_FOM_needles,              // C kg
+                            Rcpp::_["N_FOM_woody"] = N_FOM_woody,                  // C kg
+                            Rcpp::_["N_FOM_roots"] = N_FOM_roots,                  // C kg
+                            Rcpp::_["N_FOM_mycelium"] = N_FOM_mycelium,            // C kg
                             Rcpp::_["C_SOM"] = C_SOM,                              // C kg
                             Rcpp::_["NH4"] = NH4,                                  // C kg
                             Rcpp::_["NO3"] = NO3,                                  // C kg
