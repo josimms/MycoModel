@@ -40,68 +40,1069 @@ symphony_plus_vs_original_plot <- function() {
   }
 }
 
-nitrogen_graphs <- function() {
+nitrogen_graphs_plant <- function() {
   
   # Indervidual functions should follow this pattern
-  temp_change_organic <- temp_change_NO3 <- conc_change_organic <- conc_change_NO3 <- SWC_change_organic <- SWC_change_NO3 <- NULL
-  temp_change_N_Uptake <- SWC_change_N_Uptake <- conc_change_N_Uptake <- conc_change_Norg_Uptake <- conc_change_NH4_Uptake <- conc_change_NO3_Uptake <- NULL
+  temp_change_N_Uptake <- SWC_change_N_Uptake <- conc_change_N_Uptake <- NULL
   temp_change_N_Uptake_Fungal <- SWC_change_N_Uptake_Fungal <- conc_change_N_Uptake_Fungal <- conc_change_Norg_Uptake_Fungal <- conc_change_NO3_Uptake_Fungal <- conc_change_NH4_Uptake_Fungal <- NULL
+  temp_change_N_Uptake_Plant <- SWC_change_N_Uptake_Plant <- conc_change_NH4_Uptake_Plant_NH4_out <- conc_change_NH4_Uptake_Plant_NO3_out <- conc_change_NH4_Uptake_Plant_Norg_out <- NULL
+  conc_change_Norg_Uptake_Plant <- conc_change_NO3_Uptake_Plant_NH4_10 <- conc_change_NO3_Uptake_Plant_NH4_5 <- conc_change_NO3_Uptake_Plant_NH4_2 <- conc_change_NH4_Uptake_Plant <- NULL
+  conc_change_N_Uptake_Plant_NH4_out <- conc_change_N_Uptake_Plant_NO3_out <- conc_change_N_Uptake_Plant_Norg_out <- NULL
+  conc_change_NH4_Uptake_Plant_NH4_out <- conc_change_NH4_Uptake_Plant_NO3_out <- conc_change_NH4_Uptake_Plant_Norg_out <- NULL
+  conc_change_NO3_Uptake_Plant_NH4_out <- conc_change_NO3_Uptake_Plant_NO3_out <- conc_change_NO3_Uptake_Plant_Norg_out <- NULL
+  conc_change_NO3_Uptake_Plant_NH4_10_NH4_out <- conc_change_NO3_Uptake_Plant_NH4_10_NO3_out <- conc_change_NO3_Uptake_Plant_NH4_10_Norg_out <- NULL
+  conc_change_Norg_Uptake_Plant_NH4_out <- conc_change_Norg_Uptake_Plant_NO3_out <- conc_change_Norg_Uptake_Plant_Norg_out <- NULL
   temperature_range = -20:20
   count = 1
   for (Temp in temperature_range) {
-    temp_change_organic[count] = uptake_organic_N(10, Temp, 10, 0.2, 0.8, 0.5)
-    temp_change_NO3[count] = uptake_NO3(10, Temp, 10, -0.2, 0.8, 0.5)
-    temp_change_N_Uptake[count] = Plant_N_Uptake(c(0.5, 0.5, 0.5), c(10, 10, 10), 0.2, 15, Temp, 0.8, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    temp_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 500, 3000, 3000, 3000, 10, Temp, 0.8,c(10, 10, 10), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
+    temp_change_N_Uptake[count] = uptake_N(10, Temp, 10, 0.2, 0.8, 0.5)
+    temp_change_N_Uptake_Plant[count] = Plant_N_Uptake(20, Temp, 0.8, 0.9, 10, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(1, 1), 4, 4)$N_to_plant
     count = count + 1
   }
   concentration_range = seq(0, 20, by = 0.01)
   count = 1
   for (conc in concentration_range) {
-    conc_change_organic[count] <- uptake_organic_N(conc, 15, 10, 0.2, 0.8, 0.5)
-    conc_change_NO3[count] <- uptake_NO3(conc, 15, 10, -0.2, 0.8, 0.5)
-    conc_change_N_Uptake[count] = Plant_N_Uptake(c(0.5, 0.5, 0.5), c(conc, conc, conc), 0.2, 15, 15, 0.8, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    conc_change_Norg_Uptake[count] = Plant_N_Uptake(c(0.5, 0.5, 0.5), c(conc, 10, 10), 0.2, 15, 15, 0.8, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    conc_change_NO3_Uptake[count] = Plant_N_Uptake(c(0.5, 0.5, 0.5), c(10, conc, 10), 0.2, 15, 15, 0.8, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    conc_change_NH4_Uptake[count] = Plant_N_Uptake(c(0.5, 0.5, 0.5), c(10, 10, conc), 0.2, 15, 15, 0.8, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    conc_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 500, 3000, 3000, 3000, 10, 15, 0.8, c(conc, conc, conc), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    conc_change_NO3_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 500, 3000, 3000, 3000, 10, 15, 0.8, c(10, conc, 10), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    conc_change_NH4_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 500, 3000, 3000, 3000, 10, 15, 0.8, c(conc, 10, 10), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    conc_change_Norg_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 500, 3000, 3000, 3000, 10, 15, 0.8, c(10, 10, conc), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
+    conc_change_N_Uptake[count] <- uptake_N(conc, 15, 10, 0.2, 0.8, 0.5)
+    conc_change_N_Uptake_Plant[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$N_to_plant
+    conc_change_N_Uptake_Plant_NH4_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$NH4_used
+    conc_change_N_Uptake_Plant_NO3_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$NO3_used
+    conc_change_N_Uptake_Plant_Norg_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$Norg_used
+    conc_change_Norg_Uptake_Plant[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.3), 4, 4)$N_to_plant
+    conc_change_Norg_Uptake_Plant_NH4_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.3), 4, 4)$N_to_plant
+    conc_change_Norg_Uptake_Plant_NO3_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.3), 4, 4)$NH4_used
+    conc_change_Norg_Uptake_Plant_Norg_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.3), 4, 4)$NO3_used
+    conc_change_NO3_Uptake_Plant_NH4_10[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$Norg_used
+    conc_change_NO3_Uptake_Plant_NH4_10_NH4_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$NH4_used
+    conc_change_NO3_Uptake_Plant_NH4_10_NO3_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$NO3_used
+    conc_change_NO3_Uptake_Plant_NH4_10_Norg_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$Norg_used
+    conc_change_NO3_Uptake_Plant_NH4_5[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 5, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$N_to_plant
+    conc_change_NO3_Uptake_Plant_NH4_2[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 2, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$N_to_plant
+    conc_change_NH4_Uptake_Plant[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$N_to_plant
+    conc_change_NH4_Uptake_Plant_NH4_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$NH4_used
+    conc_change_NH4_Uptake_Plant_NO3_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$NO3_used
+    conc_change_NH4_Uptake_Plant_Norg_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$Norg_used
     count = count + 1
   }
   SWC_range = seq(0, 1, by = 0.01)
   count = 1
   for (SWC in SWC_range) {
-    SWC_change_organic[count] <- uptake_organic_N(10, 15, 10, 0.2, SWC, 0.5)
-    SWC_change_NO3[count] <- uptake_NO3(10, 15, 10, -0.2, SWC, 0.5)
-    SWC_change_N_Uptake[count] = Plant_N_Uptake(c(0.5, 0.5, 0.5), c(10, 10, 10), 0.2, 15, 15, SWC, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
-    SWC_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 500, 3000, 3000, 3000, 10, 15, SWC, c(10, 10, 10), c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5))
+    SWC_change_N_Uptake[count] <- uptake_N(10, 15, 10, 0.2, SWC, 0.5)
+    SWC_change_N_Uptake_Plant[count] = Plant_N_Uptake(20, 10, SWC, 0.9, 10, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -10), 4, 4)$N_to_plant
     count = count + 1
   }
   
   par(mfrow = c(3, 2))
-  plot(concentration_range, conc_change_organic, xlab = "Concentration", ylab = "Uptake of Organic / NH4", main = "Concentration response \n with temperature 15, SWC 0.8")
-  plot(concentration_range, conc_change_NO3, xlab = "Concentration", ylab = "Uptake of NO3", main = "Concentration response \n with temperature 15, SWC 0.8")
-  plot(temperature_range, temp_change_organic, xlab = "Temperature", ylab = "Uptake of Organic / NH4", main = "Temperature response \n with concentation 10, SWC 0.8")
-  plot(temperature_range, temp_change_NO3, xlab = "Temperature", ylab = "Uptake of NO3", main = "Temperature response \n with concentation 10, SWC 0.8")
-  plot(SWC_range, SWC_change_organic, xlab = "SWC", ylab = "Uptake of Organic / NH4", main = "SWC response \n with concentation 10, temperature 15")
-  plot(SWC_range, SWC_change_NO3, xlab = "SWC", ylab = "Uptake of NO3", main = "SWC response \n with concentation 5, temperature 15")
+  plot(concentration_range, conc_change_NH4_Uptake_Plant, xlab = "NH4", ylab = "total N to plant", main = "NH4 response (Plant) \n with temperature 15, SWC 0.8, other N 10")
+  lines(concentration_range, conc_change_NH4_Uptake_Plant_NH4_out, col = "black", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_NH4_Uptake_Plant_NO3_out, col = "blue", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_NH4_Uptake_Plant_Norg_out, col = "green", lty = 2, lwd = 2)
+  legend(0, max(unlist(c(conc_change_NH4_Uptake_Plant, conc_change_NH4_Uptake_Plant_NH4_out, conc_change_NH4_Uptake_Plant_NO3_out, conc_change_NH4_Uptake_Plant_Norg_out))),
+         c("NH4", "No3", "FOM"), col = c("black", "blue", "green"), lty = 2, title = "N Type", bty = "n")
   
-  par(mfrow = c(3, 2))
-  plot(concentration_range, conc_change_N_Uptake, xlab = "Concentration", ylab = "total N to plant", main = "Concentration response \n with temperature 15, SWC 0.8")
-  plot(concentration_range, conc_change_NH4_Uptake, xlab = "NH4", ylab = "total N to plant", main = "NH4 response \n with temperature 15, SWC 0.8, other N 10")
-  plot(temperature_range, temp_change_N_Uptake, xlab = "Temperature", ylab = "total N to plant", main = "Temperature response \n with concentation 10, SWC 0.8")
-  plot(concentration_range, conc_change_NO3_Uptake, xlab = "NO3", ylab = "total N to plant", main = "NO3 response \n with temperature 15, SWC 0.8, other N 10")
-  plot(SWC_range, SWC_change_N_Uptake, xlab = "SWC", ylab = "total N to plant", main = "SWC response \n with concentation 10, temperature 15")
-  plot(concentration_range, conc_change_Norg_Uptake, xlab = "Norg", ylab = "total N to plant", main = "Norg response \n with temperature 15, SWC 0.8, other N 10")
+  plot(concentration_range, conc_change_Norg_Uptake_Plant, xlab = "Norg", ylab = "total N to plant",
+       main = "Norg response (Plant) \n with temperature 15, SWC 0.8, other N 10",
+       ylim = c(0, max(conc_change_Norg_Uptake_Plant)))
+  lines(concentration_range, conc_change_Norg_Uptake_Plant_NH4_out, col = "black", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_Norg_Uptake_Plant_NO3_out, col = "blue", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_Norg_Uptake_Plant_Norg_out, col = "green", lty = 2, lwd = 2)
   
+  plot(concentration_range, conc_change_NO3_Uptake_Plant_NH4_10, xlab = "NO3", ylab = "total N to plant", 
+       main = "NO3 response (Plant) \n with temperature 15, SWC 0.8, other 10",
+       ylim = c(0,  max(c(conc_change_NO3_Uptake_Plant_NH4_10))))
+  lines(concentration_range, conc_change_NO3_Uptake_Plant_NH4_10_NH4_out, lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_NO3_Uptake_Plant_NH4_10_NO3_out, lty = 2, lwd = 2, col = "blue")
+  lines(concentration_range, conc_change_NO3_Uptake_Plant_NH4_10_Norg_out, lty = 2, lwd = 2, col = "green")
+  
+  plot(concentration_range, conc_change_NO3_Uptake_Plant_NH4_10, xlab = "NO3", ylab = "total N to plant",
+       main = "NO3 response (Plant) \n with temperature 15, SWC 0.8, Organic 10, NH4 variable",
+       ylim = c(0,  max(c(conc_change_NO3_Uptake_Plant_NH4_10, conc_change_NO3_Uptake_Plant_NH4_5, conc_change_NO3_Uptake_Plant_NH4_2))))
+  points(concentration_range, conc_change_NO3_Uptake_Plant_NH4_5, col = "pink")
+  points(concentration_range, conc_change_NO3_Uptake_Plant_NH4_2, col = "red")
+  legend(0, max(unlist(c(conc_change_NO3_Uptake_Plant_NH4_10, conc_change_NO3_Uptake_Plant_NH4_5, conc_change_NO3_Uptake_Plant_NH4_2))),
+         c("High", "Medium", "Low"), col = c("black", "pink", "red"), pch = 1, title = "NH4", bty = "n")
+  
+  plot(temperature_range, temp_change_N_Uptake_Plant, xlab = "Temperature", ylab = "total N to plant", main = "Temperature response (Plant) \n with concentation 10, SWC 0.8")
+  
+  plot(SWC_range, SWC_change_N_Uptake, xlab = "SWC", ylab = "total N to plant", main = "SWC response (Plant) \n with concentation 10, temperature 15")
+  
+  # TODO: need to add other state variables esim. C_fungal, decision parameters / optimum root parameter
+  
+}
+
+
+nitrogen_graphs_fungal <- function() {
+  #####
+  ## Generating the values
+  #####
+  temp_change_N_Uptake_Fungal <- SWC_change_N_Uptake_Fungal <- conc_change_N_Uptake_Fungal <- conc_change_Norg_Uptake_Fungal <- conc_change_NO3_Uptake_Fungal <- conc_change_NH4_Uptake_Fungal <- NULL
+  conc_change_N_Uptake_Fungal_NH4_out <- conc_change_N_Uptake_Fungal_NO3_out <- conc_change_N_Uptake_Fungal_Norg_out <- NULL
+  conc_change_NO3_Uptake_Fungal_NH4_10 <- conc_change_NO3_Uptake_Fungal_NH4_10_NH4_out <- conc_change_NO3_Uptake_Fungal_NH4_10_NO3_out <- conc_change_NO3_Uptake_Fungal_NH4_10_Norg_out <- NULL
+  conc_change_NO3_Uptake_Fungal_NH4_5 <- conc_change_NO3_Uptake_Fungal_NH4_2 <- NULL
+  conc_change_NH4_Uptake_Fungal_NH4_out <- conc_change_NH4_Uptake_Fungal_NO3_out <- conc_change_NH4_Uptake_Fungal_Norg_out <- NULL
+  conc_change_Norg_Uptake_Fungal_NH4_out <- conc_change_Norg_Uptake_Fungal_NO3_out <- conc_change_Norg_Uptake_Fungal_Norg_out <- NULL
+  
+  temperature_range = -20:20
+  count = 1
+  for (Temp in temperature_range) {
+    temp_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, Temp, 0.8, 10, 10, 10, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
+    count = count + 1
+  }
+  concentration_range = seq(0, 20, by = 0.01)
+  count = 1
+  for (conc in concentration_range) {
+    conc_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
+    conc_change_N_Uptake_Fungal_NH4_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NH4_used
+    conc_change_N_Uptake_Fungal_NO3_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NO3_used
+    conc_change_N_Uptake_Fungal_Norg_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$Norg_used
+    conc_change_NO3_Uptake_Fungal_NH4_10[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
+    conc_change_NO3_Uptake_Fungal_NH4_10_NH4_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NH4_used
+    conc_change_NO3_Uptake_Fungal_NH4_10_NO3_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NO3_used
+    conc_change_NO3_Uptake_Fungal_NH4_10_Norg_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$Norg_used
+    conc_change_NO3_Uptake_Fungal_NH4_5[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 5, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
+    conc_change_NO3_Uptake_Fungal_NH4_2[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 2, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
+    conc_change_NH4_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
+    conc_change_NH4_Uptake_Fungal_NH4_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NH4_used
+    conc_change_NH4_Uptake_Fungal_NO3_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NO3_used
+    conc_change_NH4_Uptake_Fungal_Norg_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$Norg_used
+    conc_change_Norg_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
+    conc_change_Norg_Uptake_Fungal_NH4_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NH4_used
+    conc_change_Norg_Uptake_Fungal_NO3_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NO3_used
+    conc_change_Norg_Uptake_Fungal_Norg_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$Norg_used
+    count = count + 1
+  }
+  
+  SWC_range = seq(0, 1, by = 0.01)
+  count = 1
+  for (SWC in SWC_range) {
+    SWC_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, SWC, 10, 10, 10, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
+    count = count + 1
+  }
+  
+  #####
+  ## Plots
+  #####
   par(mfrow = c(3, 2))
-  plot(concentration_range, conc_change_N_Uptake_Fungal, xlab = "Concentration", ylab = "total N to plant", main = "Concentration response \n with temperature 15, SWC 0.8")
-  plot(concentration_range, conc_change_NH4_Uptake_Fungal, xlab = "NH4", ylab = "total N to plant", main = "NH4 response \n with temperature 15, SWC 0.8, other N 10")
-  plot(temperature_range, temp_change_N_Uptake_Fungal, xlab = "Temperature", ylab = "total N to plant", main = "Temperature response \n with concentation 10, SWC 0.8")
-  plot(concentration_range, conc_change_NO3_Uptake_Fungal, xlab = "NO3", ylab = "total N to plant", main = "NO3 response \n with temperature 15, SWC 0.8, other N 10")
-  plot(SWC_range, SWC_change_N_Uptake_Fungal, xlab = "SWC", ylab = "total N to plant", main = "SWC response \n with concentation 10, temperature 15")
-  plot(concentration_range, conc_change_Norg_Uptake_Fungal, xlab = "Norg", ylab = "total N to plant", main = "Norg response \n with temperature 15, SWC 0.8, other N 10")
+  plot(concentration_range, conc_change_NH4_Uptake_Fungal, xlab = "NH4", ylab = "total N to Fungal", main = "NH4 response (Fungal) \n with temperature 15, SWC 0.8, other N 10")
+  lines(concentration_range, conc_change_NH4_Uptake_Fungal_NH4_out, col = "black", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_NH4_Uptake_Fungal_NO3_out, col = "blue", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_NH4_Uptake_Fungal_Norg_out, col = "green", lty = 2, lwd = 2)
+  legend(0, max(unlist(c(conc_change_NH4_Uptake_Fungal, conc_change_NH4_Uptake_Fungal_NH4_out, conc_change_NH4_Uptake_Fungal_NO3_out, conc_change_NH4_Uptake_Fungal_Norg_out))),
+         c("NH4", "NO3", "FOM"), col = c("black", "blue", "green"), lty = 2, title = "N Type", bty = "n")
+  
+  plot(concentration_range, conc_change_Norg_Uptake_Fungal, xlab = "Norg", ylab = "total N to Fungal",
+       main = "Norg response (Fungal) \n with temperature 15, SWC 0.8, other N 10",
+       ylim = c(0, max(conc_change_Norg_Uptake_Fungal)))
+  lines(concentration_range, conc_change_Norg_Uptake_Fungal_NH4_out, col = "black", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_Norg_Uptake_Fungal_NO3_out, col = "blue", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_Norg_Uptake_Fungal_Norg_out, col = "green", lty = 2, lwd = 2)
+  
+  plot(concentration_range, conc_change_NO3_Uptake_Fungal_NH4_10, xlab = "NO3", ylab = "total N to Fungal", 
+       main = "NO3 response (Fungal) \n with temperature 15, SWC 0.8, other 10",
+       ylim = c(0,  max(c(conc_change_NO3_Uptake_Fungal_NH4_10))))
+  lines(concentration_range, conc_change_NO3_Uptake_Fungal_NH4_10_NH4_out, lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_NO3_Uptake_Fungal_NH4_10_NO3_out, lty = 2, lwd = 2, col = "blue")
+  lines(concentration_range, conc_change_NO3_Uptake_Fungal_NH4_10_Norg_out, lty = 2, lwd = 2, col = "green")
+  
+  plot(concentration_range, conc_change_NO3_Uptake_Fungal_NH4_10, xlab = "NO3", ylab = "total N to Fungal",
+       main = "NO3 response (Fungal) \n with temperature 15, SWC 0.8, Organic 10, NH4 variable",
+       ylim = c(0,  max(c(conc_change_NO3_Uptake_Fungal_NH4_10, conc_change_NO3_Uptake_Fungal_NH4_5, conc_change_NO3_Uptake_Fungal_NH4_2))))
+  points(concentration_range, conc_change_NO3_Uptake_Fungal_NH4_5, col = "pink")
+  points(concentration_range, conc_change_NO3_Uptake_Fungal_NH4_2, col = "red")
+  legend(0, max(unlist(c(conc_change_NO3_Uptake_Fungal_NH4_10, conc_change_NO3_Uptake_Fungal_NH4_5, conc_change_NO3_Uptake_Fungal_NH4_2))),
+         c("High", "Medium", "Low"), col = c("black", "pink", "red"), pch = 1, title = "NH4", bty = "n")
+  
+  plot(temperature_range, temp_change_N_Uptake_Fungal, xlab = "Temperature", ylab = "total N to Fungal", main = "Temperature response (Fungal) \n with concentation 10, SWC 0.8")
+  
+  plot(SWC_range, SWC_change_N_Uptake, xlab = "SWC", ylab = "total N to Fungal", main = "SWC response (Fungal) \n with concentation 10, temperature 15")
+}
+
+nitrogen_graphs <- function() {
+  temp_change_N_Uptake <- SWC_change_N_Uptake <- conc_change_N_Uptake <- NULL
+  
+  temperature_range = -20:20
+  count = 1
+  for (Temp in temperature_range) {
+    temp_change_N_Uptake[count] = uptake_N(10, Temp, 10, 0.2, 0.8, 0.5)
+    count = count + 1
+  }
+  
+  concentration_range = seq(0, 20, by = 0.01)
+  count = 1
+  for (conc in concentration_range) {
+    conc_change_N_Uptake[count] <- uptake_N(conc, 15, 10, 0.2, 0.8, 0.5)
+    count = count + 1
+  }
+  
+  SWC_range = seq(0, 1, by = 0.01)
+  count = 1
+  for (SWC in SWC_range) {
+    SWC_change_N_Uptake[count] <- uptake_N(10, 15, 10, 0.2, SWC, 0.5)
+    count = count + 1
+  }
+  
+  par(mfrow = c(3, 1))
+  plot(concentration_range, conc_change_N_Uptake, xlab = "Concentration", ylab = "Uptake of N", main = "Concentration response \n with temperature 15, SWC 0.8")
+  plot(temperature_range, temp_change_N_Uptake, xlab = "Temperature", ylab = "Uptake of N", main = "Temperature response \n with concentation 10, SWC 0.8")
+  plot(SWC_range, SWC_change_N_Uptake, xlab = "SWC", ylab = "Uptake of N", main = "SWC response \n with concentation 10, temperature 15")
+}
+
+nitrogen_graphs_microbe <- function() {
+  #####
+  ## Generating the values
+  #####
+  temp_change_N_Uptake_Microbes_C_out <- SWC_change_N_Uptake_Microbes_C_out <- conc_change_N_Uptake_Microbes_C_out <- conc_change_Norg_Uptake_Microbes_C_out <- conc_change_NO3_Uptake_Microbes_C_out <- conc_change_NH4_Uptake_Microbes_C_out <- NULL
+  conc_change_N_Uptake_Microbes_NH4_out <- conc_change_N_Uptake_Microbes_NO3_out <- conc_change_N_Uptake_Microbes_Norg_out <- NULL
+  temp_change_N_Uptake_Microbes_NH4_out <- temp_change_N_Uptake_Microbes_NO3_out <- temp_change_N_Uptake_Microbes_Norg_out <- NULL
+  conc_change_NO3_Uptake_Microbes_NH4_1000_C_out <- conc_change_NO3_Uptake_Microbes_NH4_1000_NH4_out <- conc_change_NO3_Uptake_Microbes_NH4_1000_NO3_out <- conc_change_NO3_Uptake_Microbes_NH4_1000_Norg_out <- NULL
+  conc_change_NO3_Uptake_Microbes_NH4_500_C_out <- conc_change_NO3_Uptake_Microbes_NH4_200_C_out <- NULL
+  conc_change_NH4_Uptake_Microbes_NH4_out <- conc_change_NH4_Uptake_Microbes_NO3_out <- conc_change_NH4_Uptake_Microbes_Norg_out <- NULL
+  conc_change_Norg_Uptake_Microbes_NH4_out <- conc_change_Norg_Uptake_Microbes_NO3_out <- conc_change_Norg_Uptake_Microbes_Norg_out <- NULL
+  conc_change_Norg_FOM_Uptake_Microbes <- NULL
+  
+  temperature_range = -20:20
+  count = 1
+  for (Temp in temperature_range) {
+    temp_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, 1500, Temp, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
+    temp_change_N_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, 1500, Temp, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NH4_uptaken
+    temp_change_N_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, 1500, Temp, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NO3_uptaken
+    temp_change_N_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, 1500, Temp, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$Norg_uptaken
+    count = count + 1
+  }
+  concentration_range = seq(0, 10000, by = 1)
+  count = 1
+  for (conc in concentration_range) {
+    conc_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
+    conc_change_N_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(2000, 1500, 0.5, conc, conc, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NH4_uptaken
+    conc_change_N_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(2000, 1500, 0.5, conc, conc, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NO3_uptaken
+    conc_change_N_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(2000, 1500, 0.5, conc, conc, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$Norg_uptaken
+    conc_change_Norg_FOM_Uptake_Microbes[count] = Microbe_Uptake(2000, 1500, 0.5, conc, conc, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$Norg_uptaken_extra_FOM
+    conc_change_NO3_Uptake_Microbes_NH4_1000_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, conc, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_1000_NH4_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1000, conc, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NH4_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_1000_NO3_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1000, conc, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NO3_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_1000_Norg_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1000, conc, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$Norg_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_500_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 500, conc, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_200_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 200, conc, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
+    conc_change_NH4_Uptake_Microbes_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, conc, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
+    conc_change_NH4_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(2000, 1500, 0.5, conc, 1500, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NH4_uptaken
+    conc_change_NH4_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(2000, 1500, 0.5, conc, 1500, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NO3_uptaken
+    conc_change_NH4_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(2000, 1500, 0.5, conc, 1500, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$Norg_uptaken
+    conc_change_Norg_Uptake_Microbes_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
+    conc_change_Norg_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NH4_uptaken
+    conc_change_Norg_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NO3_uptaken
+    conc_change_Norg_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$Norg_uptaken
+    count = count + 1
+  }
+  SWC_range = seq(0, 1, by = 0.01)
+  count = 1
+  for (SWC in SWC_range) {
+    SWC_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, 1500, 15, SWC, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
+    count = count + 1
+  }
+  
+  #####
+  ## Plots
+  #####
+  
+  par(mfrow = c(3, 3))
+  plot(concentration_range, conc_change_NH4_Uptake_Microbes_C_out, xlab = "NH4", ylab = "total N to Microbes",
+       main = "NH4 response (Microbes) \n with temperature 15, SWC 0.8, other N 1000")
+  lines(concentration_range, conc_change_NH4_Uptake_Microbes_NH4_out, col = "black", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_NH4_Uptake_Microbes_NO3_out, col = "blue", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_NH4_Uptake_Microbes_Norg_out, col = "green", lty = 2, lwd = 2)
+  legend(0, max(unlist(c(conc_change_NH4_Uptake_Microbes, conc_change_NH4_Uptake_Microbes_NH4_out, conc_change_NH4_Uptake_Microbes_NO3_out, conc_change_NH4_Uptake_Microbes_Norg_out))),
+         c("NH4", "NO3", "FOM"), col = c("black", "blue", "green"), lty = 2, title = "N Type", bty = "n")
+  
+  plot(concentration_range, conc_change_Norg_FOM_Uptake_Microbes, xlab = "Norg", ylab = "total N to Microbes",
+       main = "Norg response (Microbes) \n with temperature 15, SWC 0.8, other N 1000")
+  
+  plot(concentration_range, conc_change_Norg_Uptake_Microbes_C_out, xlab = "Norg", ylab = "total N to Microbes",
+       main = "Norg response (Microbes) \n with temperature 15, SWC 0.8, other N 1000")
+  lines(concentration_range, conc_change_Norg_Uptake_Microbes_NH4_out, col = "black", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_Norg_Uptake_Microbes_NO3_out, col = "blue", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_Norg_Uptake_Microbes_Norg_out, col = "green", lty = 2, lwd = 2)
+  
+  plot(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_1000_C_out, xlab = "NO3", ylab = "total N to Microbes", 
+       main = "NO3 response (Microbes) \n with temperature 15, SWC 0.8, other 1000")
+  lines(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_1000_NH4_out, lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_1000_NO3_out, lty = 2, lwd = 2, col = "blue")
+  lines(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_1000_Norg_out, lty = 2, lwd = 2, col = "green")
+  
+  plot(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_1000_C_out, xlab = "NO3", ylab = "total N to Microbes",
+       main = "NO3 response (Microbes) \n with temperature 15, SWC 0.8, Organic 10, NH4 variable")
+  points(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_500_C_out, col = "pink")
+  points(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_200_C_out, col = "red")
+  legend(0, max(unlist(c(conc_change_NO3_Uptake_Microbes_NH4_1000_C_out, conc_change_NO3_Uptake_Microbes_NH4_500, conc_change_NO3_Uptake_Microbes_NH4_200))),
+         c("High", "Medium", "Low"), col = c("black", "pink", "red"), pch = 1, title = "NH4", bty = "n")
+  
+  plot(temperature_range, temp_change_N_Uptake_Microbes_C_out, xlab = "Temperature", ylab = "total N to Microbes", main = "Temperature response (Microbes) \n with concentation 10, SWC 0.8")
+  
+  plot(SWC_range, SWC_change_N_Uptake_Microbes_C_out, xlab = "SWC", ylab = "total N to Microbes", main = "SWC response (Microbes) \n with concentation 10, temperature 15")
+}
+
+decision_graphs <- function() {
+  ####
+  # Initialisation
+  ####
+  plant_decision_C <- plant_decision_N <- plant_decision_op <- plant_decision_C_value <- plant_decision_N_value <- NULL
+  myco_decision_C <- myco_decision_N <- myco_decision_op <- myco_decision_C_value <- 
+    myco_decision_N_value <- myco_decision_mm <- myco_decision_ERM <- myco_decision_pC <- NULL
+  
+  ####
+  # State tests
+  ####
+  C_range <- seq(100, 300)
+  count = 1
+  for (C in C_range) {
+    plant_decision_C[count] <- plant_decision(C, 150, 0.5, 4, 4)$demand
+    myco_decision_C[count] <- myco_decision(C, 150, 0.5, 20, 180, 0.4, 4, 4)$demand
+    count = count + 1
+  }
+  N_range <- seq(50, 250)
+  count = 1
+  for (N in N_range) {
+    plant_decision_N[count] <- plant_decision(200, N, 0.5, 4, 4)$demand
+    myco_decision_N[count] <- myco_decision(200, N, 0.5, 20, 180, 0.4, 4, 4)$demand
+    count = count + 1
+  }
+  optimum_point <- seq(0.2, 0.8, by = 0.01)
+  count = 1
+  for (op in optimum_point) {
+    plant_decision_op[count] <- plant_decision(200, 150, op, 4, 4)$demand
+    myco_decision_op[count] <- myco_decision(200, 150, op, 20, 180, 0.4, 4, 4)$demand
+    count = count + 1
+  }
+  mantle_mass <- seq(10, 50, by = 1)
+  count = 1
+  for (mm in mantle_mass) {
+    myco_decision_mm[count] <- myco_decision(200, 150, 0.5, mm, 180, 0.4, 4, 4)$demand
+    count = count + 1
+  }
+  ERM_mass <- seq(110, 250, by = 1)
+  count = 1
+  for (ERM in ERM_mass) {
+    myco_decision_ERM[count] <- myco_decision(200, 150, 0.5, 20, ERM, 0.4, 4, 4)$demand
+    count = count + 1
+  }
+  percentage_C_biomass <- seq(0.1, 0.8, by = 0.01)
+  count = 1
+  for (pC in percentage_C_biomass) {
+    myco_decision_pC[count] <- myco_decision(200, 150, 0.5, 20, 180, pC, 4, 4)$demand
+    count = count + 1
+  }
+  C_value_range <- seq(-300, 300)
+  count = 1
+  for (C_value in C_value_range) {
+    plant_decision_C_value[count] <- plant_decision(200, 150, 0.5, C_value, 4)$demand
+    myco_decision_C_value[count] <- myco_decision(200, 150, 0.5, 20, 180, 0.4, C_value, 4)$demand
+    count = count + 1
+  }
+  N_value_range <- seq(-300, 300)
+  count = 1
+  for (N_value in N_value_range) {
+    plant_decision_N_value[count] <- plant_decision(200, 150, 0.5, 4, N_value)$demand
+    myco_decision_N_value[count] <- myco_decision(200, 150, 0.5, 20, 180, 0.4, 4, N_value)$demand
+    count = count + 1
+  }
+  
+  
+  ####
+  # Plots
+  ####
+  par(mfrow = c(3, 3))
+  plot(C_range, plant_decision_C, col = "black",
+       ylab = "Decision value", xlab = "C concentration",
+       main = "C range test", 
+       ylim = c(min(c(myco_decision_C, plant_decision_C)), max(c(myco_decision_C, plant_decision_C))))
+  points(C_range, myco_decision_C, col = "red")
+  legend(C_range[1], max(myco_decision_C), c("Plant", "Myco"), col = c("black", "red"),
+         title = "Organism", bty = "n")
+  
+  plot(N_range, plant_decision_N, col = "black",
+       ylab = "Decision value", xlab = "N concentration",
+       main = "N range test", 
+       ylim = c(min(c(myco_decision_N, plant_decision_N)), max(c(myco_decision_N, plant_decision_N))))
+  points(N_range, myco_decision_N, col = "red")
+  legend(N_range[1], max(myco_decision_N), c("Plant", "Myco"), col = c("black", "red"),
+         title = "Organism", bty = "n")
+
+  plot(optimum_point, plant_decision_op, col = "black",
+       ylab = "Decision value", xlab = "Optimum point",
+       main = "Optimum point range test", 
+       ylim = c(min(c(plant_decision_op, myco_decision_op)), max(c(plant_decision_op, myco_decision_N))))
+  points(optimum_point, myco_decision_op, col = "red")
+  legend(optimum_point[1], max(myco_decision_op), c("Plant", "Myco"), col = c("black", "red"),
+         title = "Organism", bty = "n")
+
+  plot(mantle_mass, myco_decision_mm, col = "red",
+       ylab = "Decision value", xlab = "Mantle Mass",
+       main = "Mantle Mass range", 
+       ylim = c(min(myco_decision_mm), max(myco_decision_mm)))
+  
+  plot(ERM_mass, myco_decision_ERM, col = "red",
+       ylab = "Decision value", xlab = "ERM range",
+       main = "ERM Mass range", 
+       ylim = c(min(myco_decision_ERM), max(myco_decision_ERM)))
+  
+  plot(percentage_C_biomass, myco_decision_pC, col = "red",
+       ylab = "Decision value", xlab = "ERM range",
+       main = "Percentange of C range", 
+       ylim = c(min(myco_decision_pC), max(myco_decision_pC)))
+  
+  plot(C_value_range, plant_decision_C_value, col = "black",
+       ylab = "Decision value", xlab = "C value",
+       main = "C value range test", 
+       ylim = c(min(c(myco_decision_C_value, plant_decision_C_value)), max(c(myco_decision_C_value, plant_decision_C_value))))
+  points(C_value_range, myco_decision_C_value, col = "red")
+  legend(C_value_range[1], max(myco_decision_C_value), c("Plant", "Myco"), col = c("black", "red"),
+         title = "Organism", bty = "n")
+  
+  plot(N_value_range, plant_decision_N_value, col = "black",
+       ylab = "Decision value", xlab = "N value",
+       main = "N range test", 
+       ylim = c(min(c(myco_decision_N_value, plant_decision_N_value)), max(c(myco_decision_N_value, plant_decision_N_value))))
+  points(N_value_range, myco_decision_N_value, col = "red")
+  legend(N_value_range[1], max(myco_decision_N_value), c("Plant", "Myco"), col = c("black", "red"),
+         title = "Organism", bty = "n")
+}
+
+respiration_graphs <- function() {
+  temp_respiration <- NULL
+  temp = -20:20
+  count = 1
+  for (tem in temp) {
+    temp_respiration[count] <- respiration(tem, 0.2, 0.2)
+    count = count + 1
+  }
+  
+  par(mfrow = c(1, 1))
+  plot(temp, temp_respiration, main = "Respiration", 
+       xlab = "Temperature range", ylab = "Respiration, kg C")
+}
+
+myco_growth_graphs <- function() {
+  myco_growth_C_fungal <- myco_growth_N_fungal <- myco_growth_C_and_N_fungal <- NULL
+  range <- 0:150
+  count = 1
+  for (ele in range) {
+    myco_growth_C_and_N_fungal[count] <- myco_growth(ele, ele, 0.2, 0.2)
+    myco_growth_C_fungal[count] <- myco_growth(ele, 15, 0.2, 0.2)
+    myco_growth_N_fungal[count] <- myco_growth(15, ele, 0.2, 0.2)
+    count = count + 1
+  }
+  
+  par(mfrow = c(3, 1))
+  plot(range, myco_growth_C_fungal, main = "Growth", xlab = "C concentration", ylab = "Growth")
+  plot(range, myco_growth_N_fungal, main = "Growth", xlab = "N concentration", ylab = "Growth")
+  plot(range, myco_growth_C_and_N_fungal, main = "Growth", xlab = "C and N concentration", ylab = "Growth")
+}
+
+mycofon_balence_graphs <- function() {
+  ####
+  # Initalisation
+  ####
+  
+  mycofon_balence_C_roots_roots <- mycofon_balence_C_roots_N_roots <- mycofon_balence_C_roots_fungal <- mycofon_balence_C_roots_N_fungal <- NULL
+  mycofon_balence_C_fungal_roots <- mycofon_balence_C_fungal_N_roots <- mycofon_balence_C_fungal_fungal <- mycofon_balence_C_fungal_N_fungal <- NULL
+  mycofon_balence_N_roots_roots <- mycofon_balence_N_roots_N_roots <- mycofon_balence_N_roots_fungal <- mycofon_balence_N_roots_N_fungal <- NULL
+  mycofon_balence_N_fungal_roots <- mycofon_balence_N_fungal_N_roots <- mycofon_balence_N_fungal_fungal <- mycofon_balence_N_fungal_N_fungal <- NULL
+  mycofon_balence_optimal_root_fungal_biomass_ratio_roots <- mycofon_balence_optimal_root_fungal_biomass_ratio_N_roots <- 
+    mycofon_balence_optimal_root_fungal_biomass_ratio_fungal <- mycofon_balence_optimal_root_fungal_biomass_ratio_N_fungal <- NULL
+  mycofon_balence_NH4_roots <- mycofon_balence_NH4_N_roots <- mycofon_balence_NH4_fungal <- mycofon_balence_NH4_N_fungal <- NULL
+  mycofon_balence_NO3_roots <- mycofon_balence_NO3_N_roots <- mycofon_balence_NO3_fungal <- mycofon_balence_NO3_N_fungal <- NULL
+  mycofon_balence_FOM_Norg_roots <- mycofon_balence_FOM_Norg_N_roots <- mycofon_balence_FOM_Norg_fungal <- mycofon_balence_FOM_Norg_N_fungal <- NULL
+  mycofon_balence_T_roots <- mycofon_balence_Tsb_roots <- mycofon_balence_T_N_fungal <- mycofon_balence_Tsb_N_fungal <- NULL
+  mycofon_balence_SWC_roots <- mycofon_balence_SWC_N_roots <- mycofon_balence_SWC_fungal <- mycofon_balence_SWC_N_fungal <- NULL
+  mycofon_balence_T_fungal <- mycofon_balence_Tsb_fungal <- mycofon_balence_T_N_roots <- mycofon_balence_Tsb_N_roots <- NULL
+  mycofon_balence_mm_roots <- mycofon_balence_mm_N_roots <- mycofon_balence_mm_fungal <- mycofon_balence_mm_N_fungal <- NULL
+  mycofon_balence_ERM_roots <- mycofon_balence_ERM_N_roots <- mycofon_balence_ERM_fungal <- mycofon_balence_ERM_N_fungal <- NULL
+  mycofon_balence_NC_in_root_opt_roots <- mycofon_balence_NC_in_root_opt_N_roots <- mycofon_balence_NC_in_root_opt_fungal <- mycofon_balence_NC_in_root_opt_N_fungal <- NULL
+  mycofon_balence_NC_in_fungai_opt_roots <- mycofon_balence_NC_in_fungai_opt_N_roots <- mycofon_balence_NC_in_fungai_opt_fungal <- mycofon_balence_NC_in_fungai_opt_N_fungal <- NULL
+  mycofon_balence_turnover_roots_roots <- mycofon_balence_turnover_roots_N_roots <- mycofon_balence_turnover_roots_fungal <- mycofon_balence_turnover_roots_N_fungal <- NULL
+  mycofon_balence_turnover_mycorrhized_roots <- mycofon_balence_turnover_mycorrhized_N_roots <- mycofon_balence_turnover_mycorrhized_fungal <- mycofon_balence_turnover_mycorrhized_N_fungal <- NULL
+  mycofon_balence_turnover_fungal_roots <- mycofon_balence_turnover_fungal_N_roots <- mycofon_balence_turnover_fungal_fungal <- mycofon_balence_turnover_fungal_N_fungal <- NULL
+  mycofon_balence_carbon_use <- mycofon_balence_nitrogen_use <- NULL
+  mycofon_balence_C_roots_value_roots <- mycofon_balence_C_roots_value_N_roots <- mycofon_balence_C_roots_value_fungal <- mycofon_balence_C_roots_value_N_fungal <- NULL
+  mycofon_balence_N_roots_value_roots <- mycofon_balence_N_roots_value_N_roots <- mycofon_balence_N_roots_value_fungal <- mycofon_balence_N_roots_value_N_fungal <- NULL
+  mycofon_balence_C_fungal_value_roots <- mycofon_balence_C_fungal_value_N_roots <- mycofon_balence_C_fungal_value_fungal <- mycofon_balence_C_fungal_value_N_fungal <- NULL
+  mycofon_balence_N_fungal_value_roots <- mycofon_balence_N_fungal_value_N_roots <- mycofon_balence_N_fungal_value_fungal <- mycofon_balence_N_fungal_value_N_fungal <- NULL
+  
+  ####
+  # vector generation
+  ####
+  
+  temp_range = -20:20
+  count = 1
+  for (tem in temp_range) {
+    mycofon_balence_T_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, tem, 5, 0.8, 
+                                                      c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                      c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                      1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_Tsb_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, tem, 0.8, 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                        1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_T_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, tem, 5, 0.8, 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                        1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_Tsb_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, tem, 0.8, 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                          1, 1, 4, 4, 4, 4)$N_roots
+    
+    mycofon_balence_T_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, tem, 5, 0.8, 
+                                                      c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                      c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                      1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_Tsb_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, tem, 0.8, 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                        1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_T_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, tem, 5, 0.8, 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                        1, 1, 4, 4, 4, 4)$N_fungal
+    mycofon_balence_Tsb_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, tem, 0.8, 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                          1, 1, 4, 4, 4, 4)$N_fungal
+    count = count + 1
+  }
+  concentration_range = 0:1500
+  count = 1
+  for (conc in concentration_range) {
+    mycofon_balence_C_roots_roots[count] <- mycofon_balence(conc, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                            c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                            c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                            1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_C_roots_N_roots[count] <- mycofon_balence(conc, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                              c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                              c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                              1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_C_roots_fungal[count] <- mycofon_balence(conc, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                            c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                            c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                            1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_C_roots_N_fungal[count] <- mycofon_balence(conc, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                1, 1, 4, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_C_fungal_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, conc, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                             1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_C_fungal_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, conc, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                               1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_C_fungal_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, conc, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                               1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_C_fungal_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, conc, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                 c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                 c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                 1, 1, 4, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_N_roots_roots[count] <- mycofon_balence(200, conc, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                           c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                           c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                           1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_N_roots_N_roots[count] <- mycofon_balence(200, conc, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                              c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                              c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                              1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_N_roots_fungal[count] <- mycofon_balence(200, conc, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                              c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                              c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                              1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_N_roots_N_fungal[count] <- mycofon_balence(200, conc, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                1, 1, 4, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_N_fungal_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, conc, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                       c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                       c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                       1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_N_fungal_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, conc, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                             1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_N_fungal_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, conc, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                             1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_N_fungal_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, conc, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                             1, 1, 4, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_NH4_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), conc, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                        1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_NH4_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), conc, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_NH4_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), conc, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                              c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                              c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                              1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_NH4_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), conc, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                1, 1, 4, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_NO3_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, conc, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                        1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_NO3_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, conc, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                          1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_NO3_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, conc, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                        1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_NO3_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, conc, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                          1, 1, 4, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_FOM_Norg_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, conc, 0.5, 0.5, 15, 5, 0.8, 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                             1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_FOM_Norg_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, conc, 0.5, 0.5, 15, 5, 0.8, 
+                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                               1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_FOM_Norg_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, conc, 0.5, 0.5, 15, 5, 0.8, 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                             1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_FOM_Norg_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, conc, 0.5, 0.5, 15, 5, 0.8, 
+                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                               1, 1, 4, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_mm_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                      c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                      c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), conc, 180, c(10, -0.2),
+                                                      1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_mm_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                         c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                         c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), conc, 180, c(10, -0.2),
+                                                         1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_mm_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                       c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                       c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), conc, 180, c(10, -0.2),
+                                                       1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_mm_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                         c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                         c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), conc, 180, c(10, -0.2),
+                                                         1, 1, 4, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_ERM_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                       c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                       c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, conc, c(10, -0.2),
+                                                       1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_ERM_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, conc, c(10, -0.2),
+                                                          1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_ERM_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, conc, c(10, -0.2),
+                                                        1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_ERM_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, conc, c(10, -0.2),
+                                                          1, 1, 4, 4, 4, 4)$N_fungal
+    count = count + 1
+  }
+  SWC_range = seq(0.0, 1, by = 0.01)
+  count = 1
+  for (SWC in SWC_range) {
+    mycofon_balence_SWC_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, SWC, 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                        1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_SWC_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, SWC, 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                          1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_SWC_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, SWC, 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                        1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_SWC_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, SWC, 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                          c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                          1, 1, 4, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_optimal_root_fungal_biomass_ratio_roots[count] <- mycofon_balence(200, 150, 0.4, SWC, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                                     c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                                     c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                                     1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_optimal_root_fungal_biomass_ratio_N_roots[count] <- mycofon_balence(200, 150, 0.4, SWC, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                                        1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_optimal_root_fungal_biomass_ratio_fungal[count] <- mycofon_balence(200, 150, 0.4, SWC, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                                      c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                                      c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                                      1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_optimal_root_fungal_biomass_ratio_N_fungal[count] <- mycofon_balence(200, 150, 0.4, SWC, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                                        1, 1, 4, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_turnover_roots_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, SWC, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                  c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                  c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                  1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_turnover_roots_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, SWC, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                     c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                     c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                     1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_turnover_roots_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, SWC, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                   c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                   c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                   1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_turnover_roots_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, SWC, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                     c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                     c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                     1, 1, 4, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_turnover_mycorrhized_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, SWC, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                              c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                              c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                              1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_turnover_mycorrhized_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, SWC, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                                 c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                                 c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                                 1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_turnover_mycorrhized_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, SWC, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                               1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_turnover_mycorrhized_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, SWC, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                                 c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                                 c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                                 1, 1, 4, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_turnover_fungal_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, SWC, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                   c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                   c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                   1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_turnover_fungal_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, SWC, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                      c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                      c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                      1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_turnover_fungal_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, SWC, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                    c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                    c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                    1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_turnover_fungal_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, SWC, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                        c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                        1, 1, 4, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_NC_in_root_opt_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, SWC, 0.5, 15, 5, 0.8, 
+                                                              c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                              c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                              1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_NC_in_root_opt_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, SWC, 0.5, 15, 5, 0.8, 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                             1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_NC_in_root_opt_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, SWC, 0.5, 15, 5, 0.8, 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                             1, 1, 4, 4, 4, 4)$C_fungal
+    mycofon_balence_NC_in_root_opt_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, SWC, 0.5, 15, 5, 0.8, 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                             c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                             1, 1, 4, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_NC_in_fungai_opt_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, SWC, 15, 5, 0.8, 
+                                                              c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                              c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                              1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_NC_in_fungai_opt_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, SWC, 15, 5, 0.8, 
+                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                               1, 1, 4, 4, 4, 4)$N_roots
+    mycofon_balence_NC_in_fungai_opt_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, SWC, 15, 5, 0.8, 
+                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                               1, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_NC_in_fungai_opt_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, SWC, 15, 5, 0.8, 
+                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                               c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                               1, 1, 4, 4, 4, 4)$N_fungal
+    
+    
+    count = count + 1
+  }
+  value = 0:10
+  count = 1
+  for (val in value) {
+    mycofon_balence_C_roots_value_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                  c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                  c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                  1, 1, 4, 4, val, 4)$C_roots
+    mycofon_balence_C_roots_value_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                    c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                    c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                    1, 1, 4, 4, val, 4)$N_roots
+    mycofon_balence_C_roots_value_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                  c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                  c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                  1, 1, 4, 4, val, 4)$C_fungal
+    mycofon_balence_C_roots_value_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                    c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                    c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                    1, 1, 4, 4, val, 4)$N_fungal
+    
+    mycofon_balence_N_roots_value_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                  c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                  c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                  1, 1, 4, 4, 4, val)$C_roots
+    mycofon_balence_N_roots_value_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                    c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                    c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                    1, 1, 4, 4, 4, val)$N_roots
+    mycofon_balence_N_roots_value_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                  c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                  c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                  1, 1, 4, 4, 4, val)$C_fungal
+    mycofon_balence_N_roots_value_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                    c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                    c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                    1, 1, 4, 4, 4, val)$N_fungal
+    
+    mycofon_balence_C_fungal_value_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                  c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                  c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                  1, 1, val, 4, 4, 4)$C_roots
+    mycofon_balence_C_fungal_value_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                     c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                     c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                     1, 1, val, 4, 4, 4)$N_roots
+    mycofon_balence_C_fungal_value_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                   c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                   c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                   1, 1, val, 4, 4, 4)$C_fungal
+    mycofon_balence_C_fungal_value_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                     c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                     c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                     1, 1, val, 4, 4, 4)$N_fungal
+    
+    mycofon_balence_N_fungal_value_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                  c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                  c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                  1, 1, 4, val, 4, 4)$C_roots
+    mycofon_balence_N_fungal_value_N_roots[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                     c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                     c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                     1, 1, 4, val, 4, 4)$N_roots
+    mycofon_balence_N_fungal_value_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                   c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                   c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                   1, 1, 4, val, 4, 4)$C_fungal
+    mycofon_balence_N_fungal_value_N_fungal[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                                     c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                                     c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                                     1, 1, 4, val, 4, 4)$N_fungal
+    
+    mycofon_balence_carbon_use[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                         c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                         c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                         val, 1, 4, 4, 4, 4)$C_roots
+    mycofon_balence_nitrogen_use[count] <- mycofon_balence(200, 150, 0.4, 0.5, 200, 150, 0.1, 0.1, 0.1, c(0.2, 0.2), 15, 15, 15, 0.5, 0.5, 15, 5, 0.8, 
+                                                           c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 
+                                                           c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 20, 180, c(10, -0.2),
+                                                           1, val, 4, 4, 4, 4)$C_roots
+    count = count + 1
+  }
+  
+  ####
+  # Plots!
+  ####
+  
+  par(mfrow = c(3, 3))
+  axis_1 = c(min(mycofon_balence_T_roots, mycofon_balence_T_N_roots, mycofon_balence_T_fungal, mycofon_balence_T_N_fungal),
+             max(mycofon_balence_T_roots, mycofon_balence_T_N_roots, mycofon_balence_T_fungal, mycofon_balence_T_N_fungal))
+  plot(temp_range, mycofon_balence_T_roots, main = "kg C", xlab = "Temperature Range: 'C", ylab = "C kg eq", ylim = axis_1)
+  points(temp_range, mycofon_balence_T_N_roots, col = "blue")
+  points(temp_range, mycofon_balence_T_fungal, pch = "+")
+  points(temp_range, mycofon_balence_T_N_fungal, pch = "+", col = "blue")
+  legend(temp_range[1], axis_1[2], c("Roots C", "Fungal C", "Roots N", "Fungal N"), col = c("black", "black", "blue", "blue"),  pch = c(1, "x", 1, "x"), bty = "n")
+  
+  axis_2 = c(min(mycofon_balence_Tsb_roots, mycofon_balence_Tsb_N_roots, mycofon_balence_Tsb_fungal, mycofon_balence_Tsb_N_fungal),
+             max(mycofon_balence_Tsb_roots, mycofon_balence_Tsb_N_roots, mycofon_balence_Tsb_fungal, mycofon_balence_Tsb_N_fungal))
+  plot(temp_range, mycofon_balence_Tsb_roots, main = "kg C eq", xlab = "Temperature Range: 'C", ylab = "C kg eq", ylim = axis_2)
+  points(temp_range, mycofon_balence_Tsb_N_roots, col = "blue")
+  points(temp_range, mycofon_balence_Tsb_fungal, pch = "+")
+  points(temp_range, mycofon_balence_Tsb_N_fungal, pch = "+", col = "blue")
+  
+  axis_3 = c(min(mycofon_balence_SWC_roots, mycofon_balence_SWC_N_roots, mycofon_balence_SWC_fungal, mycofon_balence_SWC_N_fungal),
+             max(mycofon_balence_SWC_roots, mycofon_balence_SWC_N_roots, mycofon_balence_SWC_fungal, mycofon_balence_SWC_N_fungal))
+  plot(SWC_range, mycofon_balence_SWC_roots, main = "kg C eq", xlab = "Soil water concentration range: %", ylab = "C kg", ylim = axis_3)
+  points(SWC_range, mycofon_balence_SWC_N_roots, col = "blue")
+  points(SWC_range, mycofon_balence_SWC_fungal, pch = "+")
+  points(SWC_range, mycofon_balence_SWC_N_fungal, pch = "+", col = "blue")
+  
+  axis_4 = c(min(mycofon_balence_NH4_roots, mycofon_balence_NH4_N_roots, mycofon_balence_NH4_fungal, mycofon_balence_NH4_N_fungal),
+             max(mycofon_balence_NH4_roots, mycofon_balence_NH4_N_roots, mycofon_balence_NH4_fungal, mycofon_balence_NH4_N_fungal))
+  plot(concentration_range, mycofon_balence_NH4_roots, main = "kg C", xlab = "Concentration range: NH4", ylab = "C kg", ylim = axis_4)
+  points(concentration_range, mycofon_balence_NH4_N_roots, col = "blue")
+  points(concentration_range, mycofon_balence_NH4_fungal, pch = "+")
+  points(concentration_range, mycofon_balence_NH4_N_fungal, pch = "+", col = "blue")
+  
+  axis_5 = c(min(mycofon_balence_NO3_roots, mycofon_balence_NO3_N_roots, mycofon_balence_NO3_fungal, mycofon_balence_NO3_N_fungal),
+             max(mycofon_balence_NO3_roots, mycofon_balence_NO3_N_roots, mycofon_balence_NO3_fungal, mycofon_balence_NO3_N_fungal))
+  plot(concentration_range, mycofon_balence_NO3_roots, main = "kg C", xlab = "Concentration range: NO3", ylab = "C kg", ylim = axis_5)
+  points(concentration_range, mycofon_balence_NO3_N_roots, col = "blue")
+  points(concentration_range, mycofon_balence_NO3_fungal, pch = "+")
+  points(concentration_range, mycofon_balence_NO3_N_fungal, pch = "+", col = "blue")
+  
+  axis_6 = c(min(mycofon_balence_FOM_Norg_roots, mycofon_balence_FOM_Norg_N_roots, mycofon_balence_FOM_Norg_fungal, mycofon_balence_FOM_Norg_N_fungal),
+             max(mycofon_balence_FOM_Norg_roots, mycofon_balence_FOM_Norg_N_roots, mycofon_balence_FOM_Norg_fungal, mycofon_balence_FOM_Norg_N_fungal))
+  plot(concentration_range, mycofon_balence_FOM_Norg, main = "kg C", xlab = "Concentration range: FOM_Norg", ylab = "C kg", ylim = axis_6)
+  points(concentration_range, mycofon_balence_FOM_Norg_N_roots, col = "blue")
+  points(concentration_range, mycofon_balence_FOM_Norg_fungal, pch = "+")
+  points(concentration_range, mycofon_balence_FOM_Norg_N_fungal, pch = "+", col = "blue")
+  
+  axis_7 = c(min(mycofon_balence_turnover_roots_roots, mycofon_balence_turnover_roots_N_roots, mycofon_balence_turnover_roots_fungal, mycofon_balence_turnover_roots_N_fungal),
+             max(mycofon_balence_turnover_roots_roots, mycofon_balence_turnover_roots_N_roots, mycofon_balence_turnover_roots_fungal, mycofon_balence_turnover_roots_N_fungal))
+  plot(SWC_range, mycofon_balence_turnover_roots, main = "kg C", xlab = "Turnover rate: %", ylab = "C kg", ylim = axis_7)
+  points(SWC_range, mycofon_balence_turnover_roots_N_roots, col = "blue")
+  points(SWC_range, mycofon_balence_turnover_roots_fungal, pch = "+")
+  points(SWC_range, mycofon_balence_turnover_roots_N_fungal, pch = "+", col = "blue")
+  
+  axis_8 = c(min(mycofon_balence_turnover_mycorrhized_roots, mycofon_balence_turnover_mycorrhized_N_roots, mycofon_balence_turnover_mycorrhized_fungal, mycofon_balence_turnover_mycorrhized_N_fungal),
+             max(mycofon_balence_turnover_mycorrhized_roots, mycofon_balence_turnover_mycorrhized_N_roots, mycofon_balence_turnover_mycorrhized_fungal, mycofon_balence_turnover_mycorrhized_N_fungal))
+  plot(SWC_range, mycofon_balence_turnover_mycorrhized_roots, main = "kg C", xlab = "root turnover rate: %", ylab = "C kg", ylim = axis_8)
+  points(SWC_range, mycofon_balence_turnover_mycorrhized_N_roots, col = "blue")
+  points(SWC_range, mycofon_balence_turnover_mycorrhized_fungal, pch = "+")
+  points(SWC_range, mycofon_balence_turnover_mycorrhized_N_fungal, pch = "+", col = "blue")
+  
+  axis_9 = c(min(mycofon_balence_turnover_fungal_roots, mycofon_balence_turnover_fungal_N_roots, mycofon_balence_turnover_fungal_fungal, mycofon_balence_turnover_fungal_N_fungal),
+             max(mycofon_balence_turnover_fungal_roots, mycofon_balence_turnover_fungal_N_roots, mycofon_balence_turnover_fungal_fungal, mycofon_balence_turnover_fungal_N_fungal))
+  plot(SWC_range, mycofon_balence_turnover_fungal_roots, main = "kg C", xlab = "root turnover rate: %", ylab = "C kg", ylim = axis_9)
+  points(SWC_range, mycofon_balence_turnover_fungal_N_roots, col = "blue")
+  points(SWC_range, mycofon_balence_turnover_fungal_fungal, pch = "+")
+  points(SWC_range, mycofon_balence_turnover_fungal_N_fungal, pch = "+", col = "blue")
+  
+  par(mfrow = c(4, 2))
+  axis_10 = c(min(mycofon_balence_C_roots_roots, mycofon_balence_C_roots_N_roots, mycofon_balence_C_roots_fungal, mycofon_balence_C_roots_N_fungal, na.rm = T),
+              max(mycofon_balence_C_roots_roots, mycofon_balence_C_roots_N_roots, mycofon_balence_C_roots_fungal, mycofon_balence_C_roots_N_fungal, na.rm = T))
+  plot(concentration_range, mycofon_balence_C_roots_roots, main = "kg C", xlab = "Concentration range: C", ylab = "C kg", ylim = axis_10)
+  points(concentration_range, mycofon_balence_C_roots_N_roots, col = "blue")
+  points(concentration_range, mycofon_balence_C_roots_fungal, pch = "+")
+  points(concentration_range, mycofon_balence_C_roots_N_fungal, pch = "+", col = "blue")
+  legend(temp_range[1], axis_10[2], c("Roots C", "Fungal C", "Roots N", "Fungal N"), col = c("black", "black", "blue", "blue"),  pch = c(1, "x", 1, "x"), bty = "n")
+  
+  axis_11 = c(min(mycofon_balence_N_roots_roots, mycofon_balence_N_roots_N_roots, mycofon_balence_N_roots_fungal, mycofon_balence_N_roots_N_fungal, na.rm = T),
+              max(mycofon_balence_N_roots_roots, mycofon_balence_N_roots_N_roots, mycofon_balence_N_roots_fungal, mycofon_balence_N_roots_N_fungal, na.rm = T))
+  plot(concentration_range, mycofon_balence_N_roots_roots, main = "kg C", xlab = "Concentration range: N", ylab = "C kg", ylim = axis_11)
+  points(concentration_range, mycofon_balence_N_roots_N_roots, col = "blue")
+  points(concentration_range, mycofon_balence_N_roots_fungal, pch = "+")
+  points(concentration_range, mycofon_balence_N_roots_N_fungal, pch = "+", col = "blue")
+  
+  axis_12 = c(min(mycofon_balence_C_fungal_roots, mycofon_balence_C_fungal_N_roots, mycofon_balence_C_fungal_fungal, mycofon_balence_C_fungal_N_fungal, na.rm = T),
+              max(mycofon_balence_C_fungal_roots, mycofon_balence_C_fungal_N_roots, mycofon_balence_C_fungal_fungal, mycofon_balence_C_fungal_N_fungal, na.rm = T))
+  plot(concentration_range, mycofon_balence_C_fungal_roots, main = "kg C", xlab = "Concentration range: C", ylab = "C kg", ylim = axis_12)
+  points(concentration_range, mycofon_balence_C_fungal_N_roots, col = "blue")
+  points(concentration_range, mycofon_balence_C_fungal_fungal, pch = "+")
+  points(concentration_range, mycofon_balence_C_fungal_N_fungal, pch = "+", col = "blue")
+  
+  axis_13 = c(min(mycofon_balence_N_fungal_roots, mycofon_balence_N_fungal_N_roots, mycofon_balence_N_fungal_fungal, mycofon_balence_N_fungal_N_fungal, na.rm = T),
+              max(mycofon_balence_N_fungal_roots, mycofon_balence_N_fungal_N_roots, mycofon_balence_N_fungal_fungal, mycofon_balence_N_fungal_N_fungal, na.rm = T))
+  plot(concentration_range, mycofon_balence_N_fungal_roots, main = "kg C", xlab = "Concentration range: N", ylab = "C kg", ylim = axis_13)
+  points(concentration_range, mycofon_balence_N_fungal_N_roots, col = "blue")
+  points(concentration_range, mycofon_balence_N_fungal_fungal, pch = "+")
+  points(concentration_range, mycofon_balence_N_fungal_N_fungal, pch = "+", col = "blue")
+  
+  axis_14 = c(min(mycofon_balence_C_roots_value_roots, mycofon_balence_C_roots_value_N_roots, mycofon_balence_C_roots_value_fungal, mycofon_balence_C_roots_value_N_fungal),
+              max(mycofon_balence_C_roots_value_roots, mycofon_balence_C_roots_value_N_roots, mycofon_balence_C_roots_value_fungal, mycofon_balence_C_roots_value_N_fungal))
+  plot(value, mycofon_balence_C_roots_value_roots, main = "kg C eq", xlab = "Carbon value range", ylab = "C kg eq", ylim = axis_14)
+  points(value, mycofon_balence_C_roots_value_N_roots, col = "blue")
+  points(value, mycofon_balence_C_roots_value_fungal, pch = "+")
+  points(value, mycofon_balence_C_roots_value_N_fungal, pch = "+", col = "blue")
+  
+  axis_15 = c(min(mycofon_balence_N_roots_value_roots, mycofon_balence_N_roots_value_N_roots, mycofon_balence_N_roots_value_fungal, mycofon_balence_N_roots_value_N_fungal),
+              max(mycofon_balence_N_roots_value_roots, mycofon_balence_N_roots_value_N_roots, mycofon_balence_N_roots_value_fungal, mycofon_balence_N_roots_value_N_fungal))
+  plot(value, mycofon_balence_N_roots_value, main = "kg C", xlab = "Nitrogen value range", ylab = "C kg", ylim = axis_15)
+  points(value, mycofon_balence_N_roots_value_N_roots, col = "blue")
+  points(value, mycofon_balence_N_roots_value_fungal, pch = "+")
+  points(value, mycofon_balence_N_roots_value_N_fungal, pch = "+", col = "blue")
+  
+  axis_16 = c(min(mycofon_balence_C_fungal_value_roots, mycofon_balence_C_fungal_value_N_roots, mycofon_balence_C_fungal_value_fungal, mycofon_balence_C_fungal_value_N_fungal),
+              max(mycofon_balence_C_fungal_value_roots, mycofon_balence_C_fungal_value_N_roots, mycofon_balence_C_fungal_value_fungal, mycofon_balence_C_fungal_value_N_fungal))
+  plot(value, mycofon_balence_C_fungal_value, main = "kg C", xlab = "Carbon value range", ylab = "C kg", ylim = axis_16)
+  points(value, mycofon_balence_C_fungal_value_N_roots, col = "blue")
+  points(value, mycofon_balence_C_fungal_value_fungal, pch = "+")
+  points(value, mycofon_balence_C_fungal_value_N_fungal, pch = "+", col = "blue")
+  
+  axis_17 = c(min(mycofon_balence_N_fungal_value_roots, mycofon_balence_N_fungal_value_N_roots, mycofon_balence_N_fungal_value_fungal, mycofon_balence_N_fungal_value_N_fungal),
+              max(mycofon_balence_N_fungal_value_roots, mycofon_balence_N_fungal_value_N_roots, mycofon_balence_N_fungal_value_fungal, mycofon_balence_N_fungal_value_N_fungal))
+  plot(value, mycofon_balence_N_fungal_value, main = "kg C", xlab = "Nitrogen value range", ylab = "C kg", ylim = axis_17)
+  points(value, mycofon_balence_N_fungal_value_N_roots, col = "blue")
+  points(value, mycofon_balence_N_fungal_value_fungal, pch = "+")
+  points(value, mycofon_balence_N_fungal_value_N_fungal, pch = "+", col = "blue")
+  
+  par(mfrow = c(4, 2))
+  axis_18 = c(min(mycofon_balence_NC_in_root_opt_roots, mycofon_balence_NC_in_root_opt_N_roots, mycofon_balence_NC_in_root_opt_fungal, mycofon_balence_NC_in_root_opt_N_fungal, na.rm = T),
+              max(mycofon_balence_NC_in_root_opt_roots, mycofon_balence_NC_in_root_opt_N_roots, mycofon_balence_NC_in_root_opt_fungal, mycofon_balence_NC_in_root_opt_N_fungal, na.rm = T))
+  plot(SWC_range, mycofon_balence_NC_in_root_opt_roots, main = "kg C", xlab = "Optimum NC ratio in roots: %", ylab = "C kg", ylim = axis_18)
+  points(SWC_range, mycofon_balence_NC_in_root_opt_N_roots, col = "blue")
+  points(SWC_range, mycofon_balence_NC_in_root_opt_fungal, pch = "+")
+  points(SWC_range, mycofon_balence_NC_in_root_opt_N_fungal, pch = "+", col = "blue")
+  legend(SWC_range[1], axis_18[2], c("Roots C", "Fungal C", "Roots N", "Fungal N"), col = c("black", "black", "blue", "blue"),  pch = c(1, "x", 1, "x"), bty = "n")
+  
+  axis_19 = c(min(mycofon_balence_NC_in_root_opt_roots, mycofon_balence_NC_in_root_opt_N_roots, mycofon_balence_NC_in_root_opt_fungal, mycofon_balence_NC_in_root_opt_N_fungal, na.rm = T),
+              max(mycofon_balence_NC_in_root_opt_roots, mycofon_balence_NC_in_root_opt_N_roots, mycofon_balence_NC_in_root_opt_fungal, mycofon_balence_NC_in_root_opt_N_fungal, na.rm = T))
+  plot(SWC_range, mycofon_balence_NC_in_fungai_opt, main = "kg C", xlab = "Optimum NC ratio in fungal: %", ylab = "C kg", ylim = axis_19)
+  points(SWC_range, mycofon_balence_NC_in_fungai_opt_N_roots, col = "blue")
+  points(SWC_range, mycofon_balence_NC_in_fungai_opt_fungal, pch = "+")
+  points(SWC_range, mycofon_balence_NC_in_fungai_opt_N_fungal, pch = "+", col = "blue")
+  
+  axis_20 = c(min(mycofon_balence_mm_roots, mycofon_balence_mm_N_roots, mycofon_balence_mm_fungal, mycofon_balence_mm_N_fungal, na.rm = T),
+              max(mycofon_balence_mm_roots, mycofon_balence_mm_N_roots, mycofon_balence_mm_fungal, mycofon_balence_mm_N_fungal, na.rm = T))
+  plot(concentration_range, mycofon_balence_mm_roots, main = "kg C", xlab = "Mantle Mass: kg C", ylab = "C kg", ylim = axis_20)
+  points(concentration_range, mycofon_balence_mm_N_roots, col = "blue")
+  points(concentration_range, mycofon_balence_mm_fungal, pch = "+")
+  points(concentration_range, mycofon_balence_mm_N_fungal, pch = "+", col = "blue")
+  
+  axis_21 = c(min(mycofon_balence_ERM_roots, mycofon_balence_ERM_N_roots, mycofon_balence_ERM_fungal, mycofon_balence_ERM_N_fungal, na.rm = T),
+              max(mycofon_balence_ERM_roots, mycofon_balence_ERM_N_roots, mycofon_balence_ERM_fungal, mycofon_balence_ERM_N_fungal, na.rm = T))
+  plot(concentration_range, mycofon_balence_ERM_roots, main = "kg C", xlab = "ERM Mass: kg C", ylab = "C kg", ylim = axis_21)
+  points(concentration_range, mycofon_balence_ERM_N_roots, col = "blue")
+  points(concentration_range, mycofon_balence_ERM_fungal, pch = "+")
+  points(concentration_range, mycofon_balence_ERM_N_fungal, pch = "+", col = "blue")
+  
+  plot(value, mycofon_balence_carbon_use, main = "kg C", xlab = "Carbon Use", ylab = "C kg")
+  plot(value, mycofon_balence_nitrogen_use, main = "kg C", xlan = "Nitrogen Use", ylab = "C kg")
+  
+  axis_24 = c(min(mycofon_balence_optimal_root_fungal_biomass_ratio_roots, mycofon_balence_optimal_root_fungal_biomass_ratio_N_roots, mycofon_balence_optimal_root_fungal_biomass_ratio_fungal, mycofon_balence_optimal_root_fungal_biomass_ratio_N_fungal, na.rm = T),
+              max(mycofon_balence_optimal_root_fungal_biomass_ratio_roots, mycofon_balence_optimal_root_fungal_biomass_ratio_N_roots, mycofon_balence_optimal_root_fungal_biomass_ratio_fungal, mycofon_balence_optimal_root_fungal_biomass_ratio_N_fungal, na.rm = T))
+  plot(SWC_range, mycofon_balence_optimal_root_fungal_biomass_ratio_roots, main = "kg C", xlan = "Nitrogen Use", ylab = "C kg", ylim = axis_24)
+  points(SWC_range, mycofon_balence_optimal_root_fungal_biomass_ratio_N_roots, col = "blue")
+  points(SWC_range, mycofon_balence_optimal_root_fungal_biomass_ratio_fungal, pch = "+")
+  points(SWC_range, mycofon_balence_optimal_root_fungal_biomass_ratio_N_fungal, pch = "+", col = "blue")
 
 }
+
+# TODO: need graphs for
+# symphony_multiple_FOM_daily
+# Toy_Model
+
+# TODO: tomorrow, try to fill the data table and also update the documentation
