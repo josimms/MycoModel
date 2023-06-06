@@ -1,6 +1,7 @@
-\name{Plant_N_Uptake}
-\alias{Plant_N_Uptake}
-\alias{plant_n_uptake}
+\name{Fungal_N_Uptake}
+\alias{Fungal_N_Uptake}
+\alias{fungal_n_uptake}
+\docType{package}
 \title{
   Fungal Nitrogen Uptake
 }
