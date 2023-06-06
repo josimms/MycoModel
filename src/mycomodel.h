@@ -1,9 +1,10 @@
 /*
  * HEADERFILES
  */
-
+#include <iostream>
 #include <vector>
 #include <cmath>
+#include <algorithm>
 #include <Rcpp.h>
 
 /*
@@ -138,9 +139,7 @@ struct CASSIA_output
   double Litter_mycelium; 
 };
 
- 
 
- 
 struct MYCOFON_output {
   double C_fungal;
   double N_fungal;
@@ -159,7 +158,12 @@ struct SYMPHONY_output {
   double C_FOM_woody;
   double C_FOM_roots;
   double C_FOM_mycelium;
+  double N_FOM_needles;
+  double N_FOM_woody;
+  double N_FOM_roots;
+  double N_FOM_mycelium;
   double C_SOM;
+  double N_SOM;
   double C_decompose_FOM;
   double C_decompose_SOM;
   double N_decompose_FOM;
@@ -182,9 +186,6 @@ int leap_year(int year);
 #endif
  
 // FILE: Toy_Model.cpp
-
- 
-
  
 #ifndef PKG_Toy_Model_H
 #define PKG_Toy_Model_H
@@ -193,14 +194,9 @@ parameters parameters_initalise(std::vector<double> parameters_R);
 
 #endif
 
- 
 
- 
 // FILE: respiration.cpp
 
- 
-
- 
 #ifndef PKG_respiration_H
 #define PKG_respiration_H
  
@@ -208,12 +204,13 @@ double respiration(double Tmb, double a, double b);
  
 #endif
 
-// FILE: myco_growth.cpp
+
+ // FILE: myco_growth.cpp
  
 double myco_growth(double sugar, double Tmb, double N);
 
-// FILE: n_uptake.cpp
 
+// FILE: n_uptake.cpp
 
 #ifndef PKG_vector_to_N_balence_H
 #define PKG_vector_to_N_balence_H
@@ -237,7 +234,7 @@ N_balence list_to_N_balence(Rcpp::List input);
 Rcpp::List Plant_N_Uptake(double NC_in_root_opt, 
                           double T,
                           double SWC,
-                          double m,
+                          double m, 
                           double NH4_in,
                           double NO3_in,
                           double FOM_in,
@@ -248,7 +245,9 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
                           double N_roots,
                           double C_fungal,
                           double percentage_C_biomass,
-                          std::vector<double> parameters);
+                          std::vector<double> parameters,
+                          double C_value_param,
+                          double N_value_param);
  
 #endif
 
@@ -256,20 +255,22 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
 #ifndef PKG_Fungal_N_Uptake_H 
 #define PKG_Fungal_N_Uptake_H
 
-Rcpp::List Fungal_N_Uptake(double C_fungal,
-                           double N_fungal,
-                           double NC_fungal_opt,
-                           double mantle_mass,
-                           double ERM_mass,
-                           double percentage_C_biomass,
-                           double T,
-                           double SWC,
-                           double NH4,
-                           double NO3,
-                           double FOM_Norg,
-                           std::vector<double> N_limits_R,
-                           std::vector<double> N_k_R,
-                           std::vector<double> SWC_k_R);
+ Rcpp::List Fungal_N_Uptake(double C_fungal,
+                            double N_fungal,
+                            double NC_fungal_opt,
+                            double mantle_mass,
+                            double ERM_mass,
+                            double percentage_C_biomass,
+                            double T,
+                            double SWC,
+                            double NH4,
+                            double NO3,
+                            double FOM_Norg,
+                            std::vector<double> N_limits_R,
+                            std::vector<double> N_k_R,
+                            std::vector<double> SWC_k_R,
+                            double C_value_param,
+                            double N_value_param);
  
 #endif
 
@@ -278,18 +279,19 @@ Rcpp::List Fungal_N_Uptake(double C_fungal,
 #define PKG_Microbe_Uptake_H
  
 Rcpp::List Microbe_Uptake(double C_microbe,
-                          double N_micorbe,
-                          double NC_microbe_opt,
-                          double NH4_avaliable,
-                          double NO3_avaliable,
-                          double Norg_avaliable,
-                          double T,
-                          double SWC,
-                          std::vector<double> N_limits_R,
-                          std::vector<double> N_k_R,
-                          std::vector<double> SWC_k_R,
-                          bool SOM_decomposers,
-                          double Norg_avaliable_FOM);
+                         double N_micorbe,
+                         double NC_microbe_opt,
+                         double NH4_avaliable,
+                         double NO3_avaliable,
+                         double Norg_avaliable,
+                         double T,             
+                         double SWC,           
+                         std::vector<double> N_limits_R,
+                         std::vector<double> N_k_R,
+                         std::vector<double> SWC_k_R,
+                         bool SOM_decomposers,
+                         double Norg_avaliable_FOM,
+                         std::vector<double> respiration_microbes_params);
  
 #endif
 
@@ -314,6 +316,7 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,
                                        double C_FOM_roots,
                                        double C_FOM_mycelium,
                                        double C_SOM,
+                                       double N_SOM,
                                        double C_decompose_FOM,
                                        double C_decompose_SOM,
                                        double N_decompose_FOM,
@@ -324,6 +327,10 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,
                                        double Litter_mycelium,
                                        double NH4,
                                        double NO3,
+                                       double N_FOM_needles,
+                                       double N_FOM_woody,
+                                       double N_FOM_roots,
+                                       double N_FOM_mycelium,
                                        double NH4_used_Plant,
                                        double NH4_used_Fungal,
                                        double NO3_used_Plant,
