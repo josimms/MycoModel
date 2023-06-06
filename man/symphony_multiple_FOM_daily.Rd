@@ -1,5 +1,6 @@
 \name{Symphony_Multiple_FOM_Daily}
 \alias{Symphony_Multiple_FOM_Daily}
+\docType{package}
 \title{
   Symphony Multiple FOM Daily
 }
