@@ -64,10 +64,10 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,
   // Apart from the biomass that the microbes specialise in, the second N uptake is considered to be equally driven between the types
   
   // FOM
-  Rcpp::List FOM_after_microbe_activity_list = Microbe_Uptake(C_decompose_FOM, N_decompose_FOM, NC_microbe_opt, NH4, NO3, C_FOM, Tmb, SWC, N_limits_R, N_k_R, SWC_k_R, false, C_FOM);
+  Rcpp::List FOM_after_microbe_activity_list = Microbe_Uptake(C_decompose_FOM, N_decompose_FOM, NC_microbe_opt, NH4, NO3, C_FOM, Tmb, SWC, N_limits_R, N_k_R, SWC_k_R, false, C_FOM, respiration_microbes_params);
   N_balence FOM_after_microbe_activity = list_to_N_balence(FOM_after_microbe_activity_list);    // C kg
   // SOM
-  Rcpp::List SOM_after_microbe_activity_list = Microbe_Uptake(C_decompose_SOM, N_decompose_SOM, NC_microbe_opt, NH4, NO3, C_SOM, Tmb, SWC, N_limits_R, N_k_R, SWC_k_R, true, C_FOM);
+  Rcpp::List SOM_after_microbe_activity_list = Microbe_Uptake(C_decompose_SOM, N_decompose_SOM, NC_microbe_opt, NH4, NO3, C_SOM, Tmb, SWC, N_limits_R, N_k_R, SWC_k_R, true, C_FOM, respiration_microbes_params);
   N_balence SOM_after_microbe_activity = list_to_N_balence(SOM_after_microbe_activity_list);    // C kg
   
   // Update pure inorganic pools
