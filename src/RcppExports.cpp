@@ -113,51 +113,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// uptake_organic_N
-double uptake_organic_N(double N_org, double T, double N_org_limit, double k, double SWC, double SWC_k);
-RcppExport SEXP _MycoModel_uptake_organic_N(SEXP N_orgSEXP, SEXP TSEXP, SEXP N_org_limitSEXP, SEXP kSEXP, SEXP SWCSEXP, SEXP SWC_kSEXP) {
+// uptake_N
+double uptake_N(double N, double T, double N_limit, double k, double SWC, double SWC_k);
+RcppExport SEXP _MycoModel_uptake_N(SEXP NSEXP, SEXP TSEXP, SEXP N_limitSEXP, SEXP kSEXP, SEXP SWCSEXP, SEXP SWC_kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type N_org(N_orgSEXP);
+    Rcpp::traits::input_parameter< double >::type N(NSEXP);
     Rcpp::traits::input_parameter< double >::type T(TSEXP);
-    Rcpp::traits::input_parameter< double >::type N_org_limit(N_org_limitSEXP);
+    Rcpp::traits::input_parameter< double >::type N_limit(N_limitSEXP);
     Rcpp::traits::input_parameter< double >::type k(kSEXP);
     Rcpp::traits::input_parameter< double >::type SWC(SWCSEXP);
     Rcpp::traits::input_parameter< double >::type SWC_k(SWC_kSEXP);
-    rcpp_result_gen = Rcpp::wrap(uptake_organic_N(N_org, T, N_org_limit, k, SWC, SWC_k));
-    return rcpp_result_gen;
-END_RCPP
-}
-// uptake_NH4
-double uptake_NH4(double NH4, double T, double NH4_limit, double k, double SWC, double SWC_k);
-RcppExport SEXP _MycoModel_uptake_NH4(SEXP NH4SEXP, SEXP TSEXP, SEXP NH4_limitSEXP, SEXP kSEXP, SEXP SWCSEXP, SEXP SWC_kSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type NH4(NH4SEXP);
-    Rcpp::traits::input_parameter< double >::type T(TSEXP);
-    Rcpp::traits::input_parameter< double >::type NH4_limit(NH4_limitSEXP);
-    Rcpp::traits::input_parameter< double >::type k(kSEXP);
-    Rcpp::traits::input_parameter< double >::type SWC(SWCSEXP);
-    Rcpp::traits::input_parameter< double >::type SWC_k(SWC_kSEXP);
-    rcpp_result_gen = Rcpp::wrap(uptake_NH4(NH4, T, NH4_limit, k, SWC, SWC_k));
-    return rcpp_result_gen;
-END_RCPP
-}
-// uptake_NO3
-double uptake_NO3(double NO3, double T, double NO3_limit, double k, double SWC, double SWC_k);
-RcppExport SEXP _MycoModel_uptake_NO3(SEXP NO3SEXP, SEXP TSEXP, SEXP NO3_limitSEXP, SEXP kSEXP, SEXP SWCSEXP, SEXP SWC_kSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type NO3(NO3SEXP);
-    Rcpp::traits::input_parameter< double >::type T(TSEXP);
-    Rcpp::traits::input_parameter< double >::type NO3_limit(NO3_limitSEXP);
-    Rcpp::traits::input_parameter< double >::type k(kSEXP);
-    Rcpp::traits::input_parameter< double >::type SWC(SWCSEXP);
-    Rcpp::traits::input_parameter< double >::type SWC_k(SWC_kSEXP);
-    rcpp_result_gen = Rcpp::wrap(uptake_NO3(NO3, T, NO3_limit, k, SWC, SWC_k));
+    rcpp_result_gen = Rcpp::wrap(uptake_N(N, T, N_limit, k, SWC, SWC_k));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -357,9 +325,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_MycoModel_myco_decision", (DL_FUNC) &_MycoModel_myco_decision, 8},
     {"_MycoModel_myco_growth", (DL_FUNC) &_MycoModel_myco_growth, 4},
     {"_MycoModel_mycofon_balence", (DL_FUNC) &_MycoModel_mycofon_balence, 33},
-    {"_MycoModel_uptake_organic_N", (DL_FUNC) &_MycoModel_uptake_organic_N, 6},
-    {"_MycoModel_uptake_NH4", (DL_FUNC) &_MycoModel_uptake_NH4, 6},
-    {"_MycoModel_uptake_NO3", (DL_FUNC) &_MycoModel_uptake_NO3, 6},
+    {"_MycoModel_uptake_N", (DL_FUNC) &_MycoModel_uptake_N, 6},
     {"_MycoModel_uptake_C", (DL_FUNC) &_MycoModel_uptake_C, 6},
     {"_MycoModel_Plant_N_Uptake", (DL_FUNC) &_MycoModel_Plant_N_Uptake, 17},
     {"_MycoModel_Fungal_N_Uptake", (DL_FUNC) &_MycoModel_Fungal_N_Uptake, 16},
