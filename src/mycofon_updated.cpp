@@ -59,7 +59,7 @@ Rcpp::List mycofon_balence(double C_roots,
   }
   
   // Plant decision, this needs to be decided before the C_roots and N_roots is recalculated
-  double C_given = plant_decision(C_roots, N_roots, NC_in_root_opt, C_value_param_plant, N_value_param_plant)[4];
+  double C_given = plant_decision(C_roots, N_roots, NC_in_root_opt, C_value_param_plant, N_value_param_plant)[3];
   double to_CASSIA = 0.1*C_roots; // could change this to be a function that would work with the gradient that is happening in CASSIA
   
   // dC^r/dt TODO: this need to be linked with the CASSIA C sections, also link the amount going to CASSIA
@@ -97,10 +97,12 @@ Rcpp::List mycofon_balence(double C_roots,
                                        N_roots,
                                        C_fungal,
                                        percentage_C_biomass,
-                                       parameters_NH4_on_NO3)[1];
+                                       parameters_NH4_on_NO3,
+                                       C_value_param_plant,
+                                       N_value_param_plant)[1];
 
   double N_given = myco_decision(C_fungal, N_fungal, NC_in_fungai_opt, mantle_mass,
-                                 ERM_mass, percentage_C_biomass, C_value_param_myco, N_value_param_myco)[4];
+                                 ERM_mass, percentage_C_biomass, C_value_param_myco, N_value_param_myco)[3];
   
   N_roots = N_roots +
     N_given + 
@@ -123,7 +125,9 @@ Rcpp::List mycofon_balence(double C_roots,
                                          FOM_Norg,
                                          N_limits_Fungal,
                                          N_k_Fungal,
-                                         SWC_k_Fungal)[1];
+                                         SWC_k_Fungal,
+                                         C_value_param_myco,
+                                         N_value_param_myco)[1];
   
   N_fungal = N_fungal + 
     uptake_fungal*C_fungal - 
@@ -140,6 +144,8 @@ Rcpp::List mycofon_balence(double C_roots,
 
 }
 
+
+// 
 
 
 
