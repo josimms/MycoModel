@@ -9,3 +9,5 @@ Description: Model to look at the transfer of N and C between trees and mycorrhi
 License: GPL (>= 2)
 Imports: Rcpp (>= 1.0.9)
 LinkingTo: Rcpp
+RoxygenNote: 7.2.3
+Encoding: UTF-8
