@@ -1,14 +1,4 @@
-
-
-export(plant_decision)
-export(myco_decision)
-export(myco_growth)
-export(respiration)
-export(myco_growth)
-export(Plant_N_Uptake)
-export(Fungal_N_Uptake)
-export(Microbe_Uptake)
-export(symphony_multiple_FOM_daily)
-export(mycofon_balence)
-
+useDynLib(MycoModel, .registration=TRUE)
+importFrom(Rcpp, evalCpp)
+exportPattern("^[[:alpha:]]+")
 
