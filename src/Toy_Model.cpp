@@ -115,19 +115,19 @@ Rcpp::List Toy_Model(double year,
     // Soil model symphony
     Rcpp::List Soil_All = symphony_multiple_FOM_daily(Tmb[days], SWC[days],
                                                       SYMPHONY_out.C_FOM_needles, SYMPHONY_out.C_FOM_woody, SYMPHONY_out.C_FOM_roots, SYMPHONY_out.C_FOM_mycelium,
-                                                      SYMPHONY_out.C_SOM, 
+                                                      SYMPHONY_out.C_SOM, SYMPHONY_out.N_SOM,
                                                       SYMPHONY_out.C_decompose_FOM, SYMPHONY_out.C_decompose_SOM,
                                                       SYMPHONY_out.N_decompose_FOM, SYMPHONY_out.N_decompose_SOM,
                                                       CASSIA_out.Litter_needles, CASSIA_out.Litter_woody, CASSIA_out.Litter_roots, CASSIA_out.Litter_mycelium, 
                                                       SYMPHONY_out.NH4, SYMPHONY_out.NO3,
+                                                      SYMPHONY_out.N_FOM_needles, SYMPHONY_out.N_FOM_woody,
+                                                      SYMPHONY_out.N_FOM_roots, SYMPHONY_out.N_FOM_mycelium,
                                                       DECISION_out.NH4_used_Plant, DECISION_out.NH4_used_Fungal,  // TODO think about this!
                                                       DECISION_out.NO3_used_Plant, DECISION_out.NO3_used_Fungal,
                                                       DECISION_out.FOM_Norg_used_Plant, DECISION_out.FOM_Norg_used_Fungal, SYMPHONY_out.SOM_Norg_used, 
                                                       parameters_in.respiration_params, parameters_in.N_limits_microbes, parameters_in.N_k_microbes, parameters_in.SWC_k_microbes,
                                                       parameters_in.NC_microbe_opt, parameters_in.microbe_turnover);
-    
-    
-    
+
   }
   
   return(0);
