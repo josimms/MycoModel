@@ -1,35 +1,36 @@
 \name{Microbe_Uptake}
 \alias{Microbe_Uptake}
 \alias{micorbe_uptake}
+\docType{package}
 \title{
   Micorbe Uptake
 }
-%\description{
-%  This function uses the nitrogen uptake functions for each of the indervidual types of N compiled for the microbes.
+\description{
+  This function uses the nitrogen uptake functions for each of the indervidual types of N compiled for the microbes.
   
-%  Organic SOM N uptake is considered first. The N demand is calculated first.
-  
-%  \eqn{demand = 1 - \frac{B^{CN}}{B^{CN}_{opt}}}
-  
-%  Then the C uptake is calculated with the same switch functions as the N uptake functions. As the C uptake per kg C is assumed to only be limited by uptake there are no modifications here.
-  
-%  The C and N limitations are then considered against each other.
-  
-%  \eqn{min{C limitation, N limitation}}
-  
-%  Leading to the ultermate organic uptake being considered to be as much as the limiting elemental uptake.
-  
-%  The inorganic uptake is then considered to top up the missing N.
-  
-%  And then FOM uptake is then considered last.
-  
-%  \eqn{Organic Uptaake = demand*u(N_{type}, T, SWC)}
-  
-%  B^{CN}, C, N ratio of the microbes.
-%}
-%\usage{
+  Organic SOM N uptake is considered first. The N demand is calculated first.
 
-%Microbe_Uptake(C_microbe,
+  \eqn{demand = 1 - \frac{B^{CN}}{B^{CN}_{opt}}}
+
+  Then the C uptake is calculated with the same switch functions as the N uptake functions. As the C uptake per kg C is assumed to only be limited by uptake there are no modifications here.
+  
+  The C and N limitations are then considered against each other.
+  
+  \eqn{min{C limitation, N limitation}}
+  
+  Leading to the ultermate organic uptake being considered to be as much as the limiting elemental uptake.
+  
+  The inorganic uptake is then considered to top up the missing N.
+  
+  And then FOM uptake is then considered last.
+  
+  \eqn{Organic Uptaake = demand*u(N_{type}, T, SWC)}
+  
+  B^{CN}, C, N ratio of the microbes.
+}
+\usage{
+
+Microbe_Uptake(C_microbe,
 %               N_micorbe,
 %               NC_microbe_opt,
 %               NH4_avaliable,

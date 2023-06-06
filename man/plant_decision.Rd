@@ -1,5 +1,6 @@
 \name{plant_decision}
 \alias{Plant Decision}
+\docType{package}
 \title{
   Plant Decision
 }

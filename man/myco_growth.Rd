@@ -1,5 +1,6 @@
 \name{Myco_Growth}
 \alias{myco_growth}
+\docType{package}
 \title{
   Mycorrhizal Growth
 }

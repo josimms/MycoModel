@@ -1,5 +1,6 @@
 \name{myco_decision}
 \alias{Myco Decision}
+\docType{package}
 \title{
   Myco Decision
 }

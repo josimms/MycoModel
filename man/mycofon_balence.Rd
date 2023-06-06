@@ -1,6 +1,7 @@
 \name{Mycofon_Balence}
 \alias{mycofon_balence}
 \alias{mycofon_balence}
+\docType{package}
 \title{
   Mycofon model (todo: reference), with updates to include the uptake properties for three types of nitrogen as well as the decision functionality.
 }

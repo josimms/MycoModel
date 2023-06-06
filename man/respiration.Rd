@@ -1,10 +1,12 @@
 \name{respiration}
 \alias{Respiration}
+\docType{package}
 \title{
   Respiration
 }
 \description{
   The respiration is the same for all of the organisms, but the parameters are different.
+  
   \eqn{a exp(b T)}
 }
 
