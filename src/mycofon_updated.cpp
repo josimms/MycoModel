@@ -20,7 +20,8 @@ Rcpp::List mycofon_balence(double C_roots,
                            double N_fungal,
                            double turnover_roots,
                            double turnover_roots_mycorrhized,
-                           double turnover_fungal,
+                           double turnover_mantle,
+                           double turnover_ERM,
                            std::vector<double> respiration_parameters_R,
                            double NH4,
                            double NO3,
@@ -39,8 +40,8 @@ Rcpp::List mycofon_balence(double C_roots,
                            double mantle_mass,
                            double ERM_mass,
                            std::vector<double> parameters_NH4_on_NO3,
-                           double carbon_use,
-                           double nitrogen_use,
+                           double growth_C,
+                           double growth_N,
                            double C_value_param_myco,
                            double N_value_param_myco,
                            double C_value_param_plant,
@@ -70,12 +71,15 @@ Rcpp::List mycofon_balence(double C_roots,
     respiration(Tsb, respiration_params.plant_a, respiration_params.plant_b)*C_roots - 
     C_given;
   
+double myco_growth_C = myco_growth(C_fungal, N_fungal, growth_C, growth_N)[1]; // TODO: currently C_roots rather than sugar as the model isn't connected in that way
+  double myco_growth_N = myco_growth(C_fungal, N_fungal, growth_C, growth_N)[2];
+  
   // dC^f/dt
   // TODO: what is the percentage_C_biomass doing?
   C_fungal = C_fungal + 
     C_given - 
-    myco_growth(C_fungal, N_fungal, carbon_use, nitrogen_use) - // TODO: currently C_roots rather than sugar as the model isn't connected in that way
-    turnover_fungal*C_fungal - 
+    myco_growth_C -
+    turnover_mantle*0.5*C_fungal - turnover_ERM*0.5*C_fungal -
     respiration(Tsb, respiration_params.fungal_a, respiration_params.fungal_b)*C_fungal;
   
   // Nitrogen!
@@ -131,7 +135,8 @@ Rcpp::List mycofon_balence(double C_roots,
   
   N_fungal = N_fungal + 
     uptake_fungal*C_fungal - 
-    turnover_fungal*C_fungal*fungal_NC_ratio - 
+    myco_growth_N -
+    (0.5*turnover_mantle + 0.5*turnover_ERM)*C_fungal*fungal_NC_ratio - 
     N_given;
   
   return Rcpp::List::create(Rcpp::_["C_roots"] = C_roots,
@@ -143,9 +148,5 @@ Rcpp::List mycofon_balence(double C_roots,
                             Rcpp::_["to_CASSIA"] = to_CASSIA);
 
 }
-
-
-// 
-
 
 
