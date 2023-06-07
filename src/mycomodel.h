@@ -63,7 +63,6 @@ struct soil_balence{
 struct parameters
  
 {
-  double m;
   double microbe_turnover;
   double NC_in_root_opt;
   double NC_fungal_opt;
@@ -84,10 +83,12 @@ struct parameters
   double turnover_roots;
   double turnover_roots_mycorrhized;
   double turnover_fungal;
+  double turnover_mantle;
+  double turnover_ERM;
   double mantle_mass;
   double ERM_mass;
-  double carbon_use;
-  double nitrogen_use;
+  double growth_C;
+  double growth_N;
   double C_value_param_myco;
   double N_value_param_myco;
   double C_value_param_plant;
@@ -200,14 +201,17 @@ parameters parameters_initalise(std::vector<double> parameters_R);
 #ifndef PKG_respiration_H
 #define PKG_respiration_H
  
-double respiration(double Tmb, double a, double b);
+double respiration(double Tmb, double Rm, double Q10);
  
 #endif
 
 
  // FILE: myco_growth.cpp
  
-double myco_growth(double sugar, double Tmb, double N);
+ Rcpp::List myco_growth(double C_fungal,
+                        double N_fungal,
+                        double a,
+                        double b);
 
 
 // FILE: n_uptake.cpp
@@ -360,7 +364,8 @@ Rcpp::List mycofon_balence(double C_roots,
                            double N_fungal,
                            double turnover_roots,
                            double turnover_roots_mycorrhized,
-                           double turnover_fungal,
+                           double turnover_mantle,
+                           double turnover_ERM,
                            std::vector<double> respiration_parameters_R,
                            double NH4,
                            double NO3,
@@ -423,9 +428,9 @@ Rcpp::List plant_decision(double C_roots,
 
 // FILE: myco_growth.cpp
 
-double myco_growth(double C_fungal,
-                   double N_fungal,
-                   double a,
-                   double b);
+Rcpp::List myco_growth(double C_fungal,
+                       double N_fungal,
+                       double a,
+                       double b);
  
 #endif
