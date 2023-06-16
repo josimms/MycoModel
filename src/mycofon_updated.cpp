@@ -71,7 +71,7 @@ Rcpp::List mycofon_balence(double C_roots,
     respiration(Tsb, respiration_params.plant_a, respiration_params.plant_b)*C_roots - 
     C_given;
   
-double myco_growth_C = myco_growth(C_fungal, N_fungal, growth_C, growth_N)[1]; // TODO: currently C_roots rather than sugar as the model isn't connected in that way
+  double myco_growth_C = myco_growth(C_fungal, N_fungal, growth_C, growth_N)[1]; // TODO: currently C_roots rather than sugar as the model isn't connected in that way
   double myco_growth_N = myco_growth(C_fungal, N_fungal, growth_C, growth_N)[2];
   
   // dC^f/dt

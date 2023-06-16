@@ -127,9 +127,7 @@ struct DECISION_output
   double N_given_Fungal_total;
 };
 
- 
 
- 
 struct CASSIA_output
 {
   double C_roots;
@@ -147,8 +145,6 @@ struct MYCOFON_output {
   double mantle_mass;
   double ERM_mass;
 };
-
- 
 
  
 struct SYMPHONY_output {
@@ -208,10 +204,7 @@ double respiration(double Tmb, double Rm, double Q10);
 
  // FILE: myco_growth.cpp
  
- Rcpp::List myco_growth(double C_fungal,
-                        double N_fungal,
-                        double a,
-                        double b);
+ Rcpp::List myco_growth(double C_fungal, double N_fungal, double a, double b);
 
 
 // FILE: n_uptake.cpp

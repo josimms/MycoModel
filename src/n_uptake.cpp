@@ -140,7 +140,6 @@ Rcpp::List Fungal_N_Uptake(double C_fungal,
                            std::vector<double> SWC_k_R,
                            double C_value_param,
                            double N_value_param) {
-  
 
   N_balence N_limits = vector_to_N_balence(N_limits_R);
   N_balence N_k = vector_to_N_balence(N_k_R);
