@@ -40,7 +40,9 @@ symphony_plus_vs_original_plot <- function() {
   }
 }
 
-nitrogen_graphs_plant <- function() {
+nitrogen_graphs_plant <- function(NC_in_root_opt, Temperature, SoilWater, micorization, NH4, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param) {
+  NH4_medium = 0.5*NH4
+  NH4_low = 0.25*NH4
   
   # Indervidual functions should follow this pattern
   temp_change_N_Uptake <- SWC_change_N_Uptake <- conc_change_N_Uptake <- NULL
@@ -56,38 +58,38 @@ nitrogen_graphs_plant <- function() {
   count = 1
   for (Temp in temperature_range) {
     temp_change_N_Uptake[count] = uptake_N(10, Temp, 10, 0.2, 0.8, 0.5)
-    temp_change_N_Uptake_Plant[count] = Plant_N_Uptake(20, Temp, 0.8, 0.9, 10, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(1, 1), 4, 4)$N_to_plant
+    temp_change_N_Uptake_Plant[count] = Plant_N_Uptake(NC_in_root_opt, Temp, SoilWater, micorization, NH4, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$N_to_plant
     count = count + 1
   }
   concentration_range = seq(0, 20, by = 0.01)
   count = 1
   for (conc in concentration_range) {
-    conc_change_N_Uptake[count] <- uptake_N(conc, 15, 10, 0.2, 0.8, 0.5)
-    conc_change_N_Uptake_Plant[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$N_to_plant
-    conc_change_N_Uptake_Plant_NH4_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$NH4_used
-    conc_change_N_Uptake_Plant_NO3_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$NO3_used
-    conc_change_N_Uptake_Plant_Norg_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$Norg_used
-    conc_change_Norg_Uptake_Plant[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.3), 4, 4)$N_to_plant
-    conc_change_Norg_Uptake_Plant_NH4_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.3), 4, 4)$N_to_plant
-    conc_change_Norg_Uptake_Plant_NO3_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.3), 4, 4)$NH4_used
-    conc_change_Norg_Uptake_Plant_Norg_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.3), 4, 4)$NO3_used
-    conc_change_NO3_Uptake_Plant_NH4_10[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$Norg_used
-    conc_change_NO3_Uptake_Plant_NH4_10_NH4_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$NH4_used
-    conc_change_NO3_Uptake_Plant_NH4_10_NO3_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$NO3_used
-    conc_change_NO3_Uptake_Plant_NH4_10_Norg_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$Norg_used
-    conc_change_NO3_Uptake_Plant_NH4_5[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 5, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$N_to_plant
-    conc_change_NO3_Uptake_Plant_NH4_2[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, 2, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$N_to_plant
-    conc_change_NH4_Uptake_Plant[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$N_to_plant
-    conc_change_NH4_Uptake_Plant_NH4_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$NH4_used
-    conc_change_NH4_Uptake_Plant_NO3_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$NO3_used
-    conc_change_NH4_Uptake_Plant_Norg_out[count] = Plant_N_Uptake(20, 15, 0.8, 0.9, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -0.2), 4, 4)$Norg_used
+    conc_change_N_Uptake[count] <- uptake_N(conc, Temperature, 10, 0.2, SoilWater, 0.5)
+    conc_change_N_Uptake_Plant[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, conc, conc, conc, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$N_to_plant
+    conc_change_N_Uptake_Plant_NH4_out[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, conc, conc, conc, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$NH4_used
+    conc_change_N_Uptake_Plant_NO3_out[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, conc, conc, conc, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$NO3_used
+    conc_change_N_Uptake_Plant_Norg_out[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, conc, conc, conc, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$Norg_used
+    conc_change_Norg_Uptake_Plant[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, NH4, NO3, conc, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$N_to_plant
+    conc_change_Norg_Uptake_Plant_NH4_out[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, NH4, NO3, conc, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$N_to_plant
+    conc_change_Norg_Uptake_Plant_NO3_out[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, NH4, NO3, conc, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$NH4_used
+    conc_change_Norg_Uptake_Plant_Norg_out[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, NH4, NO3, conc, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$NO3_used
+    conc_change_NO3_Uptake_Plant_NH4_10[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, NH4, conc, Norg, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$Norg_used
+    conc_change_NO3_Uptake_Plant_NH4_10_NH4_out[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, NH4, conc, Norg, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$NH4_used
+    conc_change_NO3_Uptake_Plant_NH4_10_NO3_out[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, NH4, conc, Norg, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$NO3_used
+    conc_change_NO3_Uptake_Plant_NH4_10_Norg_out[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, NH4, conc, Norg, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$Norg_used
+    conc_change_NO3_Uptake_Plant_NH4_5[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, NH4_medium, conc, Norg, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$N_to_plant
+    conc_change_NO3_Uptake_Plant_NH4_2[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, NH4_low, conc, Norg, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$N_to_plant
+    conc_change_NH4_Uptake_Plant[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, conc, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$N_to_plant
+    conc_change_NH4_Uptake_Plant_NH4_out[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, conc, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$NH4_used
+    conc_change_NH4_Uptake_Plant_NO3_out[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, conc, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$NO3_used
+    conc_change_NH4_Uptake_Plant_Norg_out[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SoilWater, micorization, conc, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$Norg_used
     count = count + 1
   }
   SWC_range = seq(0, 1, by = 0.01)
   count = 1
   for (SWC in SWC_range) {
     SWC_change_N_Uptake[count] <- uptake_N(10, 15, 10, 0.2, SWC, 0.5)
-    SWC_change_N_Uptake_Plant[count] = Plant_N_Uptake(20, 10, SWC, 0.9, 10, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 1, 1, 1, 0.4, c(10, -10), 4, 4)$N_to_plant
+    SWC_change_N_Uptake_Plant[count] = Plant_N_Uptake(NC_in_root_opt, Temperature, SWC, micorization, NH4, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)$N_to_plant
     count = count + 1
   }
   
@@ -130,7 +132,8 @@ nitrogen_graphs_plant <- function() {
 }
 
 
-nitrogen_graphs_fungal <- function() {
+nitrogen_graphs_fungal <- function(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                   NH4, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param) {
   #####
   ## Generating the values
   #####
@@ -144,37 +147,56 @@ nitrogen_graphs_fungal <- function() {
   temperature_range = -20:20
   count = 1
   for (Temp in temperature_range) {
-    temp_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, Temp, 0.8, 10, 10, 10, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
+    temp_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temp, SoilWater, NH4, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$N_to_fungal
     count = count + 1
   }
   concentration_range = seq(0, 20, by = 0.01)
   count = 1
   for (conc in concentration_range) {
-    conc_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
-    conc_change_N_Uptake_Fungal_NH4_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NH4_used
-    conc_change_N_Uptake_Fungal_NO3_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NO3_used
-    conc_change_N_Uptake_Fungal_Norg_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, conc, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$Norg_used
-    conc_change_NO3_Uptake_Fungal_NH4_10[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
-    conc_change_NO3_Uptake_Fungal_NH4_10_NH4_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NH4_used
-    conc_change_NO3_Uptake_Fungal_NH4_10_NO3_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NO3_used
-    conc_change_NO3_Uptake_Fungal_NH4_10_Norg_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$Norg_used
-    conc_change_NO3_Uptake_Fungal_NH4_5[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 5, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
-    conc_change_NO3_Uptake_Fungal_NH4_2[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 2, conc, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
-    conc_change_NH4_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
-    conc_change_NH4_Uptake_Fungal_NH4_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NH4_used
-    conc_change_NH4_Uptake_Fungal_NO3_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NO3_used
-    conc_change_NH4_Uptake_Fungal_Norg_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, conc, 10, 10, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$Norg_used
-    conc_change_Norg_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
-    conc_change_Norg_Uptake_Fungal_NH4_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NH4_used
-    conc_change_Norg_Uptake_Fungal_NO3_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$NO3_used
-    conc_change_Norg_Uptake_Fungal_Norg_out[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, 0.8, 10, 10, conc, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$Norg_used
+    conc_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                         conc, conc, conc, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$N_to_fungal
+    conc_change_N_Uptake_Fungal_NH4_out[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                                 conc, conc, conc, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$NH4_used
+    conc_change_N_Uptake_Fungal_NO3_out[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater, 
+                                                                 conc, conc, conc, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$NO3_used
+    conc_change_N_Uptake_Fungal_Norg_out[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                                  conc, conc, conc, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$Norg_used
+    conc_change_NO3_Uptake_Fungal_NH4_10[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                                  NH4, conc, Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$N_to_fungal
+    conc_change_NO3_Uptake_Fungal_NH4_10_NH4_out[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                                          NH4, conc, Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$NH4_used
+    conc_change_NO3_Uptake_Fungal_NH4_10_NO3_out[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                                          NH4, conc, Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$NO3_used
+    conc_change_NO3_Uptake_Fungal_NH4_10_Norg_out[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                                           NH4, conc, Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$Norg_used
+    conc_change_NO3_Uptake_Fungal_NH4_5[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                                 NH4_medium, conc, Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$N_to_fungal
+    conc_change_NO3_Uptake_Fungal_NH4_2[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                                 NH4_low, conc, Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$N_to_fungal
+    conc_change_NH4_Uptake_Fungal[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                           conc, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$N_to_fungal
+    conc_change_NH4_Uptake_Fungal_NH4_out[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                                   conc, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$NH4_used
+    conc_change_NH4_Uptake_Fungal_NO3_out[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                                   conc, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$NO3_used
+    conc_change_NH4_Uptake_Fungal_Norg_out[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                                    conc, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$Norg_used
+    conc_change_Norg_Uptake_Fungal[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                            NH4, NO3, conc, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$N_to_fungal
+    conc_change_Norg_Uptake_Fungal_NH4_out[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                                    NH4, NO3, conc, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$NH4_used
+    conc_change_Norg_Uptake_Fungal_NO3_out[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                                    NH4, NO3, conc, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$NO3_used
+    conc_change_Norg_Uptake_Fungal_Norg_out[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SoilWater,
+                                                                     NH4, NO3, conc, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$Norg_used
     count = count + 1
   }
   
   SWC_range = seq(0, 1, by = 0.01)
   count = 1
   for (SWC in SWC_range) {
-    SWC_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(200, 150, 200, 20, 180, 0.4, 15, SWC, 10, 10, 10, c(10, 10, 10), c(0.2, -0.2, 0.2), c(0.5, 0.5, 0.5), 4, 4)$N_to_fungal
+    SWC_change_N_Uptake_Fungal[count] = Fungal_N_Uptake(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, Temperature, SWC, 
+                                                        NH4, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)$N_to_fungal
     count = count + 1
   }
   
@@ -216,27 +238,27 @@ nitrogen_graphs_fungal <- function() {
   plot(SWC_range, SWC_change_N_Uptake, xlab = "SWC", ylab = "total N to Fungal", main = "SWC response (Fungal) \n with concentation 10, temperature 15")
 }
 
-nitrogen_graphs <- function() {
+nitrogen_graphs <- function(N_type, Temperature, N_limit, k, SoilWater, SoilWaterk) {
   temp_change_N_Uptake <- SWC_change_N_Uptake <- conc_change_N_Uptake <- NULL
   
   temperature_range = -20:20
   count = 1
   for (Temp in temperature_range) {
-    temp_change_N_Uptake[count] = uptake_N(10, Temp, 10, 0.2, 0.8, 0.5)
+    temp_change_N_Uptake[count] = uptake_N(N_type, Temp, N_limit, k, SoilWater, SoilWaterk)
     count = count + 1
   }
   
   concentration_range = seq(0, 20, by = 0.01)
   count = 1
   for (conc in concentration_range) {
-    conc_change_N_Uptake[count] <- uptake_N(conc, 15, 10, 0.2, 0.8, 0.5)
+    conc_change_N_Uptake[count] <- uptake_N(conc, Temperature, N_limit, k, SoilWater, SoilWaterk)
     count = count + 1
   }
   
   SWC_range = seq(0, 1, by = 0.01)
   count = 1
   for (SWC in SWC_range) {
-    SWC_change_N_Uptake[count] <- uptake_N(10, 15, 10, 0.2, SWC, 0.5)
+    SWC_change_N_Uptake[count] <- uptake_N(N_type, Temperature, N_limit, k, SWC, SoilWaterk)
     count = count + 1
   }
   
@@ -246,7 +268,11 @@ nitrogen_graphs <- function() {
   plot(SWC_range, SWC_change_N_Uptake, xlab = "SWC", ylab = "Uptake of N", main = "SWC response \n with concentation 10, temperature 15")
 }
 
-nitrogen_graphs_microbe <- function() {
+nitrogen_graphs_microbe <- function(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, Rm, Q10) {
+  
+  NH4_medium = NH4*0.5
+  NH4_low = NH4*0.2
+  
   #####
   ## Generating the values
   #####
@@ -262,40 +288,40 @@ nitrogen_graphs_microbe <- function() {
   temperature_range = -20:20
   count = 1
   for (Temp in temperature_range) {
-    temp_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, 1500, Temp, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
-    temp_change_N_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, 1500, Temp, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NH4_uptaken
-    temp_change_N_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, 1500, Temp, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NO3_uptaken
-    temp_change_N_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, 1500, Temp, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$Norg_uptaken
+    temp_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, Norg, Temp, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
+    temp_change_N_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, Norg, Temp, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NH4_uptaken
+    temp_change_N_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, Norg, Temp, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NO3_uptaken
+    temp_change_N_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, Norg, Temp, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$Norg_uptaken
     count = count + 1
   }
   concentration_range = seq(0, 10000, by = 1)
   count = 1
   for (conc in concentration_range) {
-    conc_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
-    conc_change_N_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(2000, 1500, 0.5, conc, conc, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NH4_uptaken
-    conc_change_N_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(2000, 1500, 0.5, conc, conc, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NO3_uptaken
-    conc_change_N_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(2000, 1500, 0.5, conc, conc, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$Norg_uptaken
-    conc_change_Norg_FOM_Uptake_Microbes[count] = Microbe_Uptake(2000, 1500, 0.5, conc, conc, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$Norg_uptaken_extra_FOM
-    conc_change_NO3_Uptake_Microbes_NH4_1000_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, conc, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
-    conc_change_NO3_Uptake_Microbes_NH4_1000_NH4_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1000, conc, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NH4_uptaken
-    conc_change_NO3_Uptake_Microbes_NH4_1000_NO3_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1000, conc, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NO3_uptaken
-    conc_change_NO3_Uptake_Microbes_NH4_1000_Norg_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1000, conc, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$Norg_uptaken
-    conc_change_NO3_Uptake_Microbes_NH4_500_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 500, conc, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
-    conc_change_NO3_Uptake_Microbes_NH4_200_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 200, conc, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
-    conc_change_NH4_Uptake_Microbes_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, conc, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
-    conc_change_NH4_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(2000, 1500, 0.5, conc, 1500, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NH4_uptaken
-    conc_change_NH4_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(2000, 1500, 0.5, conc, 1500, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NO3_uptaken
-    conc_change_NH4_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(2000, 1500, 0.5, conc, 1500, 1500, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$Norg_uptaken
-    conc_change_Norg_Uptake_Microbes_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
-    conc_change_Norg_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NH4_uptaken
-    conc_change_Norg_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$NO3_uptaken
-    conc_change_Norg_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, conc, 15, 0.8, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$Norg_uptaken
+    conc_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, conc, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
+    conc_change_N_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, conc, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NH4_uptaken
+    conc_change_N_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, conc, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NO3_uptaken
+    conc_change_N_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, conc, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$Norg_uptaken
+    conc_change_Norg_FOM_Uptake_Microbes[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, conc, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$Norg_uptaken_extra_FOM
+    conc_change_NO3_Uptake_Microbes_NH4_1000_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, conc, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_1000_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, conc, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NH4_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_1000_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, conc, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NO3_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_1000_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, conc, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$Norg_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_500_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4_medium, conc, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_200_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4_low, conc, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
+    conc_change_NH4_Uptake_Microbes_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, NO3, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
+    conc_change_NH4_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, NO3, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NH4_uptaken
+    conc_change_NH4_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, NO3, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NO3_uptaken
+    conc_change_NH4_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, NO3, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$Norg_uptaken
+    conc_change_Norg_Uptake_Microbes_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
+    conc_change_Norg_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NH4_uptaken
+    conc_change_Norg_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NO3_uptaken
+    conc_change_Norg_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$Norg_uptaken
     count = count + 1
   }
   SWC_range = seq(0, 1, by = 0.01)
   count = 1
   for (SWC in SWC_range) {
-    SWC_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(2000, 1500, 0.5, 1500, 1500, 1500, 15, SWC, c(10, 10, 10), c(0.2, 0.2, 0.2), c(0.5, 0.5, 0.5), TRUE, 2000, c(0.2, 0.2))$C_uptaken
+    SWC_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(2000, 1500, NC_microbe_opt, NH4, NO3, Norg, Temperature, SWC, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
     count = count + 1
   }
   
@@ -309,11 +335,11 @@ nitrogen_graphs_microbe <- function() {
   lines(concentration_range, conc_change_NH4_Uptake_Microbes_NH4_out, col = "black", lty = 2, lwd = 2)
   lines(concentration_range, conc_change_NH4_Uptake_Microbes_NO3_out, col = "blue", lty = 2, lwd = 2)
   lines(concentration_range, conc_change_NH4_Uptake_Microbes_Norg_out, col = "green", lty = 2, lwd = 2)
-  legend(0, max(unlist(c(conc_change_NH4_Uptake_Microbes, conc_change_NH4_Uptake_Microbes_NH4_out, conc_change_NH4_Uptake_Microbes_NO3_out, conc_change_NH4_Uptake_Microbes_Norg_out))),
+  legend(0, max(unlist(c(conc_change_NH4_Uptake_Microbes_NH4_out, conc_change_NH4_Uptake_Microbes_NH4_out, conc_change_NH4_Uptake_Microbes_NO3_out, conc_change_NH4_Uptake_Microbes_Norg_out))),
          c("NH4", "NO3", "FOM"), col = c("black", "blue", "green"), lty = 2, title = "N Type", bty = "n")
   
-  plot(concentration_range, conc_change_Norg_FOM_Uptake_Microbes, xlab = "Norg", ylab = "total N to Microbes",
-       main = "Norg response (Microbes) \n with temperature 15, SWC 0.8, other N 1000")
+  plot(concentration_range, conc_change_Norg_FOM_Uptake_Microbes, xlab = "Norg", ylab = "Emergancy N to microbes",
+       main = "Extra Norg from FOM")
   
   plot(concentration_range, conc_change_Norg_Uptake_Microbes_C_out, xlab = "Norg", ylab = "total N to Microbes",
        main = "Norg response (Microbes) \n with temperature 15, SWC 0.8, other N 1000")
@@ -331,7 +357,7 @@ nitrogen_graphs_microbe <- function() {
        main = "NO3 response (Microbes) \n with temperature 15, SWC 0.8, Organic 10, NH4 variable")
   points(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_500_C_out, col = "pink")
   points(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_200_C_out, col = "red")
-  legend(0, max(unlist(c(conc_change_NO3_Uptake_Microbes_NH4_1000_C_out, conc_change_NO3_Uptake_Microbes_NH4_500, conc_change_NO3_Uptake_Microbes_NH4_200))),
+  legend(0, max(unlist(c(conc_change_NO3_Uptake_Microbes_NH4_1000_C_out, conc_change_NO3_Uptake_Microbes_NH4_500_C_out, conc_change_NO3_Uptake_Microbes_NH4_200_C_out))),
          c("High", "Medium", "Low"), col = c("black", "pink", "red"), pch = 1, title = "NH4", bty = "n")
   
   plot(temperature_range, temp_change_N_Uptake_Microbes_C_out, xlab = "Temperature", ylab = "total N to Microbes", main = "Temperature response (Microbes) \n with concentation 10, SWC 0.8")
@@ -339,7 +365,8 @@ nitrogen_graphs_microbe <- function() {
   plot(SWC_range, SWC_change_N_Uptake_Microbes_C_out, xlab = "SWC", ylab = "total N to Microbes", main = "SWC response (Microbes) \n with concentation 10, temperature 15")
 }
 
-decision_graphs <- function() {
+decision_graphs <- function(C_roots, N_roots, C_fungal, N_fungal, optimum_point_roots, optimum_point_fungal, percentage_C_biomasses, 
+                            mantle_mass, ERM_mass, C_value_plant, N_value_plant, C_value_fungal, N_value_fungal) {
   ####
   # Initialisation
   ####
@@ -353,54 +380,54 @@ decision_graphs <- function() {
   C_range <- seq(100, 300)
   count = 1
   for (C in C_range) {
-    plant_decision_C[count] <- plant_decision(C, 150, 0.5, 4, 4)$demand
-    myco_decision_C[count] <- myco_decision(C, 150, 0.5, 20, 180, 0.4, 4, 4)$demand
+    plant_decision_C[count] <- plant_decision(C_roots, N_roots, optimum_point_roots, C_value_plant, N_value_plant)$demand
+    myco_decision_C[count] <- myco_decision(C_fungal, N_fungal, optimum_point_fungal, mantle_mass, ERM_mass, percentage_C_biomasses, C_value_fungal, N_value_fungal)$demand
     count = count + 1
   }
   N_range <- seq(50, 250)
   count = 1
   for (N in N_range) {
-    plant_decision_N[count] <- plant_decision(200, N, 0.5, 4, 4)$demand
-    myco_decision_N[count] <- myco_decision(200, N, 0.5, 20, 180, 0.4, 4, 4)$demand
+    plant_decision_N[count] <- plant_decision(C_roots, N, optimum_point_roots, C_value_param_plant, N_value_param_plant)$demand
+    myco_decision_N[count] <- myco_decision(C_fungal, N, optimum_point_fungal, mantle_mass, ERM_mass, percentage_C_biomasses, C_value_fungal, N_value_fungal)$demand
     count = count + 1
   }
   optimum_point <- seq(0.2, 0.8, by = 0.01)
   count = 1
   for (op in optimum_point) {
-    plant_decision_op[count] <- plant_decision(200, 150, op, 4, 4)$demand
-    myco_decision_op[count] <- myco_decision(200, 150, op, 20, 180, 0.4, 4, 4)$demand
+    plant_decision_op[count] <- plant_decision(C_roots, N_roots, op, C_value_param_plant, N_value_param_plant)$demand
+    myco_decision_op[count] <- myco_decision(C_roots, N_roots, op, mantle_mass, ERM_mass, percentage_C_biomasses, C_value_fungal, N_value_fungal)$demand
     count = count + 1
   }
-  mantle_mass <- seq(10, 50, by = 1)
+  mantle_masses <- seq(10, 50, by = 1)
   count = 1
-  for (mm in mantle_mass) {
-    myco_decision_mm[count] <- myco_decision(200, 150, 0.5, mm, 180, 0.4, 4, 4)$demand
+  for (mm in mantle_masses) {
+    myco_decision_mm[count] <- myco_decision(C_fungal, N_fungal, optimum_point_fungal, mm, ERM_mass, percentage_C_biomasses, C_value_fungal, N_value_fungal)$demand
     count = count + 1
   }
-  ERM_mass <- seq(110, 250, by = 1)
+  ERM_masses <- seq(110, 250, by = 1)
   count = 1
-  for (ERM in ERM_mass) {
-    myco_decision_ERM[count] <- myco_decision(200, 150, 0.5, 20, ERM, 0.4, 4, 4)$demand
+  for (ERM in ERM_masses) {
+    myco_decision_ERM[count] <- myco_decision(C_fungal, N_fungal, optimum_point_fungal, mantle_mass, ERM, percentage_C_biomasses, C_value_fungal, N_value_fungal)$demand
     count = count + 1
   }
   percentage_C_biomass <- seq(0.1, 0.8, by = 0.01)
   count = 1
   for (pC in percentage_C_biomass) {
-    myco_decision_pC[count] <- myco_decision(200, 150, 0.5, 20, 180, pC, 4, 4)$demand
+    myco_decision_pC[count] <- myco_decision(C_fungal, N_fungal, optimum_point_fungal, mantle_mass, ERM_mass, pC, C_value_fungal, N_value_fungal)$demand
     count = count + 1
   }
   C_value_range <- seq(-300, 300)
   count = 1
   for (C_value in C_value_range) {
-    plant_decision_C_value[count] <- plant_decision(200, 150, 0.5, C_value, 4)$demand
-    myco_decision_C_value[count] <- myco_decision(200, 150, 0.5, 20, 180, 0.4, C_value, 4)$demand
+    plant_decision_C_value[count] <- plant_decision(C_roots, N_roots, optimum_point_roots, C_value, N_value_plant)$demand
+    myco_decision_C_value[count] <- myco_decision(C_fungal, N_fungal, optimum_point_fungal, mantle_mass, ERM_mass, percentage_C_biomasses, C_value, C_value_fungal)$demand
     count = count + 1
   }
   N_value_range <- seq(-300, 300)
   count = 1
   for (N_value in N_value_range) {
-    plant_decision_N_value[count] <- plant_decision(200, 150, 0.5, 4, N_value)$demand
-    myco_decision_N_value[count] <- myco_decision(200, 150, 0.5, 20, 180, 0.4, 4, N_value)$demand
+    plant_decision_N_value[count] <- plant_decision(C_roots, N_roots, optimum_point_fungal, C_value_fungal, N_value)$demand
+    myco_decision_N_value[count] <- myco_decision(C_fungal, N_fungal, optimum_point_fungal, mantle_mass, ERM_mass, percentage_C_biomasses, C_value_fungal, N_value)$demand
     count = count + 1
   }
   
@@ -433,12 +460,12 @@ decision_graphs <- function() {
   legend(optimum_point[1], max(myco_decision_op), c("Plant", "Myco"), col = c("black", "red"),
          title = "Organism", bty = "n")
 
-  plot(mantle_mass, myco_decision_mm, col = "red",
+  plot(mantle_masses, myco_decision_mm, col = "red",
        ylab = "Decision value", xlab = "Mantle Mass",
        main = "Mantle Mass range", 
        ylim = c(min(myco_decision_mm), max(myco_decision_mm)))
   
-  plot(ERM_mass, myco_decision_ERM, col = "red",
+  plot(ERM_masses, myco_decision_ERM, col = "red",
        ylab = "Decision value", xlab = "ERM range",
        main = "ERM Mass range", 
        ylim = c(min(myco_decision_ERM), max(myco_decision_ERM)))
@@ -465,12 +492,12 @@ decision_graphs <- function() {
          title = "Organism", bty = "n")
 }
 
-respiration_graphs <- function() {
+respiration_graphs <- function(Rm, Q10) {
   temp_respiration <- NULL
-  temp = -20:20
+  temp = -30:30
   count = 1
   for (tem in temp) {
-    temp_respiration[count] <- respiration(tem, 0.2, 0.2)
+    temp_respiration[count] <- respiration(tem, Rm, Q10)
     count = count + 1
   }
   
@@ -479,14 +506,14 @@ respiration_graphs <- function() {
        xlab = "Temperature range", ylab = "Respiration, kg C")
 }
 
-myco_growth_graphs <- function() {
+myco_growth_graphs <- function(C_fungal_in, N_fungal_in, gorwth_C, growth_N) {
   myco_growth_C_fungal <- myco_growth_N_fungal <- myco_growth_C_and_N_fungal <- NULL
   range <- 0:150
   count = 1
   for (ele in range) {
-    myco_growth_C_and_N_fungal[count] <- myco_growth(ele, ele, 0.2, 0.2)
-    myco_growth_C_fungal[count] <- myco_growth(ele, 15, 0.2, 0.2)
-    myco_growth_N_fungal[count] <- myco_growth(15, ele, 0.2, 0.2)
+    myco_growth_C_and_N_fungal[count] <- myco_growth(ele, ele, gorwth_C, growth_N)
+    myco_growth_C_fungal[count] <- myco_growth(ele, N_fungal_in, gorwth_C, growth_N)
+    myco_growth_N_fungal[count] <- myco_growth(C_fungal_in, ele, gorwth_C, growth_N)
     count = count + 1
   }
   
