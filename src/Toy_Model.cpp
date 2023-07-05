@@ -125,6 +125,7 @@ Rcpp::List Toy_Model(double year,
                                               parameters_in.growth_C,
                                               parameters_in.growth_N,
                                               0.1,
+                                              0.1,
                                               false);
 
     // CASSIA max should be an output from CASSIA at some point

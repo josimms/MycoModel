@@ -41,6 +41,7 @@ Rcpp::List mycofon_balence(double C_roots,
                            double growth_C,
                            double growth_N,
                            double max_C_allocation_CASSIA,
+                           double allocation_N_to_rest_of_plant,
                            bool mycofon_stratergy) {
   
   /*
@@ -185,6 +186,7 @@ Rcpp::List mycofon_balence(double C_roots,
   double fungal_NC_ratio = N_fungal / C_fungal;
   
   double from_CASSIA = max_C_allocation_CASSIA; // could change this to be a function that would work with the gradient that is happening in CASSIA
+  double to_CASSIA = allocation_N_to_rest_of_plant; // TODO: sort this!
   
   double myco_growth_C = myco_growth(C_fungal, N_fungal, growth_C, growth_N)[1]; // TODO: currently C_roots rather than sugar as the model isn't connected in that way
   double myco_growth_N = myco_growth(C_fungal, N_fungal, growth_C, growth_N)[2];
@@ -193,8 +195,8 @@ Rcpp::List mycofon_balence(double C_roots,
     N_given + 
     uptake_plant*C_roots - // This should be by the biomass, so decided that it is multiplied by C^r rather than N^r, maybe should actually be a surface area equation
     (1 - m)*C_roots*turnover_roots*root_NC_ratio - 
-    m*C_roots*turnover_roots_mycorrhized*root_NC_ratio;
-  
+    m*C_roots*turnover_roots_mycorrhized*root_NC_ratio -
+    to_CASSIA;
   
   N_fungal = N_fungal + 
     uptake_fungal*C_fungal - 
@@ -228,7 +230,8 @@ Rcpp::List mycofon_balence(double C_roots,
                             Rcpp::_["N_fungal"] = N_fungal,
                             Rcpp::_["uptake_plant"] = uptake_plant*C_roots,
                             Rcpp::_["uptake_fungal"] = uptake_fungal*N_roots,
-                            Rcpp::_["from_CASSIA"] = from_CASSIA);
+                            Rcpp::_["from_CASSIA"] = from_CASSIA,
+                            Rcpp::_["to_CASSIA"] = to_CASSIA);
 
 }
 

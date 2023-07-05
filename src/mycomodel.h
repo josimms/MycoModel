@@ -365,6 +365,7 @@ Rcpp::List mycofon_balence(double C_roots,
                            double growth_C,
                            double growth_N,
                            double max_C_allocation_CASSIA,
+                           double allocation_N_to_rest_of_plant,
                            bool mycofon_stratergy);
  
 #endif
