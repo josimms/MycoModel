@@ -105,13 +105,12 @@ Rcpp::List Toy_Model(double year,
     
     // TODO: work out which parameters are available here
     Rcpp::List MYCOFON_out =  mycofon_balence(CASSIA_out.C_roots, CASSIA_out.N_roots,
-                                              parameters_in.percentage_C_biomass, parameters_in.optimal_root_fungal_biomass_ratio,
+                                              parameters_in.optimal_root_fungal_biomass_ratio,
                                               MYTCOFON_out.C_fungal, MYTCOFON_out.N_fungal,
                                               parameters_in.turnover_roots, parameters_in.turnover_roots_mycorrhized, 
                                               parameters_in.turnover_mantle, parameters_in.turnover_ERM,
                                               parameters_in.respiration_params,
                                               SYMPHONY_out.NH4, SYMPHONY_out.NO3, SYMPHONY_out.N_FOM,
-                                              parameters_in.NC_in_root_opt,
                                               parameters_in.NC_fungal_opt,
                                               TAir[days], Tmb[days], SWC[days],
                                               parameters_in.N_limits_plant,
@@ -125,10 +124,11 @@ Rcpp::List Toy_Model(double year,
                                               parameters_in.NH4_on_NO3,
                                               parameters_in.growth_C,
                                               parameters_in.growth_N,
-                                              parameters_in.C_value_param_myco,
-                                              parameters_in.N_value_param_myco,
-                                              parameters_in.C_value_param_plant,
-                                              parameters_in.N_value_param_plant);
+                                              0.1,
+                                              false);
+
+    // CASSIA max should be an output from CASSIA at some point
+    // Currently just assuming that the Frakelin model is used - need to sort this out as well!
     
     // Soil model symphony
     Rcpp::List Soil_All = symphony_multiple_FOM_daily(Tmb[days], SWC[days],
