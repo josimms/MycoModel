@@ -36,11 +36,11 @@ double uptake_N(double N,   // UNITS: C kg
                 double SWC_k) {
 
   // Concentration
-  double u = k * pow(N, 8) / (pow(N_limit, 8) + pow(N, 8));
+  double u = std::max(k * pow(N, 8) / (pow(N_limit, 8) + pow(N, 8)), 0.0);
   // Temperature
-  double u_t = (T+20)/55;
+  double u_t = std::max((T+20)/55, 0.0);
   // Water
-  double u_w = SWC_k * pow(SWC, 8) / (pow(0.5, 8) + pow(SWC, 8));
+  double u_w = std::max(SWC_k * pow(SWC, 8) / (pow(0.5, 8) + pow(SWC, 8)), 0.0);
   double all = u * u_t * u_w;
   return(all);
 }
@@ -64,8 +64,7 @@ double uptake_C(double C,     // UNITS: C kg
 }
 
 // [[Rcpp::export]]
-Rcpp::List Plant_N_Uptake(double NC_in_root_opt, 
-                          double T,
+Rcpp::List Plant_N_Uptake(double T,
                           double SWC,
                           double m, 
                           double NH4_in,
@@ -74,13 +73,8 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
                           std::vector<double> N_limits_R,
                           std::vector<double> N_k_R,
                           std::vector<double> SWC_k_R,
-                          double C_roots,
-                          double N_roots,
-                          double C_fungal,
-                          double percentage_C_biomass,
                           std::vector<double> parameters,
-                          double C_value_param,
-                          double N_value_param) {
+                          double demand) {
   
   // Input the parameters!
   N_balence N_limits = vector_to_N_balence(N_limits_R);
@@ -92,45 +86,21 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
   // Inorganic NH4 affects NO3, in this function as it is a specific plant effect
   double NH4_effect_on_NO3 = parameters[0] * pow(NH4_in, 8) / (pow(parameters[1], 8) + pow(NH4_in, 8));
   
-  double demand = plant_decision(C_roots, N_roots, NC_in_root_opt, C_value_param, N_value_param)[0];
-  
   // All possible N to root with NH4 modifier for NO3
   double N_to_root = (uptake_N(FOM_in, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg) + 
-    uptake_N(NH4_in, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4) + 
-    NH4_effect_on_NO3*uptake_N(NO3_in, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3));
+                      uptake_N(NH4_in, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4) + 
+                      NH4_effect_on_NO3*uptake_N(NO3_in, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3));
   
-  // STEP 2: Uptake with demand
-  double N_to_root_max = N_to_root * (C_fungal/percentage_C_biomass) * (1 - m) * demand;
-  
-  // STEP 3: 
-  double NC_in_root = 1;
-  double N_to_plant = std::min(N_to_root_max, (NC_in_root_opt - NC_in_root)*N_to_root_max); // TODO: reconsider the conditions here
-  double reduction_factor;
-  if (N_to_plant == N_to_root_max) {
-    reduction_factor = 1;
-  } else if (N_to_plant == (NC_in_root_opt - NC_in_root)*N_to_root_max) {
-    reduction_factor = (NC_in_root_opt - NC_in_root)*N_to_root_max/N_to_root_max;
-  } else {
-    std::cout << "Warning:\nReduction factor not working in Planr_N_Intake\n";
-  }
-  
-  
-  return(Rcpp::List::create(Rcpp::_["N_to_plant"] = N_to_plant,
-                            Rcpp::_["NH4_used"] = uptake_N(NH4_in, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4)*reduction_factor,
-                            Rcpp::_["NO3_used"] = NH4_effect_on_NO3*uptake_N(NO3_in, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3)*reduction_factor,
-                            Rcpp::_["Norg_used"] = uptake_N(FOM_in, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*reduction_factor));
+  return(Rcpp::List::create(Rcpp::_["N_to_plant"] = N_to_root*demand,
+                            Rcpp::_["NH4_used"] = uptake_N(NH4_in, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4) * demand,
+                            Rcpp::_["NO3_used"] = NH4_effect_on_NO3 * uptake_N(NO3_in, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3) * demand,
+                            Rcpp::_["Norg_used"] = uptake_N(FOM_in, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg) * demand));
 }
 
    
 
 // [[Rcpp::export]]
-Rcpp::List Fungal_N_Uptake(double C_fungal,
-                           double N_fungal,
-                           double NC_fungal_opt,
-                           double mantle_mass,
-                           double ERM_mass,
-                           double percentage_C_biomass,
-                           double T,
+Rcpp::List Fungal_N_Uptake(double T,
                            double SWC,
                            double NH4,
                            double NO3,
@@ -138,28 +108,17 @@ Rcpp::List Fungal_N_Uptake(double C_fungal,
                            std::vector<double> N_limits_R,
                            std::vector<double> N_k_R,
                            std::vector<double> SWC_k_R,
-                           double C_value_param,
-                           double N_value_param) {
+                           double demand) {
 
   N_balence N_limits = vector_to_N_balence(N_limits_R);
   N_balence N_k = vector_to_N_balence(N_k_R);
   N_balence SWC_k = vector_to_N_balence(SWC_k_R);
   
-  double NC_in_fungal = N_fungal/C_fungal;
-  // Demand
-  double demand = myco_decision(C_fungal,
-                                N_fungal,
-                                NC_fungal_opt,
-                                mantle_mass,
-                                ERM_mass,
-                                percentage_C_biomass,
-                                C_value_param,
-                                N_value_param)[0];
-  
   double N_fungal_uptake = (uptake_N(FOM_Norg, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg) + 
                             uptake_N(NH4, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4) + 
                             uptake_N(NO3, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3))*demand;
   
+  // TODO: consider renaming this uptake rather than used
   return Rcpp::List::create(Rcpp::_["N_to_fungal"] = N_fungal_uptake,
                             Rcpp::_["NH4_used"] = uptake_N(NH4, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4)*demand,
                             Rcpp::_["NO3_used"] = uptake_N(NO3, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3)*demand,
@@ -185,7 +144,9 @@ Rcpp::List Microbe_Uptake(double C_microbe,                   // UNITS: C kg
   
 
   /*
-   * Nitrogen limitation // Mass limitation is in the soil model!
+   * Nitrogen limitation
+   * 
+   * Mass limitation is in the soil model!
    */
   
   N_balence N_limits = vector_to_N_balence(N_limits_R);
@@ -200,8 +161,14 @@ Rcpp::List Microbe_Uptake(double C_microbe,                   // UNITS: C kg
   // Working out the current N:C ratio
   double NC_in_micorbe = N_micorbe/C_microbe;        // UNITS: C kg eq
   
+  double demand = 1 - NC_in_micorbe/NC_microbe_opt;
+  if (demand < 0) {
+    demand = 0;
+    std::cout << "Warning! The choice of NC_microbe_opt would make the demand negative. Chnage value.\n";
+  }
+  
   // purely organic uptake
-  double N_micorbe_uptake = uptake_N(Norg_avaliable, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*(1 - (NC_in_micorbe)/(NC_microbe_opt));           // UNITS: C kg eq
+  double N_micorbe_uptake = uptake_N(Norg_avaliable, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*demand;           // UNITS: C kg eq
   
   /*
    * Carbon limitation // Mass limitation is in the soil model!
@@ -218,10 +185,10 @@ Rcpp::List Microbe_Uptake(double C_microbe,                   // UNITS: C kg
   double organic_limitation = std::min(N_micorbe_uptake, C_microbe_uptake);        // UNITS: C kg
   
   if (organic_limitation == N_micorbe_uptake) {
-    Norg_uptaken = uptake_N(Norg_avaliable, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*(1 - (NC_in_micorbe)/(NC_microbe_opt));
+    Norg_uptaken = uptake_N(Norg_avaliable, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*demand;
     C_uptaken = C_microbe_uptake - (C_microbe_uptake - N_micorbe_uptake);       // UNITS: C kg
   } else if (organic_limitation == C_microbe_uptake) {
-    Norg_uptaken = uptake_N(Norg_avaliable, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*(C_microbe_uptake/N_micorbe_uptake)*(1 - (NC_in_micorbe)/(NC_microbe_opt));
+    Norg_uptaken = uptake_N(Norg_avaliable, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*(C_microbe_uptake/N_micorbe_uptake)*demand;
     C_uptaken = C_microbe_uptake;       // UNITS: C kg
   } else {
     std::cout << "Warning:\nOrganic uptake of Microbe_Uptake doesn't match either limitation!\n";
@@ -237,8 +204,8 @@ Rcpp::List Microbe_Uptake(double C_microbe,                   // UNITS: C kg
   // uptake enough inorganic to balance their internal NC ratio
   // As there is not an update here, accept that this is an overestimate here - could add a dapening factor if need too
   // Not having an update means that they will be considered equal.
-  NH4_uptaken = uptake_N(NH4_avaliable, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4)*(1 - (NC_in_micorbe)/(NC_microbe_opt));        // UNITS: C kg
-  NO3_uptaken = uptake_N(NO3_avaliable, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3)*(1 - (NC_in_micorbe)/(NC_microbe_opt));        // UNITS: C kg
+  NH4_uptaken = uptake_N(NH4_avaliable, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4)*demand;        // UNITS: C kg
+  NO3_uptaken = uptake_N(NO3_avaliable, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3)*demand;        // UNITS: C kg
   
   /*
    * Organic Uptake Again if SOM
@@ -246,7 +213,7 @@ Rcpp::List Microbe_Uptake(double C_microbe,                   // UNITS: C kg
   
   double Norg_uptaken_extra_FOM;
   if (SOM_decomposers) {
-    Norg_uptaken_extra_FOM = uptake_N(Norg_avaliable_FOM, T, N_limits.Norg_FOM, N_k.Norg_FOM, SWC, SWC_k.Norg_FOM)*(1 - (NC_in_micorbe)/(NC_microbe_opt));        // UNITS: C kg
+    Norg_uptaken_extra_FOM = uptake_N(Norg_avaliable_FOM, T, N_limits.Norg_FOM, N_k.Norg_FOM, SWC, SWC_k.Norg_FOM)*demand;        // UNITS: C kg
   }
   
   /*
