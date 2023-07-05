@@ -40,17 +40,17 @@ symphony_plus_vs_original_plot <- function() {
   }
 }
 
-symphony_multiple_FOM_daily_plot(Tsb, SoilWater, 
-                                 C_FOM_needles, C_FOM_woody, C_FOM_roots, C_FOM_mycelium,
-                                 C_SOM, N_SOM,
-                                 C_decompose_FOM, C_decompose_SOM, N_decompose_FOM, N_decompose_SOM,
-                                 Litter_needles, Litter_woody, Litter_roots, Litter_mycelium, 
-                                 NH4, NO3, N_FOM_needles, N_FOM_woody, N_FOM_roots, N_FOM_mycelium,
-                                 NH4_used_Plant, NH4_used_Fungal, NO3_used_Plant, NO3_used_Fungal, FOM_Norg_used_Plant, FOM_Norg_used_Fungal,
-                                 SOM_Norg_used,
-                                 Rm, Q10, N_limits_microbes, N_k_microbes, SWC_k_microbes, 
-                                 NC_microbe_opt, microbe_turnover) {
-  
+symphony_multiple_FOM_daily_plot <- function(Tsb, SoilWater, 
+                                             C_FOM_needles, C_FOM_woody, C_FOM_roots, C_FOM_mycelium,
+                                             C_SOM, N_SOM,
+                                             C_decompose_FOM, C_decompose_SOM, N_decompose_FOM, N_decompose_SOM,
+                                             Litter_needles, Litter_woody, Litter_roots, Litter_mycelium, 
+                                             NH4, NO3, N_FOM_needles, N_FOM_woody, N_FOM_roots, N_FOM_mycelium,
+                                             NH4_used_Plant, NH4_used_Fungal, NO3_used_Plant, NO3_used_Fungal, FOM_Norg_used_Plant, FOM_Norg_used_Fungal,
+                                             SOM_Norg_used,
+                                             Rm, Q10, N_limits_microbes, N_k_microbes, SWC_k_microbes, 
+                                             NC_microbe_opt, microbe_turnover) {
+              
   ####
   # Simulations
   ####
@@ -83,17 +83,17 @@ symphony_multiple_FOM_daily_plot(Tsb, SoilWater,
     
   
   # TODO: would like to have all of these outputs as a graph, so how should I go about this? Is there a way of doing it where the output could be a list rather than having to do 8 for loops for everything?
-  for (C in C_range) {
-    
-  }
+  #for (C in C_range) {
+  #  
+  #}
   
-  for (N in N_range) {
-    
-  }
+  #for (N in N_range) {
+  #  
+  #}
   
-  for (rate in rate_range) {
-    
-  }
+  #for (rate in rate_range) {
+  #  
+  #}
   
   
   ####
