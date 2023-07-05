@@ -7,7 +7,8 @@
 \description{
   The respiration is the same for all of the organisms, but the parameters are different.
   
-  \eqn{a exp(b T)}
+  \eqn{\max{Rm \exp(\frac{Q10 T}{10}) - \exp(- \frac{1}{2} \log(Q10)), 0.0}}
+  Where Rm and Q10 are photosynthesis parameters. T is temperature. The formula is from the CASSIA formation (Schistel-Aalto, 2015)
 }
 
 \usage{
@@ -29,12 +30,12 @@ respiration(T,
 }
 
 \value{
-  \item{output}{Number of the respiration.}
+  \item{output}{Amount of the respiration, kg C eq}
 }
 
 \author{
   Joanna Simms, joanna.x.simms@ad.helsinki.fi
 }
 \references{
-  TODO: add a reference here
+  Schiestl‐Aalto, Pauliina, et al. "CASSIA–a dynamic model for predicting intra‐annual sink demand and interannual growth variation in S cots pine." New Phytologist 206.2 (2015): 647-659.
 }

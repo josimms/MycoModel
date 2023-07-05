@@ -8,40 +8,41 @@
 \description{
   This function brings together the C or N balance as in the original MYCOFON model, the decision functions for resource transfer, fungal growth and multiple N uptake functions. The equations in this function are below.
   
-  \eqn{m = \frac{N^r}{B^{rf}_{opt}C^r}}
+  \eqn{m = \frac{C_f}{B^{rf}_{opt}C^r}}
   
   Where N is nitrogen, C is carbon, r roots, f fungai, B biomass, opt is optimum.
   
+  The uptake and decision functions are then calulated from the balance of the last iteration. Note that the plant decision requires the N alllocated, so the mycorrhizal decision is calculated first.
+  
+  Then the balance is updated again.
+  
   \eqn{C^r = C^r + C^{CASSIA}_{Allocated} - (1 - m)t^rC^r - mt^mC^r - r(Tmb)C^r - d^r(C^{CASSIA})}
 
-  Where, C^{CASSIA}_{Allocated} is the carbon allocated from the CASSIA model, t is turnover, which is different for micorhized (m) and non-mycorrhized roots (r), Tmb is temperature of the soil, d() is decision and r() is respiration.
+  Where, C^{CASSIA}_{Allocated} is the carbon allocated from the CASSIA model, t is turnover, which is different for micorhized (m) and non-mycorrhized roots (r), Tmb is temperature of the soil, d() is decision and r() is respiration. Growth is currently handled in CASSIA, and therefore has not been added here!
   
-  \eqn{C^f = C^f + d(C^{CASSIA}) - t^f  C^{F} - r(Tmb)  C^{f}}
+  \eqn{C^f = C^f + d^r(C^{CASSIA}) - 0.5 t^{mantle} C^{mantle} - 0.5 t^{ERM} C^{ERM} - r(Tmb)  C^{f}}
   
-  Where p is percentage.
-  
-  \eqn{N^r = N^r + d^f(N^{f}) + u^r(T, SWC, NH4, NO3, FOM_Norg, C^r, N^r)C^r - (1 - m) t^r R^r_{C:N} N^r - mt^m R^r_{C:N} N^r - R^r_{C:N} N^{CASSIA}_{Allocated}}
+  \eqn{N^r = N^r + d^f(N^{f}) + u^r(T, SWC, NH4, NO3, FOM_Norg)C^r - (1 - m) t^r R^r_{C:N} N^r - mt^m R^r_{C:N} N^r - R^r_{C:N} N^{CASSIA}_{Allocated}}
   
   R^r_{C:N} fungal NC ratio
   
-  \eqn{N^f = N^f + u^f(T, SWC, NH4, NO3, FOM_Norg, C^r, N^r)C^f R^f_{C:N} - t^f C^f R^f_{C:N} - d^f(N^f)}
+  \eqn{N^f = N^f + u^f(T, SWC, NH4, NO3, FOM_Norg)C^f R^f_{C:N} - t^{ERM} C^{ERM} R^{ERM}_{C:N} - t^{mantle} C^{mantle} R^{mantle}_{C:N} - d^f(N^f)}
 }
 \usage{
 
 mycofon_balence(C_roots,
                 N_roots,
-                percentage_C_biomass,
                 optimal_root_fungal_biomass_ratio,
                 C_fungal,
                 N_fungal,
                 turnover_roots,
                 turnover_roots_mycorrhized,
-                turnover_fungal,
+                turnover_mantle,
+                turnover_ERM,
                 respiration_parameters_R,
                 NH4,
                 NO3,
                 FOM_Norg,
-                NC_in_root_opt,
                 NC_in_fungai_opt,
                 T,
                 Tsb,
@@ -55,7 +56,12 @@ mycofon_balence(C_roots,
                 NC_fungal_opt,
                 mantle_mass,
                 ERM_mass,
-                parameters_NH4_on_NO3)
+                parameters_NH4_on_NO3,
+                growth_C,
+                growth_N,
+                max_C_allocation_CASSIA,
+                allocation_N_to_rest_of_plant,
+                mycofon_stratergy)
 }
 
 \arguments{
@@ -64,9 +70,6 @@ mycofon_balence(C_roots,
   }
   \item{N_roots}{
     Nitrogen in roots.
-  }
-  \item{percentage_C_biomass}{
-    The percentage of C that is in biomass.
   }
   \item{optimal_root_fungal_biomass_ratio}{
     The ratio of root and fungal biomass, as in mochrizzal rate.
@@ -83,8 +86,11 @@ mycofon_balence(C_roots,
   \item{turnover_mycorrhized}{
     Turnover of the roots that ARE mycorrhized
   }
-  \item{turnover_fungal}{
-    Turnover of the mycorrhized roots
+  \item{turnover_mantle}{
+    Turnover of the mantle
+  }
+  \item{turnover_ERM}{
+    Turnover of the ERM
   }
   \item{respiration_parameters_R}{
     Respiration parameters
@@ -97,9 +103,6 @@ mycofon_balence(C_roots,
   }
   \item{FOM_Norg}{
     The nitrogen in FOM
-  }
-  \item{NC_in_root_opt}{
-    The ideal NC ratio in the roots
   }
   \item{NC_in_fungai_opt}{
     The idea NC ratio in the fungus
@@ -140,24 +143,39 @@ mycofon_balence(C_roots,
   \item{parameters_NH4_on_NH3}{
     The additional parameters to control the uptake of the NO3 from NH4 in the plant uptake.
   }
+  \item{growth_C}{
+    The growth parameter for the C limitation on fungal growth.
+  }
+  \item{growth_N}{
+    The growth parameter for the N limitation on fungal growth.
+  }
+  \item{max_C_allocation_CASSIA}{
+    The maximum allocation of C from CASSIA to mycorrhiza
+  }
+  \item{allocation_N_to_rest_of_plant}{
+    The allocation of the root N to the rest of the plant. In this case to the CASSIA model. NOTE, when the CASSIA links are set better, then this won't be an input.
+  }
+  \item{mycofon_stratergy}{
+    TURE or FALSE value, Franklin is the default stratergy.
+  }
 }
 
 \value{
-  \item{output}{
-    List of the outputs
-  
-    1. C_roots (kg C) \cr
-    2. C_fungal (kg C) \cr
-    3. N_roots (kg C eq) \cr
-    4. N_fungal (kg C eq) \cr
-    5. N uptake to the plant from the soil (kg C eq) \cr
-    6. N uptake to the fungus from the soil (kg C eq)
-  }
+  \item{C_roots}{Carbon in the roots after the balance, kg C eq.}
+  \item{C_fungal}{Carbon in the fungi after the balance, kg C eq.}
+  \item{N_roots}{Nitrogen in the roots after the balance, kg C eq.}
+  \item{N_fungal}{Nitrogen in the fungi after the balance, kg C eq.}
+  \item{uptake_plant}{The amount of N the plant will uptake}
+  \item{uptake_fungal}{The amount of N the fungi will uptake}
+  \item{from_CASSIA}{The amount of C given from CASSIA})
+  \item{to_CASSIA}{The amount of N given to the rest of the plant i.e. CASSIA}
 }
 
 \author{
   Joanna Simms, joanna.x.simms@ad.helsinki.fi
 }
 \references{
-  TODO: add a reference here
+  Meyer, Astrid, et al. "Simulating mycorrhiza contribution to forest C-and N cycling-the MYCOFON model." Plant and soil 327 2010: 493-517.
+  
+  Franklin, Oskar, et al. "Forests trapped in nitrogen limitation–an ecological market perspective on ectomycorrhizal symbiosis." New Phytologist 203.2 2014: 657-666.
 }

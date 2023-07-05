@@ -10,7 +10,7 @@
 
   This function uses the nitrogen uptake functions for each of the indervidual types of N compiled for the plant.
   
-  The demand is calculated by the decision function, then used to sclae the maximum uptake.
+  The demand is calculated by the decision function, then used to sclae the maximum uptake. Although demand is currently 1 for all decision functions included. (Meyer, 2010, Franklin, 2014)
   
   \eqn{N_to_root = (u_{organic}(FOM, T, SWC) + u_{NH4}(NH4, T, SWC) + f(NH4)u_{NO3}(NO3, T, SWC))*demnad}
   
@@ -94,19 +94,17 @@ Plant_N_Uptake(NC_in_root_opt,
 }
 
 \value{
-  \item{output}{
-    List of the outputs
-  
-    1. N_to_Plant (kg C eq) \cr
-    2. NH4_used (kg C eq) \cr
-    3. NO3_used (kg C eq) \cr
-    4. Norg_used (kg C eq)
-  }
+    \item{N_to_plant}{The total N of all forms to the plant (N forms are not distinguished between within the plant, kg C eq}
+    \item{NH4_used}{All NH4 uptaken - balance used in the symphony soil model, kg C eq}
+    \item{NO3_used}{All NO3 uptaken - balance used in the symphony soil model, kg C eq}
+    \item{Norg_used}{All organic N uptaken - balance used in the symphony soil model, kg C eq}
 }
 
 \author{
   Joanna Simms, joanna.x.simms@ad.helsinki.fi
 }
 \references{
-  TODO: add a reference here
+  Meyer, Astrid, et al. "Simulating mycorrhiza contribution to forest C-and N cycling-the MYCOFON model." Plant and soil 327 2010: 493-517.
+  
+  Franklin, Oskar, et al. "Forests trapped in nitrogen limitation–an ecological market perspective on ectomycorrhizal symbiosis." New Phytologist 203.2 2014: 657-666.
 }

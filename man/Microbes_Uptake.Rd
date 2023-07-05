@@ -89,21 +89,17 @@ Microbe_Uptake(C_microbe,
 }
 
 \value{
-  \item{output}{
-    List of the outputs
-  
-    1. NH4 Uptaken (kg C eq) \cr
-    2. NO3 Uptaken (kg C eq) \cr
-    3. Norg Uptaken (kg C eq) \cr
-    4. C_uptaken (kg C) \cr
-    5- Norg uptake extra FOM
-  }
+    \item{NH4_uptaken}{NH4 uptaken by relevant microbes (kg C eq)}
+    \item{NO3_uptaken}{NO3 uptaken by relevant microbes (kg C eq)}
+    \item{Norg_uptaken}{Norg uptaken by relevant microbes (kg C eq)}
+    \item{C_uptaken}{C uptaken by relevant microbes (kg C eq)}
+    \item{Norg_uptaken_extra_FOM}{Extra FOM uptaken by SOM microbes if the inorganic N is limiting. This is only possible for SOM decomposers (kg C eq)}
 }
 
 \author{
   Joanna Simms, joanna.x.simms@ad.helsinki.fi
 }
 \references{
-  TODO: add a reference here
+  Perveen, Nazia, et al. "Priming effect and microbial diversity in ecosystem functioning and response to global change: a modeling approach using the SYMPHONY model." Global change biology 20.4 (2014): 1174-1190.
 }
 
