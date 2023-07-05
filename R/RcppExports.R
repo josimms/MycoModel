@@ -5,20 +5,20 @@ Toy_Model <- function(year, C_roots, N_roots, C_fungal, N_fungal, Hyde_weather, 
     .Call(`_MycoModel_Toy_Model`, year, C_roots, N_roots, C_fungal, N_fungal, Hyde_weather, parameters_R)
 }
 
-plant_decision <- function(C_roots, N_roots, NC_in_root_opt, C_value_param, N_value_param) {
-    .Call(`_MycoModel_plant_decision`, C_roots, N_roots, NC_in_root_opt, C_value_param, N_value_param)
+plant_decision <- function(C_roots, N_roots, C_fungal, optimal_root_funga_biomass_ratio, N_allo, max_C_allocation_CASSIA) {
+    .Call(`_MycoModel_plant_decision`, C_roots, N_roots, C_fungal, optimal_root_funga_biomass_ratio, N_allo, max_C_allocation_CASSIA)
 }
 
-myco_decision <- function(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, C_value_param, N_value_param) {
-    .Call(`_MycoModel_myco_decision`, C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, C_value_param, N_value_param)
+myco_decision <- function(C_fungal, N_fungal, C_roots, N_roots, NC_fungal_opt, growth_C, growth_N) {
+    .Call(`_MycoModel_myco_decision`, C_fungal, N_fungal, C_roots, N_roots, NC_fungal_opt, growth_C, growth_N)
 }
 
 myco_growth <- function(C_fungal, N_fungal, a, b) {
     .Call(`_MycoModel_myco_growth`, C_fungal, N_fungal, a, b)
 }
 
-mycofon_balence <- function(C_roots, N_roots, percentage_C_biomass, optimal_root_fungal_biomass_ratio, C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_root_opt, NC_in_fungai_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, C_value_param_myco, N_value_param_myco, C_value_param_plant, N_value_param_plant) {
-    .Call(`_MycoModel_mycofon_balence`, C_roots, N_roots, percentage_C_biomass, optimal_root_fungal_biomass_ratio, C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_root_opt, NC_in_fungai_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, C_value_param_myco, N_value_param_myco, C_value_param_plant, N_value_param_plant)
+mycofon_balence <- function(C_roots, N_roots, optimal_root_fungal_biomass_ratio, C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_fungal_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, max_C_allocation_CASSIA, mycofon_stratergy) {
+    .Call(`_MycoModel_mycofon_balence`, C_roots, N_roots, optimal_root_fungal_biomass_ratio, C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM, respiration_parameters_R, NH4, NO3, FOM_Norg, NC_in_fungal_opt, T, Tsb, SWC, N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, max_C_allocation_CASSIA, mycofon_stratergy)
 }
 
 uptake_N <- function(N, T, N_limit, k, SWC, SWC_k) {
@@ -29,12 +29,12 @@ uptake_C <- function(C, T, C_limit, k, SWC, SWC_k) {
     .Call(`_MycoModel_uptake_C`, C, T, C_limit, k, SWC, SWC_k)
 }
 
-Plant_N_Uptake <- function(NC_in_root_opt, T, SWC, m, NH4_in, NO3_in, FOM_in, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param) {
-    .Call(`_MycoModel_Plant_N_Uptake`, NC_in_root_opt, T, SWC, m, NH4_in, NO3_in, FOM_in, N_limits_R, N_k_R, SWC_k_R, C_roots, N_roots, C_fungal, percentage_C_biomass, parameters, C_value_param, N_value_param)
+Plant_N_Uptake <- function(T, SWC, m, NH4_in, NO3_in, FOM_in, N_limits_R, N_k_R, SWC_k_R, parameters, demand) {
+    .Call(`_MycoModel_Plant_N_Uptake`, T, SWC, m, NH4_in, NO3_in, FOM_in, N_limits_R, N_k_R, SWC_k_R, parameters, demand)
 }
 
-Fungal_N_Uptake <- function(C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, T, SWC, NH4, NO3, FOM_Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param) {
-    .Call(`_MycoModel_Fungal_N_Uptake`, C_fungal, N_fungal, NC_fungal_opt, mantle_mass, ERM_mass, percentage_C_biomass, T, SWC, NH4, NO3, FOM_Norg, N_limits_R, N_k_R, SWC_k_R, C_value_param, N_value_param)
+Fungal_N_Uptake <- function(T, SWC, NH4, NO3, FOM_Norg, N_limits_R, N_k_R, SWC_k_R, demand) {
+    .Call(`_MycoModel_Fungal_N_Uptake`, T, SWC, NH4, NO3, FOM_Norg, N_limits_R, N_k_R, SWC_k_R, demand)
 }
 
 Microbe_Uptake <- function(C_microbe, N_micorbe, NC_microbe_opt, NH4_avaliable, NO3_avaliable, Norg_avaliable, T, SWC, N_limits_R, N_k_R, SWC_k_R, SOM_decomposers, Norg_avaliable_FOM, respiration_microbes_params) {
