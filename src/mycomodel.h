@@ -228,8 +228,7 @@ N_balence list_to_N_balence(Rcpp::List input);
 #ifndef PKG_Plant_N_Uptake_H
 #define PKG_Plant_N_Uptake_H
 
-Rcpp::List Plant_N_Uptake(double NC_in_root_opt, 
-                          double T,
+Rcpp::List Plant_N_Uptake(double T,
                           double SWC,
                           double m, 
                           double NH4_in,
@@ -238,13 +237,8 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
                           std::vector<double> N_limits_R,
                           std::vector<double> N_k_R,
                           std::vector<double> SWC_k_R,
-                          double C_roots,
-                          double N_roots,
-                          double C_fungal,
-                          double percentage_C_biomass,
                           std::vector<double> parameters,
-                          double C_value_param,
-                          double N_value_param);
+                          double demand);
  
 #endif
 
@@ -252,23 +246,16 @@ Rcpp::List Plant_N_Uptake(double NC_in_root_opt,
 #ifndef PKG_Fungal_N_Uptake_H 
 #define PKG_Fungal_N_Uptake_H
 
- Rcpp::List Fungal_N_Uptake(double C_fungal,
-                            double N_fungal,
-                            double NC_fungal_opt,
-                            double mantle_mass,
-                            double ERM_mass,
-                            double percentage_C_biomass,
-                            double T,
-                            double SWC,
-                            double NH4,
-                            double NO3,
-                            double FOM_Norg,
-                            std::vector<double> N_limits_R,
-                            std::vector<double> N_k_R,
-                            std::vector<double> SWC_k_R,
-                            double C_value_param,
-                            double N_value_param);
- 
+Rcpp::List Fungal_N_Uptake(double T,
+                          double SWC,
+                          double NH4,
+                          double NO3,
+                          double FOM_Norg,
+                          std::vector<double> N_limits_R,
+                          std::vector<double> N_k_R,
+                          std::vector<double> SWC_k_R,
+                          double demand);
+
 #endif
 
  
@@ -351,7 +338,6 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,
 
 Rcpp::List mycofon_balence(double C_roots,
                            double N_roots,
-                           double percentage_C_biomass,
                            double optimal_root_fungal_biomass_ratio,
                            double C_fungal,
                            double N_fungal,
@@ -363,8 +349,7 @@ Rcpp::List mycofon_balence(double C_roots,
                            double NH4,
                            double NO3,
                            double FOM_Norg,
-                           double NC_in_root_opt,
-                           double NC_in_fungai_opt,
+                           double NC_in_fungal_opt,
                            double T,
                            double Tsb,
                            double SWC,
@@ -377,12 +362,10 @@ Rcpp::List mycofon_balence(double C_roots,
                            double mantle_mass,
                            double ERM_mass,
                            std::vector<double> parameters_NH4_on_NO3,
-                           double carbon_use,
-                           double nitrogen_use,
-                           double C_value_param_myco,
-                           double N_value_param_myco,
-                           double C_value_param_plant,
-                           double N_value_param_plant);
+                           double growth_C,
+                           double growth_N,
+                           double max_C_allocation_CASSIA,
+                           bool mycofon_stratergy);
  
 #endif
 
@@ -395,12 +378,11 @@ Rcpp::List mycofon_balence(double C_roots,
 
 Rcpp::List myco_decision(double C_fungal,
                          double N_fungal,
+                         double C_roots,
+                         double N_roots,
                          double NC_fungal_opt,
-                         double mantle_mass,
-                         double ERM_mass,
-                         double percentage_C_biomass,
-                         double C_value_param,
-                         double N_value_param);
+                         double growth_C,
+                         double growth_N);
 
 #endif
 
@@ -413,9 +395,10 @@ Rcpp::List myco_decision(double C_fungal,
 
 Rcpp::List plant_decision(double C_roots,
                           double N_roots,
-                          double NC_in_root_opt,
-                          double C_value_param,
-                          double N_value_param);
+                          double C_fungal,
+                          double optimal_root_funga_biomass_ratio,
+                          double N_allo,
+                          double max_C_allocation_CASSIA);
 
 #endif
 
