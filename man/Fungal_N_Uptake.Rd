@@ -10,7 +10,10 @@
   
   The demand is calculated by the decision function.
   
-  \eqn{demand = \frac{C^f B^{mantle mass}}{B^f B^{ERM}}(1 - \frac{B^{rf}}{B^{rf}_{opt}})}
+  Then the output is the N uptake of each of the types of nitrogen calculated in parallel a then downscaled with the demand function.
+  
+  \eqn{out = (u_{Org} + u_{NO3} + u_{NH4})*demand}
+  
 }
 
 \usage{

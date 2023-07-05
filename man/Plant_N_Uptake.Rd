@@ -6,11 +6,13 @@
   Plant Nitrogen Uptake
 }
 \description{
+  This function is for the soil to root uptake only.
+
   This function uses the nitrogen uptake functions for each of the indervidual types of N compiled for the plant.
   
-  The demand is calculated by the decision function. Then TODO: I should link this somehow.
+  The demand is calculated by the decision function, then used to sclae the maximum uptake.
   
-  \eqn{N_to_root = u_{organic}(FOM, T, SWC) + u_{NH4}(NH4, T, SWC) + f(NH4)u_{NO3}(NO3, T, SWC)}
+  \eqn{N_to_root = (u_{organic}(FOM, T, SWC) + u_{NH4}(NH4, T, SWC) + f(NH4)u_{NO3}(NO3, T, SWC))*demnad}
   
   The nitrogen to the root is a combination of all of the uptake functions, with the NO3 nitrogen uptake updated with a NH4 modifier. NH4, NO3 and FOM are the amounts in the soil. T is temperature in the soil B horizon and then SWC is the soil water content.
   
@@ -74,11 +76,20 @@ Plant_N_Uptake(NC_in_root_opt,
   \item{N_roots}{
     Nitrogen in the roots
   }
+  \item{C_fungal}{
+    Carbon in the roots
+  }
   \item{percentage_C_biomass}{
     The percentage of C in the biomass
   }
   \item{parameters}{
     The parameters that control the NH4 effect on NO3 uptake
+  }
+  \item{C_value_param}{
+    Carbon value for the plant
+  }
+  \item{N_value_param}{
+    Nitrogen value for the plant
   }
 }
 
