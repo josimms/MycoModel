@@ -1,34 +1,61 @@
 \name{Symphony_Multiple_FOM_Daily}
 \alias{Symphony_Multiple_FOM_Daily}
+\alias{symphony_multiple_FOM_daily}
 \docType{package}
 \title{
   Symphony Multiple FOM Daily
 }
 \description{
   This model updates the soil states from CASSIA output (eventually).
-  \eqn{C_{FOM} = C_{FOM}^{needles} + C_{FOM}^{woody} + C_{FOM}^{roots} + C_{FOM}^{mycelium}}
   
-  Then the plant and microbe usages from MYCOFON are calculated.
-  \eqn{NH4 = NH4 - NH4_{used}^{p} - NH4_{used}^{f}}
-  \eqn{NO3 = NO3 - NO3_{used}^{p} - NO3_{used}^{f}}
-  \eqn{C^{FOM} = C^{FOM} - C_{used}^{FOM,p} - C_{used}^{FOM,f}}
-  \eqn{C^{SOM} = C^{SOM}}
+  \eqn{C_{FOM}^{needles} = C_{FOM}^{needles} + L^{needles}} \cr
+  \eqn{C_{FOM}^{woody} = C_{FOM}^{woody} + L^{woody}} \cr
+  \eqn{C_{FOM}^{roots} = C_{FOM}^{roots} + L^{roots}} \cr
+  \eqn{C_{FOM}^{mantle} = C_{FOM}^{mantle} + L^{mantle}} \cr
+  \eqn{C_{FOM}^{ERM} = C_{FOM}^{ERM} + L^{ERM}}
   
-  Next the microbe uptake is considered, and this is taken away from the N type states and C.
+  Where C and N are carbon and nitrogen respectively, L is letter and the comartments are refered to explicitly. FOM is fresh organic matter and SOM is soil organic matter. These values are then aggregated for the microbe model.
   
-  \eqn{NH4 = NH4 - u_{NH4}C^{FOM} - u_{NH4}C^{SOM}}
-  \eqn{NO3 = NO3 - u_{NO3}C^{FOM} - u_{NO3}C^{SOM}}
+  \eqn{C_{FOM} = C_{FOM}^{needles} + C_{FOM}^{woody} + C_{FOM}^{roots} + C_{FOM}^{mantle} + C_{FOM}^{ERM}} \cr
+  \eqn{N_{FOM} = N_{FOM}^{needles}(N:C)^{needles} + N_{FOM}^{woody}(N:C)^{woody} + N_{FOM}^{roots}(N:C)^{roots} + N_{FOM}^{mantle}(N:C)^{mantle} + N_{FOM}^{ERM}(N:C)^{ERM}}
   
-  \eqn{decomposition_{total} = C_{SOM} + C_{FOM}}
+  where \eqn{C} and \eqn{N} are carbon and nitrogren respiectively, the compartment is indicated by the superscript and \eqn{(N:C)} is the carbon nitrogen ratio of the indicated comaprtment.
   
-  \eqn{C_{FOM}^{needles} = C_{FOM}^{needles} + litter^{needles} - decomposition_{total} \frac{C_{FOM}^{needles}}{C_{FOM}}}
-  \eqn{C_{FOM}^{woody} = C_{FOM}^{woody} + litter^{woody} - decomposition_{total} \frac{C_{FOM}^{woody}}{C_{FOM}}}
-  \eqn{C_{FOM}^{roots} = C_{FOM}^{roots} + litter^{roots} - decomposition_{total} \frac{C_{FOM}^{roots}}{C_{FOM}}}
-  \eqn{C_{FOM}^{mycelium} = C_{FOM}^{mycelium} + litter^{mycelium} - decomposition_{total} \frac{C_{FOM}^{mycelium}}{C_{FOM}}}
+  Then the plant and microbe usages from the previous model / interation are calculated.
   
-  \eqn{C_{SOM} = C_{SOM} - C^{microbe, SOM} + turnover*(C^{microbe, SOM} + C^{microbe, FOM})}
+  \eqn{NH4 = NH4 - NH4_{used}^{p} - NH4_{used}^{f}} \cr
+  \eqn{NO3 = NO3 - NO3_{used}^{p} - NO3_{used}^{f}} \cr
+  \eqn{N^{FOM} = N^{FOM} - N_{used}^{FOM,p} - N_{used}^{FOM,f}} \cr
+  \eqn{N^{SOM} = N^{SOM}}
   
-  \eqn{C^{microbe, FOM} = (1 + u_{SOM}C^{microbe, FOM} - r(Tmb) - turnover)C^{microbe, FOM}}
+  Where NH4_{used}^{p} is the NH4 used for the plant, f respresents the fungal uptake. This is an input to the function from the mycofon model.
+  
+  TODO: carbon considerations from fungal and plant uptake!
+
+  Next the microbe uptake is considered, and this is taken away from the N type states and C. First nitrogen balance.
+  
+  \eqn{NH4 = NH4 - u_{NH4}C^{FOM} - u_{NH4}C^{SOM}} \cr
+  \eqn{NO3 = NO3 - u_{NO3}C^{FOM} - u_{NO3}C^{SOM}} \cr
+  \eqn{N^{FOM} = N^{FOM} - u_{Norg}C^{FOM} - u_{Norg}C^{SOM}} \cr
+  \eqn{N^{SOM} = N^{SOM} - u_{Norg}C^{SOM}}
+  
+  Where u is the uptake. Next carbon balance.
+  
+  \eqn{d_{total} = u_{C}C^{SOM} + u_{C}C^{FOM}}
+  
+  Where d is decompostiion.
+  
+  TODO: The distributed \eqn{C_{FOM}} deocmposition is currently based on the size of the pool rather than the type of material. This should be changed!
+  
+  \eqn{C_{FOM}^{needles} = C_{FOM}^{needles} - d_{total} \frac{C_{FOM}^{needles}}{C_{FOM}}} \cr
+  \eqn{C_{FOM}^{woody} = C_{FOM}^{woody} - d_{total} \frac{C_{FOM}^{woody}}{C_{FOM}}} \cr
+  \eqn{C_{FOM}^{roots} = C_{FOM}^{roots} - d_{total} \frac{C_{FOM}^{roots}}{C_{FOM}}} \cr
+  \eqn{C_{FOM}^{mantle} = C_{FOM}^{mantle} - d_{total} \frac{C_{FOM}^{mantle}}{C_{FOM}}} \cr
+  \eqn{C_{FOM}^{ERM} = C_{FOM}^{ERM} - d_{total} \frac{C_{FOM}^{ERM}}{C_{FOM}}}
+  
+  \eqn{C_{SOM} = C_{SOM} - u_{C}C^{microbe, SOM} + turnover*(C^{microbe, SOM} + C^{microbe, FOM})}
+  
+  \eqn{C^{microbe, FOM} = (1 + u_{SOM}C^{microbe, FOM} - r(Tmb) - turnover)C^{microbe, FOM}} \cr
   \eqn{C^{microbe, SOM} = (1 + u_{SOM}C^{microbe, SOM} - r(Tmb) - turnover)C^{microbe, SOM}}
 }
 
@@ -39,8 +66,10 @@ symphony_multiple_FOM_daily(Tmb,
                             C_FOM_needles,
                             C_FOM_woody,
                             C_FOM_roots,
-                            C_FOM_mycelium,
+                            C_FOM_mantle,
+                            C_FOM_ERM,
                             C_SOM,
+                            N_SOM,
                             C_decompose_FOM,
                             C_decompose_SOM,
                             N_decompose_FOM,
@@ -48,9 +77,15 @@ symphony_multiple_FOM_daily(Tmb,
                             Litter_needles,
                             Litter_woody,
                             Litter_roots,
-                            Litter_mycelium,
+                            Litter_mantle,
+                            Litter_ERM,
                             NH4,
                             NO3,
+                            NC_needles,
+                            NC_woody,
+                            NC_roots,
+                            NC_mantle,
+                            NC_ERM,
                             NH4_used_Plant,
                             NH4_used_Fungal,
                             NO3_used_Plant,
@@ -83,23 +118,29 @@ symphony_multiple_FOM_daily(Tmb,
   \item{C_FOM_roots}{
     FOM from roots
   }
-  \item{C_FOM_mycelium}{
+  \item{C_FOM_mantle}{
     FOM from mycelium
+  }
+  \item{C_FOM_ERM}{
+    FOM from ERM
   }
   \item{C_SOM}{
     SOM
   }
+  \item{N_SOM}{
+    N in SOM
+  }
   \item{C_decompose_FOM}{
-    Microbes that decompose the FOM
+    C in the FOM decomposers
   }
   \item{C_decompose_SOM}{
-    Microbes that decompose the SOM
+    C in the FOM decomposers
   }
   \item{N_decompose_FOM}{
-    The N component of the microbes that decompose FOM
+    N in the FOM decomposers
   }
   \item{N_decompose_SOM}{
-    The N component of the microbes that decompose SOM
+    N in the FOM decomposers
   }
   \item{Litter_needles}{
     The input of needle litter from CASSIA
@@ -110,14 +151,32 @@ symphony_multiple_FOM_daily(Tmb,
   \item{Litter_roots}{
     The input of root litter from CASSIA
   }
-  \item{Litter_mycelium}{
-    The input of mycelium litter from CASSIA
+  \item{Litter_mantle}{
+    The input of mantle litter from CASSIA
+  }
+  \item{Litter_ERM}{
+    The input of ERM litter from CASSIA
   }
   \item{NH4}{
     NH4 from the soil
   }
   \item{NO3}{
     NO3 from the soil
+  }
+  \item{NC_needles}{
+    The nitrogen : carbon ratio for the needle FOM.
+  }
+  \item{NC_woody}{
+    The nitrogen : carbon ratio for the needle FOM.
+  }
+  \item{NC_roots}{
+    The nitrogen : carbon ratio for the needle FOM.
+  }
+  \item{NC_mantle}{
+    The nitrogen : carbon ratio for the needle FOM.
+  }
+  \item{NC_ERM}{
+    The nitrogen : carbon ratio for the needle FOM.
   }
   \item{NH4_used_Plant}{
     NH4 used by / allocated by the plant
@@ -161,19 +220,38 @@ symphony_multiple_FOM_daily(Tmb,
 }
 
 \value{
-  \item{output}{
-    List of the outputs
-    
-    1. C_decompose_FOM (kg C) \cr
-    2. C_decompose_SOM (kg C) \cr
-    3. C_FOM_needles (kg C) \cr
-    4. C_FOM_woody (kg C) \cr
-    5. C_FOM_roots (kg C) \cr
-    6. C_FOM_mycelium (kg C) \cr
-    7. C_SOM (kg C) \cr
-    8. NH4 (kg C) \cr
-    8. NO3 (kg C) \cr
-    8. Respiration (kg C)
+  \item{C_decompose_FOM}{
+    C in the FOM decomposers
+  }
+  \item{C_decompose_SOM}{
+    C in the SOM decomposers
+  }
+  \item{C_FOM_needles}{
+    C in the FOM needle biomass.
+  }
+  \item{C_FOM_woody}{
+    C in the FOM woody biomass.
+  }
+  \item{C_FOM_roots}{
+    C in the FOM roots biomass.
+  }
+  \item{C_FOM_mantle}{
+    C in the FOM mantle biomass.
+  }
+  \item{C_FOM_ERM}{
+    C in the FOM ERM biomass.
+  }
+  \item{C_SOM}{
+    C in the SOM biomass.
+  }
+  \item{NH4}{
+    NH4 in soil.
+  }
+  \item{NO3}{
+    NO3 in soil
+  }
+  \item{Microbe_respiration}{
+    The unit mass respiration for microbes.
   }
 }
 
@@ -181,5 +259,5 @@ symphony_multiple_FOM_daily(Tmb,
   Joanna Simms, joanna.x.simms@ad.helsinki.fi
 }
 \references{
-  TODO: add a reference here
+  Perveen, Nazia, et al. "Priming effect and microbial diversity in ecosystem functioning and response to global change: a modeling approach using the SYMPHONY model." Global change biology 20.4 (2014): 1174-1190.
 }
