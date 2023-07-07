@@ -7,7 +7,7 @@
 \description{
   The growth of mycorrhiza is controlled by the limitation in C or N.
   
-  \eqn{a C, b N}
+  \eqn{\min \{a C, b N \}}
   
   Where a is the growth rate for fungi dependent on C, and b is the growth rate of fungi dependent on N.
   

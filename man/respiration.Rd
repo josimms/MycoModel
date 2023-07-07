@@ -7,7 +7,7 @@
 \description{
   The respiration is the same for all of the organisms, but the parameters are different.
   
-  \eqn{\max{Rm \exp(\frac{Q10 T}{10}) - \exp(- \frac{1}{2} \log(Q10)), 0.0}}
+  \eqn{\max \{Rm \exp(\frac{Q10 T}{10}) - \exp(- \frac{1}{2} \log(Q10)), 0.0 \}}
   Where Rm and Q10 are photosynthesis parameters. T is temperature. The formula is from the CASSIA formation (Schistel-Aalto, 2015)
 }
 

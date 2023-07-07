@@ -13,10 +13,12 @@
   
   and
   
-  transfer = \eqn{\max{allo_{max} C_r, allo(C_r - (R:F)*) - C_f}}
+  transfer = \eqn{\max \{allo_{max} C_r, allo(C_r - (R:F)*) - C_f \}}
   
   where \eqn{allo_{max} = 1 - (1 - [exp(-50*N_r)]^3)} if \eqn{N_r < 0.01}, else it's 0.2 and
+  
   \eqn{allo = N_{allo} / (N_r + N_{allo})} when \eqn{N_{allo} < 0.5 N_r} else it's 1.
+  
   \eqn{C_r} and \eqn{C_f} are the carbon in the roots and fungi respectively, \eqn{(R:F)*} is the optimal root fungal biomass ratio, \eqn{N_r} is the nitrogen in the roots and N_{allo} is the nitrogen alloctaed by the mycorrhiza.
   
   The stratergy of Franklin gives;
@@ -25,7 +27,7 @@
   
   and
   
-  transfer = \eqn{\max{max(CASSIA, 0.0)}}
+  transfer = \eqn{\max \{ max(CASSIA, 0.0) \}}
   
   where CASSIA is the maximum C allocation to the mycorrhiza calculated in CASSIA.
 }

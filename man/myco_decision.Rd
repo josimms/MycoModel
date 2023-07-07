@@ -13,7 +13,7 @@
   
   and
   
-  transfer = \eqn{\max{N_f(1 - \frac{\frac{N_r}{C_r}}{(N:C)^{*}}), 0.0}}
+  transfer = \eqn{\max \{N_f(1 - \frac{\frac{N_r}{C_r}}{(N:C)^{*}}), 0.0 \}}
   
   where \eqn{N_f}, \eqn{N_r} are the N in the fungi and root respectively, \eqn{C_r} is the C in the root and (N:C)^{*} is the optimal N:C ration in the root.
   
@@ -23,7 +23,7 @@
   
   and
   
-  tranfer = \eqn{\max{N_f - G_f, 0.0}}
+  tranfer = \eqn{\max \{N_f - G_f, 0.0 \}}
   
   Where N and G are the nitorgen and growth of the fungi.
   
