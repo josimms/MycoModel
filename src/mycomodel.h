@@ -144,6 +144,8 @@ struct MYCOFON_output {
   double N_fungal;
   double mantle_mass;
   double ERM_mass;
+  double Litter_mantle;
+  double Litter_ERM;
 };
 
  
@@ -154,13 +156,15 @@ struct SYMPHONY_output {
   double C_FOM_needles;
   double C_FOM_woody;
   double C_FOM_roots;
-  double C_FOM_mycelium;
-  double N_FOM_needles;
-  double N_FOM_woody;
-  double N_FOM_roots;
-  double N_FOM_mycelium;
+  double C_FOM_mantle;
+  double C_FOM_ERM;
   double C_SOM;
   double N_SOM;
+  double NC_needles;
+  double NC_woody;
+  double NC_roots;
+  double NC_mantle;
+  double NC_ERM;
   double C_decompose_FOM;
   double C_decompose_SOM;
   double N_decompose_FOM;
@@ -262,20 +266,23 @@ Rcpp::List Fungal_N_Uptake(double T,
 #ifndef PKG_Microbe_Uptake_H
 #define PKG_Microbe_Uptake_H
  
-Rcpp::List Microbe_Uptake(double C_microbe,
-                         double N_micorbe,
-                         double NC_microbe_opt,
-                         double NH4_avaliable,
-                         double NO3_avaliable,
-                         double Norg_avaliable,
-                         double T,             
-                         double SWC,           
-                         std::vector<double> N_limits_R,
-                         std::vector<double> N_k_R,
-                         std::vector<double> SWC_k_R,
-                         bool SOM_decomposers,
-                         double Norg_avaliable_FOM,
-                         std::vector<double> respiration_microbes_params);
+Rcpp::List Microbe_Uptake(double C_microbe,                   // UNITS: C kg
+                          double N_micorbe,                   // UNITS: C kg eq
+                          double C_soil_compartment,
+                          double NC_microbe_opt,              // UNITS: %
+                          double NH4_avaliable,               // UNITS: C kg eq
+                          double NO3_avaliable,               // UNITS: C kg eq
+                          double Norg_avaliable,              // UNITS: C kg eq
+                          double T,                           // UNITS: 'C
+                          double SWC,                         // UNITS: %
+                          double NC_Litter,
+                          double imobilisation,
+                          double assimilation,
+                          std::vector<double> N_limits_R,
+                          std::vector<double> N_k_R,
+                          std::vector<double> SWC_k_R,
+                          bool SOM_decomposers,
+                          std::vector<double> respiration_microbes_params);
  
 #endif
 
@@ -298,7 +305,8 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,
                                        double C_FOM_needles,
                                        double C_FOM_woody,
                                        double C_FOM_roots,
-                                       double C_FOM_mycelium,
+                                       double C_FOM_mantle,
+                                       double C_FOM_ERM,
                                        double C_SOM,
                                        double N_SOM,
                                        double C_decompose_FOM,
@@ -308,13 +316,17 @@ Rcpp::List symphony_multiple_FOM_daily(double Tmb,
                                        double Litter_needles,
                                        double Litter_woody,
                                        double Litter_roots,
-                                       double Litter_mycelium,
+                                       double Litter_mantle,
+                                       double Litter_ERM,
+                                       double imobilisation,
+                                       double assimilation,
                                        double NH4,
                                        double NO3,
-                                       double N_FOM_needles,
-                                       double N_FOM_woody,
-                                       double N_FOM_roots,
-                                       double N_FOM_mycelium,
+                                       double NC_needles,
+                                       double NC_woody,
+                                       double NC_roots,
+                                       double NC_mantle,
+                                       double NC_ERM,
                                        double NH4_used_Plant,
                                        double NH4_used_Fungal,
                                        double NO3_used_Plant,
