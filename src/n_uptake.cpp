@@ -129,17 +129,20 @@ Rcpp::List Fungal_N_Uptake(double T,
 // [[Rcpp::export]]
 Rcpp::List Microbe_Uptake(double C_microbe,                   // UNITS: C kg
                           double N_micorbe,                   // UNITS: C kg eq
+                          double C_soil_compartment,
                           double NC_microbe_opt,              // UNITS: %
                           double NH4_avaliable,               // UNITS: C kg eq
                           double NO3_avaliable,               // UNITS: C kg eq
                           double Norg_avaliable,              // UNITS: C kg eq
                           double T,                           // UNITS: 'C
                           double SWC,                         // UNITS: %
+                          double NC_Litter,
+                          double imobilisation,
+                          double assimilation,
                           std::vector<double> N_limits_R,
                           std::vector<double> N_k_R,
                           std::vector<double> SWC_k_R,
                           bool SOM_decomposers,
-                          double Norg_avaliable_FOM,
                           std::vector<double> respiration_microbes_params) {
   
 
@@ -153,78 +156,43 @@ Rcpp::List Microbe_Uptake(double C_microbe,                   // UNITS: C kg
   N_balence N_k = vector_to_N_balence(N_k_R);
   N_balence SWC_k = vector_to_N_balence(SWC_k_R);
   
+  double Norg_uptake = uptake_N(Norg_avaliable, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg);   // UNITS: C kg
+  double NH4_uptake = uptake_N(NH4_avaliable, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4);        // UNITS: C kg
+  double NO3_uptake = uptake_N(NO3_avaliable, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3);        // UNITS: C kg
+  
+  double carbon_limitation = Norg_uptake;
+  double nitrogen_limitation = (imobilisation*(NH4_uptake + NO3_uptake) + NC_microbe_opt*respiration(T, respiration_microbes_params[1], respiration_microbes_params[2])*C_microbe)/
+    (NC_Litter - NC_microbe_opt);
+  
   double NH4_uptaken;     // UNITS: C kg
   double NO3_uptaken;     // UNITS: C kg
   double Norg_uptaken;    // UNITS: C kg
   double C_uptaken;       // UNITS: C kg
   
-  // Working out the current N:C ratio
-  double NC_in_micorbe = N_micorbe/C_microbe;        // UNITS: C kg eq
-  
-  double demand = 1 - NC_in_micorbe/NC_microbe_opt;
-  if (demand < 0) {
-    demand = 0;
-    std::cout << "Warning! The choice of NC_microbe_opt would make the demand negative. Chnage value.\n";
-  }
-  
-  // purely organic uptake
-  double N_micorbe_uptake = uptake_N(Norg_avaliable, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*demand;           // UNITS: C kg eq
-  
-  /*
-   * Carbon limitation // Mass limitation is in the soil model!
-   */
-  
-  // The respiration is taken into account here so the microbes don't run out of C
-  double C_microbe_uptake = uptake_C(Norg_avaliable, T, N_limits.C, N_k.C, SWC, SWC_k.C) - respiration(T, respiration_microbes_params[1], respiration_microbes_params[2]);       // UNITS: C kg
-  
-  /*
-   * Uptake organic
-   */
-  
-  // TODO: need to find the mass relationship here - also for the following code to work need to assume that they are in the same units
-  double organic_limitation = std::min(N_micorbe_uptake, C_microbe_uptake);        // UNITS: C kg
-  
-  if (organic_limitation == N_micorbe_uptake) {
-    Norg_uptaken = uptake_N(Norg_avaliable, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*demand;
-    C_uptaken = C_microbe_uptake - (C_microbe_uptake - N_micorbe_uptake);       // UNITS: C kg
-  } else if (organic_limitation == C_microbe_uptake) {
-    Norg_uptaken = uptake_N(Norg_avaliable, T, N_limits.Norg, N_k.Norg, SWC, SWC_k.Norg)*(C_microbe_uptake/N_micorbe_uptake)*demand;
-    C_uptaken = C_microbe_uptake;       // UNITS: C kg
+  double total_N_uptake = std::min(carbon_limitation, nitrogen_limitation);
+  if (total_N_uptake == carbon_limitation) {
+    C_uptaken = Norg_uptake * NC_Litter;
+    Norg_uptaken = Norg_uptake;
+    NH4_uptaken = NH4_uptake * (carbon_limitation / nitrogen_limitation);
+    NO3_uptaken = NO3_uptake * (carbon_limitation / nitrogen_limitation);
   } else {
-    std::cout << "Warning:\nOrganic uptake of Microbe_Uptake doesn't match either limitation!\n";
+    C_uptaken = Norg_uptake * NC_Litter * (nitrogen_limitation / carbon_limitation);
+    Norg_uptaken = Norg_uptake * (nitrogen_limitation / carbon_limitation);
+    NH4_uptaken = NH4_uptake;
+    NO3_uptaken = NO3_uptake;
   }
   
-  /*
-   * Uptake Inorganic
-   */
+  total_N_uptake = std::max(total_N_uptake, 0.0);
   
-  // Uptake NC ratio
-  NC_in_micorbe = (N_micorbe+Norg_uptaken)/(C_microbe+C_uptaken); 
-  
-  // uptake enough inorganic to balance their internal NC ratio
-  // As there is not an update here, accept that this is an overestimate here - could add a dapening factor if need too
-  // Not having an update means that they will be considered equal.
-  NH4_uptaken = uptake_N(NH4_avaliable, T, N_limits.NH4, N_k.NH4, SWC, SWC_k.NH4)*demand;        // UNITS: C kg
-  NO3_uptaken = uptake_N(NO3_avaliable, T, N_limits.NO3, N_k.NO3, SWC, SWC_k.NO3)*demand;        // UNITS: C kg
-  
-  /*
-   * Organic Uptake Again if SOM
-   */
-  
-  double Norg_uptaken_extra_FOM;
+  double total_N_uptaken = (NC_microbe_opt*respiration(T, respiration_microbes_params[1], respiration_microbes_params[2])*C_microbe + NC_Litter - NC_microbe_opt) * total_N_uptake;
   if (SOM_decomposers) {
-    Norg_uptaken_extra_FOM = uptake_N(Norg_avaliable_FOM, T, N_limits.Norg_FOM, N_k.Norg_FOM, SWC, SWC_k.Norg_FOM)*demand;        // UNITS: C kg
+    total_N_uptaken =  total_N_uptaken + assimilation * C_microbe;
   }
-  
-  /*
-   * Output
-   */
   
   return(Rcpp::List::create(Rcpp::_["NH4_uptaken"] = NH4_uptaken,                                  // UNITS: C kg
                             Rcpp::_["NO3_uptaken"] = NO3_uptaken,                                  // UNITS: C kg
                             Rcpp::_["Norg_uptaken"] = Norg_uptaken,                                // UNITS: C kg
-                            Rcpp::_["C_uptaken"] = C_uptaken,                                      // UNITS: C kg
-                            Rcpp::_["Norg_uptaken_extra_FOM"] = Norg_uptaken_extra_FOM));          // UNITS: C kg
+                            Rcpp::_["C_uptaken"] = C_uptaken));                                    // UNITS: C kg
 }
 
 
