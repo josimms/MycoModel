@@ -10,6 +10,7 @@ tests <- function() {
   # The stable SOM C:N ratio is about 1/6, if it is assumed that proteins are the main cause - Adamczyk, 2019
   # Högberg 2017, the C/N ratio of microorganisms in the F + H layer is around 5
   NC_fungal_opt = 120  ## 0.025 # Meyer 2010, CN ratio of 40 fungal
+  NC_Litter = 200
   percentage_C_biomass = 0.5 # Used in CASSIA
   N_limits_plant = c(10, 10, 10) # Arbitrarty - Bayesian Callibration
   N_limits_fungal = c(10, 10, 10) # Arbitrarty - Bayesian Callibration
@@ -32,6 +33,9 @@ tests <- function() {
   growth_N = 0.3 # Arbitrary - TODO
   Cmic_Corg = 0.5 # TODO: find this value from hyytiälä
   max_C_allocation_CASSIA = 0.1 # TODO: link this to CASSIA and find a sensible value
+  to_CASSIA = 0.1 # TODO: link this to CASSIA and find a sensible value
+  imobilisation = 0.1 # TODO: 
+  assimilation = 0.1 # TODO:
   
   ###
   # State variables
@@ -61,7 +65,9 @@ tests <- function() {
   C_FOM_needles = 1 # TODO: find a real value for this!
   C_FOM_woody = 1 # TODO: find a real value for this!
   C_FOM_roots = 1 # TODO: find a real value for this!
-  C_FOM_mycelium = 1 # TODO: find a real value for this!
+  C_FOM_mantle = 1 # TODO: find a real value for this!
+  C_FOM_ERM = 1 # TODO: find a real value for this!
+  C_FOM = C_FOM_needles + C_FOM_woody + C_FOM_roots + C_FOM_mantle + C_FOM_ERM
   C_SOM = 1 # TODO: find a real value for this!
   N_SOM = 1 # TODO: find a real value for this!
   C_decompose_FOM = 1 # TODO: find a real value for this!
@@ -84,9 +90,6 @@ tests <- function() {
   FOM_Norg_used_Plant = 1 # TODO: This would be an output of the other models!
   FOM_Norg_used_Fungal = 1 # TODO: This would be an output of the other models!
   SOM_Norg_used = 1 # TODO: This would be an output of the other models!
-  
-  
-  
   
   parameters_R = c(microbe_turnover, NC_in_root_opt, NC_fungal_opt, NC_microbe_opt, percentage_C_biomass, 
                    N_limits_plant, N_limits_fungal, N_limits_microbes,
@@ -123,18 +126,32 @@ tests <- function() {
                          N_limits_fungal, N_k_fungal, 
                          SWC_k_fungal, 1)
   
-  nitrogen_graphs_microbe(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, Norg, 
-                          Temp, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes,
-                          TRUE, Norg, Rm, Q10)
+  nitrogen_graphs_microbe(C_microbe, N_microbe, C_SOM, NC_microbe_opt, NH4, NO3, Norg, 
+                          Temp, SoilWater, NC_Litter, imobilisation, assimilation, 
+                          N_limits_microbes, N_k_microbes, SWC_k_microbes,
+                          TRUE, Rm, Q10)
+  nitrogen_graphs_microbe(C_microbe, N_microbe, C_FOM, NC_microbe_opt, NH4, NO3, Norg, 
+                          Temp, SoilWater, NC_Litter, imobilisation, assimilation, 
+                          N_limits_microbes, N_k_microbes, SWC_k_microbes,
+                          FALSE, Rm, Q10)
   
   mycofon_balence_graphs(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                          C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                          Rm, Q10, NH4, NO3, Norg, NC_in_fungai_opt, Temp, Tsb, SoilWater, 
                          N_limits_plant, N_k_plant, SWC_k_plant, N_limits_fungal, N_k_fungal, SWC_k_fungal, 
                          mantle_mass, ERM_mass, NH4_on_NO3, growth_C, growth_N, 
-                         max_C_allocation_CASSIA, TRUE)
+                         max_C_allocation_CASSIA, to_CASSIA, TRUE)
   
-  symphony_multiple_FOM_daily_plot()
+  symphony_multiple_FOM_daily_plot(Tsb, SoilWater, 
+                                   C_FOM_needles, C_FOM_woody, C_FOM_roots, C_FOM_mycelium,
+                                   C_SOM, N_SOM,
+                                   C_decompose_FOM, C_decompose_SOM, N_decompose_FOM, N_decompose_SOM,
+                                   Litter_needles, Litter_woody, Litter_roots, Litter_mycelium, 
+                                   NH4, NO3, N_FOM_needles, N_FOM_woody, N_FOM_roots, N_FOM_mycelium,
+                                   NH4_used_Plant, NH4_used_Fungal, NO3_used_Plant, NO3_used_Fungal, FOM_Norg_used_Plant, FOM_Norg_used_Fungal,
+                                   SOM_Norg_used,
+                                   Rm, Q10, N_limits_microbes, N_k_microbes, SWC_k_microbes, 
+                                   NC_microbe_opt, microbe_turnover)
   
   ###
   # Check that there is mass conservation

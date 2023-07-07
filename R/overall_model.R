@@ -399,10 +399,7 @@ nitrogen_graphs <- function(N_type, Temperature, N_limit, k, SoilWater, SoilWate
   plot(SWC_range, SWC_change_N_Uptake, xlab = "SWC", ylab = "Uptake of N", main = "SWC response \n with concentation 10, temperature 15")
 }
 
-nitrogen_graphs_microbe <- function(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, Rm, Q10) {
-  
-  NH4_medium = NH4*0.5
-  NH4_low = NH4*0.2
+nitrogen_graphs_microbe <- function(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, NO3, Norg, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, Rm, Q10) {
   
   #####
   ## Generating the values
@@ -419,42 +416,41 @@ nitrogen_graphs_microbe <- function(C_microbe, N_microbe, NC_microbe_opt, NH4, N
   temperature_range = -20:20
   count = 1
   for (Temp in temperature_range) {
-    temp_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, Norg, Temp, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
-    temp_change_N_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, Norg, Temp, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NH4_uptaken
-    temp_change_N_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, Norg, Temp, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NO3_uptaken
-    temp_change_N_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, Norg, Temp, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$Norg_uptaken
+    temp_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, NO3, Norg, Temp, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$C_uptaken
+    temp_change_N_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, NO3, Norg, Temp, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$NH4_uptaken
+    temp_change_N_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, NO3, Norg, Temp, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$NO3_uptaken
+    temp_change_N_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, NO3, Norg, Temp, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$Norg_uptaken
     count = count + 1
   }
   
   concentration_range = seq(0, 30, by = 1)
   count = 1
   for (conc in concentration_range) {
-    conc_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, conc, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
-    conc_change_N_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, conc, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NH4_uptaken
-    conc_change_N_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, conc, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NO3_uptaken
-    conc_change_N_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, conc, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$Norg_uptaken
-    conc_change_Norg_FOM_Uptake_Microbes[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, conc, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$Norg_uptaken_extra_FOM
-    conc_change_NO3_Uptake_Microbes_NH4_1000_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, conc, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
-    conc_change_NO3_Uptake_Microbes_NH4_1000_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, conc, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NH4_uptaken
-    conc_change_NO3_Uptake_Microbes_NH4_1000_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, conc, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NO3_uptaken
-    conc_change_NO3_Uptake_Microbes_NH4_1000_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, conc, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$Norg_uptaken
-    conc_change_NO3_Uptake_Microbes_NH4_500_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4_medium, conc, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
-    conc_change_NO3_Uptake_Microbes_NH4_200_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4_low, conc, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
-    conc_change_NH4_Uptake_Microbes_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, NO3, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
-    conc_change_NH4_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, NO3, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NH4_uptaken
-    conc_change_NH4_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, NO3, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NO3_uptaken
-    conc_change_NH4_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, conc, NO3, Norg, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$Norg_uptaken
-    conc_change_Norg_Uptake_Microbes_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
-    conc_change_Norg_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NH4_uptaken
-    conc_change_Norg_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$NO3_uptaken
-    conc_change_Norg_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, NC_microbe_opt, NH4, NO3, conc, Temperature, SoilWater, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$Norg_uptaken
+    conc_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, conc, conc, conc, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$C_uptaken
+    conc_change_N_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, conc, conc, conc, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$NH4_uptaken
+    conc_change_N_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, conc, conc, conc, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$NO3_uptaken
+    conc_change_N_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, conc, conc, conc, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$Norg_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_1000_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, conc, Norg, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$C_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_1000_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, conc, Norg, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$NH4_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_1000_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, conc, Norg, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$NO3_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_1000_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, conc, Norg, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$Norg_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_500_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, conc, Norg, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$C_uptaken
+    conc_change_NO3_Uptake_Microbes_NH4_200_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, conc, Norg, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$C_uptaken
+    conc_change_NH4_Uptake_Microbes_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, conc, NO3, Norg, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$C_uptaken
+    conc_change_NH4_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, conc, NO3, Norg, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$NH4_uptaken
+    conc_change_NH4_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, conc, NO3, Norg, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$NO3_uptaken
+    conc_change_NH4_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, conc, NO3, Norg, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$Norg_uptaken
+    conc_change_Norg_Uptake_Microbes_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, NO3, conc, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$C_uptaken
+    conc_change_Norg_Uptake_Microbes_NH4_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, NO3, conc, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$NH4_uptaken
+    conc_change_Norg_Uptake_Microbes_NO3_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, NO3, conc, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$NO3_uptaken
+    conc_change_Norg_Uptake_Microbes_Norg_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, NO3, conc, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$Norg_uptaken
     count = count + 1
   }
   
   SWC_range = seq(0, 1, by = 0.01)
   count = 1
   for (SWC in SWC_range) {
-    SWC_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(2000, 1500, NC_microbe_opt, NH4, NO3, Norg, Temperature, SWC, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_used, Forg_FOM, c(Rm, Q10))$C_uptaken
+    SWC_change_N_Uptake_Microbes_C_out[count] = Microbe_Uptake(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, NO3, Norg, Temperature, SWC, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, c(Rm, Q10))$C_uptaken
     count = count + 1
   }
   
@@ -462,43 +458,49 @@ nitrogen_graphs_microbe <- function(C_microbe, N_microbe, NC_microbe_opt, NH4, N
   ## Plots
   #####
   
-  par(mfrow = c(3, 3))
+  par(mfrow = c(3, 2))
   plot(concentration_range, conc_change_NH4_Uptake_Microbes_C_out, xlab = "NH4", ylab = "total N to Microbes",
-       main = "NH4 response (Microbes) \n with temperature 15, SWC 0.8, other N 1000", col = "red")
+       main = "NH4 response (Microbes) \n with temperature 15, SWC 0.8, other N 1000", col = "red",
+       ylim = range(c(conc_change_NH4_Uptake_Microbes_C_out, conc_change_NH4_Uptake_Microbes_NH4_out, 
+                      conc_change_NH4_Uptake_Microbes_NO3_out, conc_change_NH4_Uptake_Microbes_Norg_out)))
   lines(concentration_range, conc_change_NH4_Uptake_Microbes_NH4_out, col = "black", lty = 2, lwd = 2)
   lines(concentration_range, conc_change_NH4_Uptake_Microbes_NO3_out, col = "blue", lty = 2, lwd = 2)
   lines(concentration_range, conc_change_NH4_Uptake_Microbes_Norg_out, col = "green", lty = 2, lwd = 2)
   legend(0, max(unlist(c(conc_change_NH4_Uptake_Microbes_C_out, conc_change_NH4_Uptake_Microbes_NH4_out, conc_change_NH4_Uptake_Microbes_NO3_out, conc_change_NH4_Uptake_Microbes_Norg_out))),
          c("NH4", "NO3", "FOM", "C"), col = c("black", "blue", "green", "red"), lty = 2, title = "N Type", bty = "n")
   
-  plot(concentration_range, conc_change_Norg_FOM_Uptake_Microbes, xlab = "Norg", ylab = "Emergancy N to microbes",
-       main = "Extra Norg from FOM", col = "green")
-  
-  plot(concentration_range, conc_change_Norg_Uptake_Microbes_C_out, xlab = "Norg", ylab = "total N to Microbes",
-       main = "Norg response (Microbes) \n with temperature 15, SWC 0.8, other N 1000", col = "red")
-  lines(concentration_range, conc_change_Norg_Uptake_Microbes_NH4_out, col = "black", lty = 2, lwd = 2)
-  lines(concentration_range, conc_change_Norg_Uptake_Microbes_NO3_out, col = "blue", lty = 2, lwd = 2)
-  lines(concentration_range, conc_change_Norg_Uptake_Microbes_Norg_out, col = "green", lty = 2, lwd = 2)
-  
   plot(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_1000_C_out, xlab = "NO3", ylab = "total N to Microbes", 
-       main = "NO3 response (Microbes) \n with temperature 15, SWC 0.8, other 1000", col = "red")
+       main = "NO3 response (Microbes) \n with temperature 15, SWC 0.8, other 1000", col = "red",
+       ylim = range(c(conc_change_NO3_Uptake_Microbes_NH4_1000_C_out, conc_change_NO3_Uptake_Microbes_NH4_1000_NH4_out,
+                      conc_change_NO3_Uptake_Microbes_NH4_1000_NO3_out, conc_change_NO3_Uptake_Microbes_NH4_1000_Norg_out)))
   lines(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_1000_NH4_out, lty = 2, lwd = 2)
   lines(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_1000_NO3_out, lty = 2, lwd = 2, col = "blue")
   lines(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_1000_Norg_out, lty = 2, lwd = 2, col = "green")
   
-  plot(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_1000_C_out, xlab = "NO3", ylab = "total N to Microbes",
-       main = "NO3 response (Microbes) \n with temperature 15, SWC 0.8, Organic 10, NH4 variable")
-  lines(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_500_C_out, col = "pink")
-  lines(concentration_range, conc_change_NO3_Uptake_Microbes_NH4_200_C_out, col = "red")
-  legend(0, max(unlist(c(conc_change_NO3_Uptake_Microbes_NH4_1000_C_out, conc_change_NO3_Uptake_Microbes_NH4_500_C_out, conc_change_NO3_Uptake_Microbes_NH4_200_C_out))),
-         c("High", "Medium", "Low"), col = c("black", "pink", "red"), pch = 1, title = "NH4", bty = "n")
+  plot(concentration_range, conc_change_Norg_Uptake_Microbes_C_out, xlab = "Norg", ylab = "total N to Microbes",
+       main = "Norg response (Microbes) \n with temperature 15, SWC 0.8, other N 1000", col = "red",
+       ylim = range(c(conc_change_Norg_Uptake_Microbes_C_out, conc_change_Norg_Uptake_Microbes_NH4_out, 
+                      conc_change_Norg_Uptake_Microbes_NO3_out, conc_change_Norg_Uptake_Microbes_Norg_out)))
+  lines(concentration_range, conc_change_Norg_Uptake_Microbes_NH4_out, col = "black", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_Norg_Uptake_Microbes_NO3_out, col = "blue", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_Norg_Uptake_Microbes_Norg_out, col = "green", lty = 2, lwd = 2)
+  
+  plot(concentration_range, conc_change_N_Uptake_Microbes_C_out, xlab = "N", ylab = "total N to Microbes",
+       main = "Norg response (Microbes) \n with temperature 15, SWC 0.8, other N 1000", col = "red",
+       ylim = range(c(conc_change_N_Uptake_Microbes_C_out, conc_change_N_Uptake_Microbes_NH4_out, 
+                      conc_change_N_Uptake_Microbes_NO3_out, conc_change_N_Uptake_Microbes_Norg_out), na.rm = T))
+  lines(concentration_range, conc_change_N_Uptake_Microbes_NH4_out, col = "black", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_N_Uptake_Microbes_NO3_out, col = "blue", lty = 2, lwd = 2)
+  lines(concentration_range, conc_change_N_Uptake_Microbes_Norg_out, col = "green", lty = 2, lwd = 2)
   
   plot(temperature_range, temp_change_N_Uptake_Microbes_C_out, xlab = "Temperature", ylab = "total N to Microbes", 
-       main = "Temperature response (Microbes) \n with concentation 10, SWC 0.8", col = "red")
+       main = "Temperature response (Microbes) \n with concentation 10, SWC 0.8", col = "black")
   
   plot(SWC_range, SWC_change_N_Uptake_Microbes_C_out, xlab = "SWC", ylab = "total N to Microbes", 
-       main = "SWC response (Microbes) \n with concentation 10, temperature 15", col = "red")
+       main = "SWC response (Microbes) \n with concentation 10, temperature 15", col = "black")
 }
+
+
 
 decision_graphs <- function(C_roots, N_roots, C_fungal, N_fungal, 
                             optimal_root_fungal_biomass_ratio, 
@@ -751,7 +753,7 @@ mycofon_balence_graphs <- function(C_roots, N_roots, optimal_root_fungal_biomass
                                    Rm, Q10, NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                    N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                    mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                   max_C_allocation_CASSIA, mycofon_stratergy) {
+                                   max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy) {
   ####
   # Initalisation
   ####
@@ -788,52 +790,52 @@ mycofon_balence_graphs <- function(C_roots, N_roots, optimal_root_fungal_biomass
                                                       c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, tem, Tsb, SWC, 
                                                       N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                       mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                      max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                      max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_Tsb_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                         C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                         c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, tem, SWC, 
                                                         N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                         mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                        max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                        max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     
     mycofon_balence_T_N_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                         C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                         c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, tem, Tsb, SWC, 
                                                         N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                         mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                        max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                        max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_Tsb_N_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                           C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                           c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, tem, SWC, 
                                                           N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                           mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                          max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                          max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     
     mycofon_balence_T_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                        C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                        c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, tem, Tsb, SWC, 
                                                        N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                        mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                       max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                       max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_Tsb_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                          C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                          c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, tem, SWC, 
                                                          N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                          mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                         max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                         max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     
     mycofon_balence_T_N_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                          C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                          c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, tem, Tsb, SWC, 
                                                          N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                          mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                         max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                         max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     mycofon_balence_Tsb_N_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                            C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                            c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, tem, SWC, 
                                                            N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                            mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                           max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                           max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     count = count + 1
   }
   concentration_range = seq(0.01, 1500, by = 1)
@@ -844,225 +846,225 @@ mycofon_balence_graphs <- function(C_roots, N_roots, optimal_root_fungal_biomass
                                                             c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                             N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                             mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                            max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                            max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_C_roots_N_roots[count] <- mycofon_balence(conc, N_roots, optimal_root_fungal_biomass_ratio, 
                                                               C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                               c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                               N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                               mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                              max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                              max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_C_roots_fungal[count] <- mycofon_balence(conc, N_roots, optimal_root_fungal_biomass_ratio, 
                                                              C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                              c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                              N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                              mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                             max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                             max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_C_roots_N_fungal[count] <- mycofon_balence(conc, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                               max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                               max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     
     mycofon_balence_C_fungal_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                              conc, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                              c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                              N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                              mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                             max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                             max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_C_fungal_N_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                conc, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                               max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                               max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_C_fungal_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                               conc, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                               c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                               N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                               mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                              max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                              max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_C_fungal_N_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                 conc, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                 c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                 N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                 mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                                max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     
     mycofon_balence_N_roots_roots[count] <- mycofon_balence(C_roots, conc, optimal_root_fungal_biomass_ratio, 
                                                             C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                             c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                             N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                             mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                            max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                            max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_N_roots_N_roots[count] <- mycofon_balence(C_roots, conc, optimal_root_fungal_biomass_ratio, 
                                                               C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                               c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                               N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                               mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                              max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                              max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_N_roots_fungal[count] <- mycofon_balence(C_roots, conc, optimal_root_fungal_biomass_ratio, 
                                                              C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                              c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                              N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                              mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                             max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                             max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_N_roots_N_fungal[count] <- mycofon_balence(C_roots, conc, optimal_root_fungal_biomass_ratio, 
                                                                C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                               max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                               max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     
     mycofon_balence_N_fungal_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                              C_fungal, conc, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                              c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                              N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                              mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                             max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                             max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_N_fungal_N_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                C_fungal, conc, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                               max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                               max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_N_fungal_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                               C_fungal, conc, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                               c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                               N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                               mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                              max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                              max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_N_fungal_N_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                 C_fungal, conc, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                 c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                 N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                 mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                                max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     
     mycofon_balence_NH4_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                         C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                         c(Rm, Q10), conc, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                         N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                         mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                        max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                        max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_NH4_N_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                           C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                           c(Rm, Q10), conc, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                           N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                           mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                          max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                          max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_NH4_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                          C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                          c(Rm, Q10), conc, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                          N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                          mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                         max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                         max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_NH4_N_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                            C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                            c(Rm, Q10), conc, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                            N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                            mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                           max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                           max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     
     mycofon_balence_NO3_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                         C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                         c(Rm, Q10), NH4, conc, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                         N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                         mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                        max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                        max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_NO3_N_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                           C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                           c(Rm, Q10), NH4, conc, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                           N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                           mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                          max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                          max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_NO3_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                          C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                          c(Rm, Q10), NH4, conc, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                          N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                          mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                         max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                         max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_NO3_N_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                            C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                            c(Rm, Q10), NH4, conc, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                            N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                            mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                           max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                           max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     
     mycofon_balence_FOM_Norg_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                              C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                              c(Rm, Q10), NH4, NO3, conc, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                              N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                              mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                             max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                             max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_FOM_Norg_N_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                c(Rm, Q10), NH4, NO3, conc, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                               max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                               max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_FOM_Norg_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                               C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                               c(Rm, Q10), NH4, NO3, conc, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                               N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                               mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                              max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                              max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_FOM_Norg_N_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                 C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                 c(Rm, Q10), NH4, NO3, conc, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                 N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                 mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                                max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     
     mycofon_balence_mm_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                        C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                        c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                        N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                        conc, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                       max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                       max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_mm_N_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                          C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                          c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                          N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                          conc, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                         max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                         max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_mm_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                         C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                         c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                         N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                         conc, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                        max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                        max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_mm_N_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                           C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                           c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                           N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                           conc, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                          max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                          max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     
     mycofon_balence_ERM_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                         C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                         c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                         N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                         mantle_mass, conc, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                        max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                        max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_ERM_N_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                           C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                           c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                           N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                           mantle_mass, conc, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                          max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                          max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_ERM_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                          C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                          c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                          N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                          mantle_mass, conc, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                         max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                         max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_ERM_N_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                            C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                            c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                            N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                            mantle_mass, conc, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                           max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                           max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     count = count + 1
   }
   SWC_range = seq(0.01, 1, by = 0.01)
@@ -1073,150 +1075,150 @@ mycofon_balence_graphs <- function(C_roots, N_roots, optimal_root_fungal_biomass
                                                         c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SoilWater, 
                                                         N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                         mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                        max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                        max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_SWC_N_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                           C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                           c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SoilWater, 
                                                           N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                           mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                          max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                          max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_SWC_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                          C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                          c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SoilWater, 
                                                          N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                          mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                         max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                         max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_SWC_N_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                            C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                            c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SoilWater, 
                                                            N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                            mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                           max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                           max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     
     mycofon_balence_optimal_root_fungal_biomass_ratio_roots[count] <- mycofon_balence(C_roots, N_roots, SoilWater, 
                                                                                       C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                                       c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                                       N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                                       mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                                      max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                                                      max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_optimal_root_fungal_biomass_ratio_N_roots[count] <- mycofon_balence(C_roots, N_roots, SoilWater, 
                                                                                         C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                                         c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                                         N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                                         mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                                        max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                                                        max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_optimal_root_fungal_biomass_ratio_fungal[count] <- mycofon_balence(C_roots, N_roots, SoilWater, 
                                                                                        C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                                        c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                                        N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                                        mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                                       max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                                                       max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_optimal_root_fungal_biomass_ratio_N_fungal[count] <- mycofon_balence(C_roots, N_roots, SoilWater, 
                                                                                          C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                                          c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                                          N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                                          mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                                         max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                                                         max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     
     mycofon_balence_turnover_roots_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                    C_fungal, N_fungal, SoilWater, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                    c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                    N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                    mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                   max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                                   max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_turnover_roots_N_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                      C_fungal, N_fungal, SoilWater, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                      c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                      N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                      mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                     max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                                     max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_turnover_roots_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                     C_fungal, N_fungal, SoilWater, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                     c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                     N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                     mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                    max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                                    max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_turnover_roots_N_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                       C_fungal, N_fungal, SoilWater, turnover_roots_mycorrhized, turnover_mantle, turnover_ERM,
                                                                       c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                       N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                       mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                      max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                                      max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     
     mycofon_balence_turnover_mycorrhized_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                          C_fungal, N_fungal, turnover_roots, SoilWater, turnover_mantle, turnover_ERM,
                                                                          c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                          N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                          mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                         max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                                         max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_turnover_mycorrhized_N_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                            C_fungal, N_fungal, turnover_roots, SoilWater, turnover_mantle, turnover_ERM,
                                                                            c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                            N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                            mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                           max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                                           max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_turnover_mycorrhized_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                           C_fungal, N_fungal, turnover_roots, SoilWater, turnover_mantle, turnover_ERM,
                                                                           c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                           N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                           mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                          max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                                          max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_turnover_mycorrhized_N_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                             C_fungal, N_fungal, turnover_roots, SoilWater, turnover_mantle, turnover_ERM,
                                                                             c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                             N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                             mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                            max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                                            max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     
     mycofon_balence_turnover_mantle_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                     C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, SoilWater, turnover_ERM,
                                                                     c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                     N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                     mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                    max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                                    max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_turnover_mantle_N_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                       C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, SoilWater, turnover_ERM,
                                                                       c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                       N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                       mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                      max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                                      max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_turnover_mantle_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                      C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, SoilWater, turnover_ERM,
                                                                      c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                      N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                      mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                     max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                                     max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_turnover_mantle_N_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                        C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, SoilWater, turnover_ERM,
                                                                        c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                        N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                        mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                       max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                                       max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     
     mycofon_balence_turnover_ERM_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                     C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, SoilWater,
                                                                     c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                     N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                     mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                    max_C_allocation_CASSIA, mycofon_stratergy)$C_roots
+                                                                    max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_roots
     mycofon_balence_turnover_ERM_N_roots[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                    C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, SoilWater,
                                                                    c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                    N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                    mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                   max_C_allocation_CASSIA, mycofon_stratergy)$N_roots
+                                                                   max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_roots
     mycofon_balence_turnover_ERM_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                   C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, SoilWater,
                                                                   c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                   N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                   mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                  max_C_allocation_CASSIA, mycofon_stratergy)$C_fungal
+                                                                  max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$C_fungal
     mycofon_balence_turnover_ERM_N_fungal[count] <- mycofon_balence(C_roots, N_roots, optimal_root_fungal_biomass_ratio, 
                                                                     C_fungal, N_fungal, turnover_roots, turnover_roots_mycorrhized, turnover_mantle, SoilWater,
                                                                     c(Rm, Q10), NH4, NO3, FOM, NC_in_fungai_opt, temp, Tsb, SWC, 
                                                                     N_limits_Plant, N_k_Plant, SWC_k_Plant, N_limits_Fungal, N_k_Fungal, SWC_k_Fungal, 
                                                                     mantle_mass, ERM_mass, parameters_NH4_on_NO3, growth_C, growth_N, 
-                                                                    max_C_allocation_CASSIA, mycofon_stratergy)$N_fungal
+                                                                    max_C_allocation_CASSIA, to_CASSIA, mycofon_stratergy)$N_fungal
     
     count = count + 1
   }
