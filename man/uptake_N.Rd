@@ -1,7 +1,8 @@
 \name{uptake_N}
-\alias{uptake_N}
 \alias{Uptake_N}
+\alias{uptake_n}
 \docType{package}
+
 \title{
   Uptake Organic
 }
@@ -34,32 +35,35 @@ respiration(N,
             N_limit,
             k,
             SWC,
-            SWC_k)
+            SWC_sat)
 }
 
 \arguments{
   \item{N}{
-    Nitrogen
+    Nitrogen, \mu M
   }
   \item{T}{
-    Temperature (usually the temperature at soil horizon B is used)
+    Temperature (usually the temperature at soil horizon B is used). degrees C
   }
   \item{N_limit}{
-    Factor for the pure N uptake
+    Factor for the pure N uptake. \mu M
   }
   \item{k}{
-    Factor for the pure N uptake
+    Factor for the pure N uptake. 
+  }
+  \item{r_v}{
+    Factor for the Temperature dependance of N uptake. \mu M
   }
   \item{SWC}{
-    Soil water concentration, %
+    Soil water concentration, \%
   }
-  \item{SWC_k}{
-    Factor for the SWC effect on N uptake.
+  \item{SWC_sat}{
+    Saturation point for the SWC effect on N uptake. \%
   }
 }
 
 \value{
-    \item{N uptake}{The uptake of a form of N, kg C eq}
+    \item{N uptake}{The uptake of a form of N, \mu M}
 }
 
 \author{
@@ -67,4 +71,7 @@ respiration(N,
 }
 \references{
   Näsholm, Torgny, Knut Kielland, and Ulrika Ganeteg. "Uptake of organic nitrogen by plants." New phytologist 182.1 (2009): 31-48.
+  
+  Data fitting for automatic parameters;
+  Oyewole, Olusegun Ayodeji, et al. "Soil diffusive fluxes constitute the bottleneck to tree nitrogen nutrition in a Scots pine forest." Plant and Soil 399 (2016): 109-120.
 }
