@@ -41,11 +41,12 @@ symphony_plus_vs_original_plot <- function() {
 }
 
 symphony_multiple_FOM_daily_plot <- function(Tsb, SoilWater, 
-                                             C_FOM_needles, C_FOM_woody, C_FOM_roots, C_FOM_mycelium,
+                                             C_FOM_needles, C_FOM_woody, C_FOM_roots, C_FOM_mantle, C_FOM_ERM,
                                              C_SOM, N_SOM,
                                              C_decompose_FOM, C_decompose_SOM, N_decompose_FOM, N_decompose_SOM,
-                                             Litter_needles, Litter_woody, Litter_roots, Litter_mycelium, 
-                                             NH4, NO3, N_FOM_needles, N_FOM_woody, N_FOM_roots, N_FOM_mycelium,
+                                             imobilisation,  assimilation,
+                                             Litter_needles, Litter_woody, Litter_roots, Litter_mantle, Litter_ERM, 
+                                             NH4, NO3, N_FOM_needles, N_FOM_woody, N_FOM_roots, N_FOM_mantle, N_FOM_ERM,
                                              NH4_used_Plant, NH4_used_Fungal, NO3_used_Plant, NO3_used_Fungal, FOM_Norg_used_Plant, FOM_Norg_used_Fungal,
                                              SOM_Norg_used,
                                              Rm, Q10, N_limits_microbes, N_k_microbes, SWC_k_microbes, 
@@ -67,11 +68,12 @@ symphony_multiple_FOM_daily_plot <- function(Tsb, SoilWater,
     NULL
   
   symphony_multiple_FOM_daily(Tsb, SoilWater, 
-                              C_FOM_needles, C_FOM_woody, C_FOM_roots, C_FOM_mycelium,
+                              C_FOM_needles, C_FOM_woody, C_FOM_roots, C_FOM_mantle, C_FOM_ERM,
                               C_SOM, N_SOM,
                               C_decompose_FOM, C_decompose_SOM, N_decompose_FOM, N_decompose_SOM,
-                              Litter_needles, Litter_woody, Litter_roots, Litter_mycelium, 
-                              NH4, NO3, N_FOM_needles, N_FOM_woody, N_FOM_roots, N_FOM_mycelium,
+                              Litter_needles, Litter_woody, Litter_roots, Litter_mantle, Litter_ERM, 
+                              imobilisation,  assimilation,
+                              NH4, NO3, N_FOM_needles, N_FOM_woody, N_FOM_roots, N_FOM_mantle, N_FOM_ERM,
                               NH4_used_Plant, NH4_used_Fungal, NO3_used_Plant, NO3_used_Fungal, FOM_Norg_used_Plant, FOM_Norg_used_Fungal,
                               SOM_Norg_used,
                               c(Rm, Q10), N_limits_microbes, N_k_microbes, SWC_k_microbes, 
@@ -81,7 +83,6 @@ symphony_multiple_FOM_daily_plot <- function(Tsb, SoilWater,
   N_range = seq(0, 25, by = 0.01)
   rate_range = seq(0, 1, by = 0.01)
     
-  
   # TODO: would like to have all of these outputs as a graph, so how should I go about this? Is there a way of doing it where the output could be a list rather than having to do 8 for loops for everything?
   #for (C in C_range) {
   #  
@@ -181,7 +182,7 @@ nitrogen_graphs_plant <- function(Temperature,
     temp_change_N_Uptake_Plant[count] = Plant_N_Uptake(Temp, SoilWater, micorization, NH4, NO3, Norg, N_limits_R, N_k_R, SWC_k_R, parameters, demand)$N_to_plant
     count = count + 1
   }
-  concentration_range = seq(0, 20, by = 0.01)
+  concentration_range = seq(0, 600, by = 0.01)
   count = 1
   for (conc in concentration_range) {
     conc_change_N_Uptake[count] <- uptake_N(conc, Temperature, 10, 0.2, SoilWater, 0.5)
@@ -379,7 +380,7 @@ nitrogen_graphs <- function(N_type, Temperature, N_limit, k, SoilWater, SoilWate
     count = count + 1
   }
   
-  concentration_range = seq(0, 20, by = 0.01)
+  concentration_range = seq(0, 600, by = 0.01)
   count = 1
   for (conc in concentration_range) {
     conc_change_N_Uptake[count] <- uptake_N(conc, Temperature, N_limit, k, SoilWater, SoilWaterk)
@@ -393,10 +394,20 @@ nitrogen_graphs <- function(N_type, Temperature, N_limit, k, SoilWater, SoilWate
     count = count + 1
   }
   
+  data_path = "~/Downloads/"
+  data = read.delim(paste0(data_path, "oyewole_2015_calibration_data.csv"), sep = ",", dec = ",")
+  
   par(mfrow = c(3, 1))
-  plot(concentration_range, conc_change_N_Uptake, xlab = "Concentration", ylab = "Uptake of N", main = "Concentration response \n with temperature 15, SWC 0.8")
-  plot(temperature_range, temp_change_N_Uptake, xlab = "Temperature", ylab = "Uptake of N", main = "Temperature response \n with concentation 10, SWC 0.8")
-  plot(SWC_range, SWC_change_N_Uptake, xlab = "SWC", ylab = "Uptake of N", main = "SWC response \n with concentation 10, temperature 15")
+  plot(concentration_range, conc_change_N_Uptake, xlab = "Concentration", ylab = "Uptake of N", 
+       main = "Concentration response \n with temperature 15, SWC 0.8", type = "l",
+       ylim = c(0, max(data$control, conc_change_N_Uptake)))
+  points(data$concentration, data$control, col = as.factor(data$n_comp))
+  arrows(data$concentration, data$control - data$error,
+         data$concentration, data$control + data$error, length=0.05, angle=90, code=3,
+         col = as.factor(data$n_comp))
+  legend(0, max(conc_change_N_Uptake, data$control), c("Agrinine", "Glycine", "NH4", "NO3"), col = c(1, 2, 3, 4), bty = "n", pch = 1)
+  plot(temperature_range, temp_change_N_Uptake, xlab = "Temperature", ylab = "Uptake of N", main = "Temperature response \n with concentation 10, SWC 0.8", type = "l")
+  plot(SWC_range, SWC_change_N_Uptake, xlab = "SWC", ylab = "Uptake of N", main = "SWC response \n with concentation 10, temperature 15", type = "l")
 }
 
 nitrogen_graphs_microbe <- function(C_microbe, N_microbe, C_soil_component, NC_microbe_opt, NH4, NO3, Norg, Temperature, SoilWater, NC_Litter, imnolisation, assimilation, N_limits_microbes, N_k_microbes, SWC_k_microbes, SOM_decomposers, Rm, Q10) {
