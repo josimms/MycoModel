@@ -33,14 +33,14 @@ double uptake_N(double N,   // UNITS: C kg
                 double N_limit, 
                 double k, 
                 double SWC,     // UNITS: %
-                double SWC_k) {
+                double SWC_sat) {
 
   // Concentration
   double u = std::max(k * pow(N, 8) / (pow(N_limit, 8) + pow(N, 8)), 0.0);
   // Temperature
-  double u_t = std::max((T+20)/55, 0.0);
+  double u_t = T+20/55;
   // Water
-  double u_w = std::max(SWC_k * pow(SWC, 8) / (pow(0.5, 8) + pow(SWC, 8)), 0.0);
+  double u_w = std::max(pow(SWC, 8) / (pow(SWC_sat, 8) + pow(SWC, 8)), 0.0);
   double all = u * u_t * u_w;
   return(all);
 }
@@ -185,14 +185,18 @@ Rcpp::List Microbe_Uptake(double C_microbe,                   // UNITS: C kg
   total_N_uptake = std::max(total_N_uptake, 0.0);
   
   double total_N_uptaken = (NC_microbe_opt*respiration(T, respiration_microbes_params[1], respiration_microbes_params[2])*C_microbe + NC_Litter - NC_microbe_opt) * total_N_uptake;
+  double Extra_FOM_uptaken = 0;
   if (SOM_decomposers) {
     total_N_uptaken =  total_N_uptaken + assimilation * C_microbe;
+    // TODO fom condition?
+    Extra_FOM_uptaken = 1;
   }
   
   return(Rcpp::List::create(Rcpp::_["NH4_uptaken"] = NH4_uptaken,                                  // UNITS: C kg
                             Rcpp::_["NO3_uptaken"] = NO3_uptaken,                                  // UNITS: C kg
                             Rcpp::_["Norg_uptaken"] = Norg_uptaken,                                // UNITS: C kg
-                            Rcpp::_["C_uptaken"] = C_uptaken));                                    // UNITS: C kg
+                            Rcpp::_["C_uptaken"] = C_uptaken,
+                            Rcpp::_["Extra_FOM_uptaken"] = Extra_FOM_uptaken));                                    // UNITS: C kg
 }
 
 
